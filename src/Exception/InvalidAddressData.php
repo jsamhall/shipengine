@@ -10,6 +10,7 @@
  */
 
 namespace jsamhall\ShipEngine\Exception;
+
 use jsamhall\ShipEngine\Exception;
 
 
@@ -21,8 +22,6 @@ use jsamhall\ShipEngine\Exception;
  */
 class InvalidAddressData extends Exception
 {
-    protected $missingKeys;
-
     /**
      * InvalidAddressDataException constructor.
      *
@@ -30,14 +29,7 @@ class InvalidAddressData extends Exception
      */
     public function __construct(array $missingKeys)
     {
-        $this->missingKeys = $missingKeys;
-
-        $message = "Invalid Address Data: missing required key(s).";
+        $message = "Invalid Address Data: missing required key(s): " . implode(',', $missingKeys);
         return parent::__construct($message);
-    }
-
-    public function getMissingKeys()
-    {
-        return $this->missingKeys;
     }
 }
