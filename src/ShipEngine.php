@@ -13,7 +13,7 @@ namespace jsamhall\ShipEngine;
 /**
  * Class ShipEngine
  *
- * @package ShipEngineApi
+ * @package ShipEngine
  */
 class ShipEngine
 {

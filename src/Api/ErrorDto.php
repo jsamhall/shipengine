@@ -16,7 +16,7 @@ namespace jsamhall\ShipEngine\Api;
  * 
  * Wrapper for an error returned by the ShipEngine API
  *
- * @package ShipEngineApi\Api
+ * @package ShipEngine\Api
  */
 class ErrorDto
 {

@@ -13,7 +13,7 @@ namespace jsamhall\ShipEngine\Carriers;
 /**
  * Class PackageTypeDto
  *
- * @package ShipEngineApi\Carriers
+ * @package ShipEngine\Carriers
  */
 class PackageTypeDto
 {

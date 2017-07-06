@@ -15,7 +15,7 @@ namespace jsamhall\ShipEngine\Api;
  *
  * Builds URLs to ShipEngine's public API endpoints
  *
- * @package ShipEngineApi\Api
+ * @package ShipEngine\Api
  */
 class UrlBuilder
 {

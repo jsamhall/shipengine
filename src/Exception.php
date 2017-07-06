@@ -14,7 +14,7 @@ namespace jsamhall\ShipEngine;
 /**
  * Generic package exception
  *
- * @package ShipEngineApi
+ * @package ShipEngine
  */
 class Exception extends \Exception
 {

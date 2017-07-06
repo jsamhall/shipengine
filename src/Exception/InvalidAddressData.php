@@ -18,7 +18,7 @@ use jsamhall\ShipEngine\Exception;
  * The data returned from the Address\FormatterInterface implementation
  * is not valid due to the absence of required array keys.
  *
- * @package ShipEngineApi\Exception
+ * @package ShipEngine\Exception
  */
 class InvalidAddressData extends Exception
 {

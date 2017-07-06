@@ -15,7 +15,7 @@ namespace jsamhall\ShipEngine\Carriers;
  *
  * A Data Transfer Option wrapping Carrier data as provided by listCarriers API response
  *
- * @package ShipEngineApi\Carriers
+ * @package ShipEngine\Carriers
  */
 class CarrierDto
 {

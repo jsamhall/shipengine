@@ -71,7 +71,7 @@ class Factory
             'country_code'
         ];
 
-        $missingKeys = array_diff_key($requiredKeys, $addressData);
+        $missingKeys = array_diff_key(array_values($requiredKeys), $addressData);
 
         if (count($missingKeys)) {
             throw Exception::invalidAddressData($missingKeys);

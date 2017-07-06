@@ -19,7 +19,7 @@ use jsamhall\ShipEngine\Exception;
  *
  * A request to the ShipEngine API failed.
  *
- * @package ShipEngineApi\Exception
+ * @package ShipEngine\Exception
  */
 class ApiRequestFailed extends Exception
 {

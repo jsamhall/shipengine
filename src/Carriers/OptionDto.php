@@ -16,7 +16,7 @@ namespace jsamhall\ShipEngine\Carriers;
  * A Data Transfer Object wrapping an Option provided by the Carrier
  * For example, UPS provides a Saturday Delivery option
  *
- * @package ShipEngineApi\Carriers
+ * @package ShipEngine\Carriers
  */
 class OptionDto
 {

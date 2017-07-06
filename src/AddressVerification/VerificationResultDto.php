@@ -13,7 +13,7 @@ namespace jsamhall\ShipEngine\AddressVerification;
 /**
  * Class ResponseDto
  *
- * @package ShipEngineApi\AddressVerification
+ * @package ShipEngine\AddressVerification
  */
 class VerificationResultDto
 {
