@@ -1,0 +1,24 @@
+{
+    "name": "jsamhall/shipengine",
+    "description": "A PHP wrapper for the accessing and interacting with the ShipEngine v1 API.",
+    "license": "MIT",
+    "keywords": [
+        "shipengine",
+        "shipstation"
+    ],
+    "authors": [
+        {
+            "name": "John Hall",
+            "email": "john@johnhall.io"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "jsamhall\\ShipEngine\\": "src"
+        }
+    }
+}
