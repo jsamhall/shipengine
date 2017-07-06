@@ -13,7 +13,8 @@ namespace jsamhall\ShipEngine\Address;
 interface FormatterInterface
 {
     /**
-     * Returns an array of Address Data as required for ShipEngine's Address DTO
+     * Returns an array of Address Data as required by the AddressDto which ensures
+     * conformity to the ShipEngine API address model
      *
      * Address model properties can be found here:
      *

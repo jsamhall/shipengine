@@ -25,13 +25,20 @@ class ShipEngine
     protected $requestFactory;
 
     /**
+     * @var Address\Factory
+     */
+    protected $addressFactory;
+
+    /**
      * ShipEngine constructor.
      *
-     * @param string $apiKey
+     * @param string          $apiKey
+     * @param Address\Factory $addressFactory
      */
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, Address\Factory $addressFactory)
     {
         $this->requestFactory = new Api\RequestFactory($apiKey);
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -39,17 +46,16 @@ class ShipEngine
      *
      * @link https://docs.shipengine.com/docs/address-validation
      *
-     * @param array $addresses Array of Address\AddressDto
-     * @return AddressVerification\VerificationResultDto[] Verification Results for every address requested
+     * @param array $addresses Array of Address\AddressDto or domain Addresses to be passed through the Address\Factory;
+     *
+     * @return AddressVerification\VerificationResultDto[] Array of Verification Results for every address requested
      */
     public function validateAddresses(array $addresses)
     {
         $addressData = array_map(function ($address) {
-            if (! $address instanceof Address\AddressDto) {
-                throw new \BadMethodCallException("validateAddresses expects an array of Address\\AddressDto");
-            }
-
-            return $address->toArray();
+            return $address instanceof Address\AddressDto
+                ? $address->toArray()
+                : $this->addressFactory->factory($address)->toArray();
         }, $addresses);
 
         $response = $this->requestFactory->validateAddresses($addressData)->send();
