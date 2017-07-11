@@ -10,20 +10,22 @@
  */
 namespace jsamhall\ShipEngine\Carriers;
 
+use jsamhall\ShipEngine;
+
 /**
- * Class CarrierDto
+ * Class Carrier
  *
  * A Data Transfer Option wrapping Carrier data as provided by listCarriers API response
  *
  * @package ShipEngine\Carriers
  */
-class CarrierDto
+class Carrier
 {
     /**
      * The CarrierId used to reference this Carrier Account within ShipEngine
      * Used when multiple Accounts are established for the same Carrier
      *
-     * @var string
+     * @var CarrierId
      */
     protected $id;
 
@@ -31,7 +33,7 @@ class CarrierDto
      * The Code used to reference this Carrier Account within ShipEngine
      * Used when only one account has been established for the Carrier
      *
-     * @var string
+     * @var CarrierCode
      */
     protected $code;
 
@@ -79,30 +81,30 @@ class CarrierDto
     protected $primary;
 
     /**
-     * @var ServiceDto[]
+     * @var Service[]
      */
     protected $services = [];
 
     /**
-     * @var PackageTypeDto[]
+     * @var PackageType[]
      */
     protected $packageTypes = [];
 
     /**
-     * @var OptionDto[]
+     * @var Option[]
      */
     protected $options = [];
 
     /**
-     * CarrierDto constructor.
+     * Carrier constructor.
      *
      * @param array $carrierData Carrier Data provided by ShipEngine Carrier API
      */
     public function __construct(array $carrierData)
     {
         $settableData = [
-            $carrierData['carrier_id'],
-            $carrierData['carrier_code'],
+            new CarrierId($carrierData['carrier_id']),
+            new CarrierCode($carrierData['carrier_code']),
             $carrierData['account_number'],
             $carrierData['requires_funded_amount'],
             $carrierData['balance'],
@@ -128,7 +130,7 @@ class CarrierDto
     }
 
     /**
-     * @return string
+     * @return CarrierId
      */
     public function getId()
     {
@@ -136,7 +138,7 @@ class CarrierDto
     }
 
     /**
-     * @return string
+     * @return CarrierCode
      */
     public function getCode()
     {
@@ -192,7 +194,7 @@ class CarrierDto
     }
 
     /**
-     * @return ServiceDto[]
+     * @return Service[]
      */
     public function getServices()
     {
@@ -200,7 +202,7 @@ class CarrierDto
     }
 
     /**
-     * @return PackageTypeDto[]
+     * @return PackageType[]
      */
     public function getPackageTypes()
     {
@@ -208,7 +210,7 @@ class CarrierDto
     }
 
     /**
-     * @return OptionDto[]
+     * @return Option[]
      */
     public function getOptions()
     {
@@ -219,7 +221,7 @@ class CarrierDto
     private function setServices(array $services)
     {
         foreach ($services as $service) {
-            $this->services[] = new ServiceDto($service);
+            $this->services[] = new Service($service);
         }
 
         return $this;
@@ -228,7 +230,7 @@ class CarrierDto
     private function setPackages(array $packages)
     {
         foreach ($packages as $package) {
-            $this->packageTypes[] = new PackageTypeDto($package);
+            $this->packageTypes[] = new PackageType($package);
         }
 
         return $this;
@@ -237,7 +239,7 @@ class CarrierDto
     private function setOptions(array $options)
     {
         foreach ($options as $option) {
-            $this->options[] = new OptionDto($option);
+            $this->options[] = new Option($option);
         }
 
         return $this;

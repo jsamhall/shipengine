@@ -11,14 +11,14 @@
 namespace jsamhall\ShipEngine\Carriers;
 
 /**
- * Class OptionDto
+ * Class Option
  *
  * A Data Transfer Object wrapping an Option provided by the Carrier
  * For example, UPS provides a Saturday Delivery option
  *
  * @package ShipEngine\Carriers
  */
-class OptionDto
+class Option
 {
     /**
      * The name of the Option
@@ -42,7 +42,7 @@ class OptionDto
     protected $description;
 
     /**
-     * OptionDto constructor.
+     * Option constructor.
      *
      * @param array $optionData Carrier Option Data as provided by the ShipEngine API
      */

@@ -10,7 +10,7 @@
  */
 namespace jsamhall\ShipEngine\Exception;
 
-use jsamhall\ShipEngine\Api\ErrorDto;
+use jsamhall\ShipEngine\Api\Error;
 use jsamhall\ShipEngine\Exception;
 
 class ApiErrorResponse
@@ -24,7 +24,7 @@ class ApiErrorResponse
     protected $requestId;
 
     /**
-     * @var ErrorDto[]
+     * @var Error[]
      */
     protected $errors = [];
 
@@ -46,7 +46,7 @@ class ApiErrorResponse
     private function setErrors(array $errors)
     {
         foreach ($errors as $error) {
-            $this->errors[] = new ErrorDto($error);
+            $this->errors[] = new Error($error);
         }
 
         return $this;
@@ -61,7 +61,7 @@ class ApiErrorResponse
     }
 
     /**
-     * @return ErrorDto[]
+     * @return Error[]
      */
     public function getErrors()
     {

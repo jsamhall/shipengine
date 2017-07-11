@@ -11,11 +11,11 @@
 namespace jsamhall\ShipEngine\AddressVerification;
 
 /**
- * Class ResponseDto
+ * Class Response
  *
  * @package ShipEngine\AddressVerification
  */
-class VerificationResultDto
+class VerificationResult
 {
     const STATUS_VERIFIED = 'verified';
     const STATUS_UNVERIFIED = 'unverified';
@@ -30,17 +30,17 @@ class VerificationResultDto
     private $status;
 
     /**
-     * @var AddressMessageDto[]
+     * @var AddressMessage[]
      */
     private $messages = [];
 
     /**
-     * @var MatchedAddressDto|null
+     * @var MatchedAddress|null
      */
     private $matchedAddress = null;
 
     /**
-     * AddressVerificationResponseDto constructor.
+     * AddressVerificationResponse constructor.
      *
      * @param $verifyAddressResponse array The response from the /addresses/validate request
      */
@@ -50,7 +50,7 @@ class VerificationResultDto
         $this->setMessages($verifyAddressResponse['messages']);
 
         if (is_array($verifyAddressResponse['matched_address'])) {
-            $this->matchedAddress = new MatchedAddressDto($verifyAddressResponse['matched_address']);
+            $this->matchedAddress = new MatchedAddress($verifyAddressResponse['matched_address']);
         }
     }
 
@@ -67,7 +67,7 @@ class VerificationResultDto
     /**
      * Returns the matched address, or null if no match was found
      *
-     * @return MatchedAddressDto|null
+     * @return MatchedAddress|null
      */
     public function getMatchedAddress()
     {
@@ -94,7 +94,7 @@ class VerificationResultDto
     /**
      * Returns any Messages included in the response
      *
-     * @return AddressMessageDto[]
+     * @return AddressMessage[]
      */
     public function getMessages()
     {
@@ -112,7 +112,7 @@ class VerificationResultDto
     private function setMessages(array $messages)
     {
         foreach ($messages as $message) {
-            $this->messages[] = new AddressMessageDto($message);
+            $this->messages[] = new AddressMessage($message);
         }
 
         return $this;

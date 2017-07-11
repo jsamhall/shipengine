@@ -12,11 +12,11 @@
 namespace jsamhall\ShipEngine\Address;
 
 /**
- * Class Dto
+ * Class 
  *
  * @package jsamhall\ShipEngine\Address
  */
-class AddressDto
+class Address
 {
     /**
      * @var string
@@ -75,7 +75,7 @@ class AddressDto
 
     /**
      * @param string $name
-     * @return AddressDto
+     * @return Address
      */
     public function setName($name)
     {
@@ -85,7 +85,7 @@ class AddressDto
 
     /**
      * @param null|string $phone
-     * @return AddressDto
+     * @return Address
      */
     public function setPhone($phone)
     {
@@ -95,7 +95,7 @@ class AddressDto
 
     /**
      * @param null|string $companyName
-     * @return AddressDto
+     * @return Address
      */
     public function setCompanyName($companyName)
     {
@@ -105,7 +105,7 @@ class AddressDto
 
     /**
      * @param string $addressLine1
-     * @return AddressDto
+     * @return Address
      */
     public function setAddressLine1($addressLine1)
     {
@@ -115,7 +115,7 @@ class AddressDto
 
     /**
      * @param null|string $addressLine2
-     * @return AddressDto
+     * @return Address
      */
     public function setAddressLine2($addressLine2)
     {
@@ -125,7 +125,7 @@ class AddressDto
 
     /**
      * @param null|string $addressLine3
-     * @return AddressDto
+     * @return Address
      */
     public function setAddressLine3($addressLine3)
     {
@@ -135,7 +135,7 @@ class AddressDto
 
     /**
      * @param string $cityLocality
-     * @return AddressDto
+     * @return Address
      */
     public function setCityLocality($cityLocality)
     {
@@ -145,7 +145,7 @@ class AddressDto
 
     /**
      * @param string $stateProvince
-     * @return AddressDto
+     * @return Address
      */
     public function setStateProvince($stateProvince)
     {
@@ -155,7 +155,7 @@ class AddressDto
 
     /**
      * @param string $postalCode
-     * @return AddressDto
+     * @return Address
      */
     public function setPostalCode($postalCode)
     {
@@ -165,7 +165,7 @@ class AddressDto
 
     /**
      * @param string $countryCode
-     * @return AddressDto
+     * @return Address
      */
     public function setCountryCode($countryCode)
     {
@@ -175,7 +175,7 @@ class AddressDto
 
     /**
      * @param string $addressResidentialIndicator
-     * @return AddressDto
+     * @return Address
      */
     public function setAddressResidentialIndicator($addressResidentialIndicator)
     {

@@ -10,12 +10,14 @@
  */
 namespace jsamhall\ShipEngine\Carriers;
 
+use jsamhall\ShipEngine;
+
 /**
- * Class PackageTypeDto
+ * Class PackageType
  *
  * @package ShipEngine\Carriers
  */
-class PackageTypeDto
+class PackageType
 {
     /**
      * The identifier of this Package Type within the ShipEngine Carrier Settings
@@ -23,7 +25,7 @@ class PackageTypeDto
      *
      * @link https://docs.shipengine.com/docs/custom-packages
      *
-     * @var mixed
+     * @var PackageId
      */
     protected $packageId;
 
@@ -31,7 +33,7 @@ class PackageTypeDto
      * The code used to identify this Package Type with the Carrier
      * This is used for all shipments, labels and rates
      *
-     * @var string
+     * @var PackageCode
      */
     protected $packageCode;
 
@@ -50,17 +52,27 @@ class PackageTypeDto
     protected $description;
 
     /**
-     * PackageTypeDto constructor.
+     * PackageType constructor.
      *
      * @param array $packageData Package Data provided by the ShipEngine Carrier API Response
      */
     public function __construct(array $packageData)
     {
-        list($this->packageId, $this->packageCode, $this->name, $this->description) = array_values($packageData);
+        list(
+            $this->packageId,
+            $this->packageCode,
+            $this->name,
+            $this->description
+            ) = [
+            new PackageId($packageData['package_id']),
+            new PackageCode($packageData['package_code']),
+            $packageData['name'],
+            $packageData['description']
+        ];
     }
 
     /**
-     * @return mixed
+     * @return PackageId
      */
     public function getPackageId()
     {
@@ -68,7 +80,7 @@ class PackageTypeDto
     }
 
     /**
-     * @return string
+     * @return PackageCode
      */
     public function getPackageCode()
     {

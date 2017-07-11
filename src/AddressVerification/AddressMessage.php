@@ -11,7 +11,7 @@
 
 namespace jsamhall\ShipEngine\AddressVerification;
 
-class AddressMessageDto
+class AddressMessage
 {
     /**
      * The reason why the Address failed verification

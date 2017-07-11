@@ -13,15 +13,15 @@ namespace jsamhall\ShipEngine\Address;
 interface FormatterInterface
 {
     /**
-     * Returns an array of Address Data as required by the AddressDto which ensures
+     * Returns an array of Address Data as required by the Address which ensures
      * conformity to the ShipEngine API address model
      *
      * Address model properties can be found here:
      *
      * @link https://docs.shipengine.com/docs/address-validation#section-v1addressesvalidate
      *
-     * @param mixed $address Input framework address
+     * @param mixed $address A framework address 
      * @return array Array of Address Data as required for ShipEngine API
      */
-    public function formatAddress($address);
+    public function format($address);
 }

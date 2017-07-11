@@ -29,19 +29,7 @@ class Exception extends \Exception
     {
         throw new Exception\ApiErrorResponse($errorResponse);
     }
-
-    /**
-     * The data returned by the FormatterInterface was invalid
-     *
-     * @param array $missingKeys
-     * @throws Exception\InvalidAddressData
-     * @return Exception\InvalidAddressData
-     */
-    public static function invalidAddressData(array $missingKeys)
-    {
-        throw new Exception\InvalidAddressData($missingKeys);
-    }
-
+    
     /**
      * A request to the ShipEngine API failed
      *

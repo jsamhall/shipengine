@@ -46,14 +46,14 @@ class ShipEngine
      *
      * @link https://docs.shipengine.com/docs/address-validation
      *
-     * @param array $addresses Array of Address\AddressDto or domain Addresses to be passed through the Address\Factory;
+     * @param array $addresses Array of Address\Address or domain Addresses which are passed through the Formatter
      *
-     * @return AddressVerification\VerificationResultDto[] Array of Verification Results for every address requested
+     * @return AddressVerification\VerificationResult[] Array of Verification Results for every address requested
      */
     public function validateAddresses(array $addresses)
     {
         $addressData = array_map(function ($address) {
-            return $address instanceof Address\AddressDto
+            return $address instanceof Address\Address
                 ? $address->toArray()
                 : $this->addressFactory->factory($address)->toArray();
         }, $addresses);
@@ -61,7 +61,7 @@ class ShipEngine
         $response = $this->requestFactory->validateAddresses($addressData)->send();
 
         return array_map(function ($data) {
-            return new AddressVerification\VerificationResultDto($data);
+            return new AddressVerification\VerificationResult($data);
         }, $response->getData());
     }
 
@@ -70,14 +70,14 @@ class ShipEngine
      *
      * @link https://docs.shipengine.com/docs/list-your-carriers
      *
-     * @return Carriers\CarrierDto[]
+     * @return Carriers\Carrier[]
      */
     public function listCarriers()
     {
         $response = $this->requestFactory->listCarriers()->send();
 
         return array_map(function ($carrier) {
-            return new Carriers\CarrierDto($carrier);
+            return new Carriers\Carrier($carrier);
         }, $response->getData('carriers'));
     }
 
@@ -85,27 +85,27 @@ class ShipEngine
      * Get a single Carrier
      *
      * @param string $carrierId
-     * @return Carriers\CarrierDto
+     * @return Carriers\Carrier
      */
     public function getCarrier(string $carrierId)
     {
         $response = $this->requestFactory->getCarrier($carrierId)->send();
 
-        return new Carriers\CarrierDto($response->getData());
+        return new Carriers\Carrier($response->getData());
     }
 
     /**
      * List all Services offered by a Carrier
      *
      * @param string $carrierId
-     * @return Carriers\ServiceDto[]
+     * @return Carriers\Service[]
      */
     public function listCarrierServices(string $carrierId)
     {
         $response = $this->requestFactory->listCarrierServices($carrierId)->send();
 
         return array_map(function ($carrier) {
-            return new Carriers\ServiceDto($carrier);
+            return new Carriers\Service($carrier);
         }, $response->getData('services'));
     }
 
@@ -113,14 +113,14 @@ class ShipEngine
      * List all Package Types offered by a Carrier
      *
      * @param string $carrierId
-     * @return Carriers\PackageTypeDto[]
+     * @return Carriers\PackageType[]
      */
     public function listCarrierPackageTypes(string $carrierId)
     {
         $response = $this->requestFactory->listCarrierPackageTypes($carrierId)->send();
 
         return array_map(function ($carrier) {
-            return new Carriers\PackageTypeDto($carrier);
+            return new Carriers\PackageType($carrier);
         }, $response->getData('packages'));
     }
 
@@ -128,14 +128,39 @@ class ShipEngine
      * Get all Options offered by a Carrier
      *
      * @param string $carrierId
-     * @return Carriers\OptionDto[]
+     * @return Carriers\Option[]
      */
     public function getCarrierOptions(string $carrierId)
     {
         $response = $this->requestFactory->getCarrierOptions($carrierId)->send();
 
         return array_map(function ($carrier) {
-            return new Carriers\OptionDto($carrier);
+            return new Carriers\Option($carrier);
         }, $response->getData('options'));
+    }
+
+    /**
+     * Get all Rates for the given Shipment and RateOptions
+     *
+     * @param Rating\Shipment $shipment
+     * @param Rating\Options  $rateOptions
+     * @return Api\Response|Rating\RateResponse
+     */
+    public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
+    {
+        if (! count($rateOptions)) {
+            throw new \InvalidArgumentException("\$rateOptions must include at least one Carrier");
+        }
+
+        $response = $this->requestFactory->getShipmentRates($shipment, $rateOptions)->send();
+
+        return new Rating\RateResponse($response->getData('rate_response'));
+    }
+
+    public function createLabel(Labels\Shipment $shipment, $testMode = false)
+    {
+        $response = $this->requestFactory->createLabel($shipment, $testMode)->send();
+
+        return new Labels\Response($response->getData());
     }
 }

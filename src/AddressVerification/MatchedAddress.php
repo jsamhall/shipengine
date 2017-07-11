@@ -11,12 +11,12 @@
 
 namespace jsamhall\ShipEngine\AddressVerification;
 
-use jsamhall\ShipEngine\Address\AddressDto as AddressDto;
+use jsamhall\ShipEngine\Address\Address as Address;
 
-class MatchedAddressDto extends AddressDto
+class MatchedAddress extends Address
 {
     /**
-     * MatchedAddressDto constructor
+     * MatchedAddress constructor
      *
      * @param array $matchedAddress
      */

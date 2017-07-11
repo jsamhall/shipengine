@@ -11,26 +11,32 @@
 
 namespace jsamhall\ShipEngine\Api;
 
-
+/**
+ * Class Response
+ * 
+ * Wrapper for a Response from the ShipEngine API
+ *
+ * @package jsamhall\ShipEngine\Api
+ */
 class Response
 {
     /**
      * @var array
      */
-    protected $response;
+    protected $rawData;
 
     /**
      * Response constructor.
      *
-     * @param array $response
+     * @param array $responseData
      */
-    public function __construct(array $response)
+    public function __construct(array $responseData)
     {
-        $this->response = $response;
+        $this->rawData = $responseData;
     }
 
     /**
-     * Get data from response
+     * Get responseData from response
      *
      * @param null $key
      * @return array|mixed
@@ -38,7 +44,7 @@ class Response
     public function getData($key = null)
     {
         return $key == null
-            ? $this->response
-            : $this->response[$key];
+            ? $this->rawData
+            : $this->rawData[$key];
     }
 }

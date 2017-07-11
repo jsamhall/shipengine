@@ -12,15 +12,22 @@
 namespace jsamhall\ShipEngine\Api;
 
 /**
- * Class ErrorDto
+ * Class Error
  * 
  * Wrapper for an error returned by the ShipEngine API
  *
  * @package ShipEngine\Api
  */
-class ErrorDto
+class Error
 {
+    /**
+     * @var string
+     */
     protected $errorCode;
+
+    /**
+     * @var string
+     */
     protected $errorMessage;
 
     public function __construct(array $error)

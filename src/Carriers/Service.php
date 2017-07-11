@@ -11,16 +11,16 @@
 namespace jsamhall\ShipEngine\Carriers;
 
 /**
- * Class ServiceDto
+ * Class Service
  *
  * @package ShipEngine\Carriers
  */
-class ServiceDto
+class Service
 {
     /**
      * The code used to identify this Service when requesting Rates or creating Labels
      *
-     * @var string
+     * @var ServiceCode
      */
     protected $code;
 
@@ -46,14 +46,14 @@ class ServiceDto
     protected $international;
 
     /**
-     * ServiceDto constructor.
+     * Service constructor.
      *
      * @param array $serviceData Service Data provided by ShipEngine Carrier API Response
      */
     public function __construct(array $serviceData)
     {
         list($this->code, $this->name, $this->domestic, $this->international) = [
-            $serviceData['service_code'],
+            new ServiceCode($serviceData['service_code']),
             $serviceData['name'],
             boolval($serviceData['domestic']),
             boolval($serviceData['international'])
@@ -61,7 +61,7 @@ class ServiceDto
     }
 
     /**
-     * @return string
+     * @return ServiceCode
      */
     public function getCode()
     {

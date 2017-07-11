@@ -34,49 +34,22 @@ class Factory
      * Builds a ShipEngine address from the provided addressData
      *
      * @param mixed $address Address as expected by the Formatter implementation
-     * @return AddressDto ShipEngine Address DTO
+     * @return Address ShipEngine Address DTO
      */
     public function factory($address)
     {
-        $formatted = $this->formatter->formatAddress($address);
+        $formatted = $this->formatter->format($address);
 
-        $this->validateAddressData($formatted);
-
-        $dto = new AddressDto();
-
-        $dto->setName($formatted['name'])
-            ->setPhone($formatted['phone'])
-            ->setCompanyName($formatted['company_name'])
-            ->setAddressLine1($formatted['address_line1'])
+        return (new Address)
+            ->setName($formatted['name'] ?? '')
+            ->setPhone($formatted['phone'] ?? '')
+            ->setCompanyName($formatted['company_name'] ?? '')
+            ->setAddressLine1($formatted['address_line1'] ?? '')
             ->setAddressLine2($formatted['address_line2'] ?? null)
             ->setAddressLine3($formatted['address_line3'] ?? null)
-            ->setCityLocality($formatted['city_locality'])
-            ->setStateProvince($formatted['state_province'])
-            ->setPostalCode($formatted['postal_code'])
-            ->setCountryCode($formatted['country_code']);
-
-        return $dto;
-    }
-
-    private function validateAddressData(array $addressData)
-    {
-        $requiredKeys = [
-            'name',
-            'phone',
-            'company_name',
-            'address_line1',
-            'city_locality',
-            'state_province',
-            'postal_code',
-            'country_code'
-        ];
-
-        $missingKeys = array_diff(array_values($requiredKeys), array_keys($addressData));
-
-        if (count($missingKeys)) {
-            throw Exception::invalidAddressData($missingKeys);
-        }
-
-        return $this;
+            ->setCityLocality($formatted['city_locality'] ?? '')
+            ->setStateProvince($formatted['state_province'] ?? '')
+            ->setPostalCode($formatted['postal_code'] ?? '')
+            ->setCountryCode($formatted['country_code'] ?? '');
     }
 }

@@ -11,6 +11,7 @@
 
 namespace jsamhall\ShipEngine\Api;
 
+use jsamhall\ShipEngine;
 
 class RequestFactory
 {
@@ -51,8 +52,8 @@ class RequestFactory
         $url = $this->buildUrl("addresses/validate");
 
         return $this->initRequest($url, [
-            CURLOPT_POSTFIELDS => json_encode($addresses),
-            CURLOPT_POST       => true
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => json_encode($addresses)
         ]);
     }
 
@@ -120,7 +121,7 @@ class RequestFactory
     {
         $endpoint = sprintf("carriers/%s/packages", $carrierId);
         $url = $this->buildUrl($endpoint);
-        
+
         return $this->initRequest($url, [
             CURLOPT_HTTPGET => true
         ]);
@@ -141,6 +142,51 @@ class RequestFactory
 
         return $this->initRequest($url, [
             CURLOPT_HTTPGET => true
+        ]);
+    }
+
+
+    /**
+     * Build a Request to the Rating "RateShipment" API endpoint
+     *
+     * @link https://shipengine-docs.readme.io/reference#Rates_RateShipment
+     *
+     * @param ShipEngine\Rating\Shipment $shipment
+     * @param ShipEngine\Rating\Options  $options
+     * @return Request
+     */
+    public function getShipmentRates(ShipEngine\Rating\Shipment $shipment, ShipEngine\Rating\Options $options)
+    {
+        $url = $this->buildUrl('rates');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                'shipment'     => $shipment->toArray(),
+                'rate_options' => $options->toArray()
+            ])
+        ]);
+    }
+
+    /**
+     * Build a Request to the Labels "PurchaseLabel" Endpoint
+     *
+     * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
+     *
+     * @param ShipEngine\Labels\Shipment $shipment
+     * @param bool                          $testMode
+     * @return Request
+     */
+    public function createLabel(ShipEngine\Labels\Shipment $shipment, $testMode = false)
+    {
+        $url = $this->buildUrl('labels');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                'shipment'   => $shipment->toArray(),
+                'test_label' => $testMode
+            ])
         ]);
     }
 
