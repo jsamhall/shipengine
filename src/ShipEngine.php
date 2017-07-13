@@ -160,7 +160,7 @@ class ShipEngine
     public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
     {
         if (! count($rateOptions)) {
-            throw new \InvalidArgumentException("\$rateOptions must include at least one Carrier");
+            throw new \InvalidArgumentException("\$rateOptions cannot be empty");
         }
 
         $response = $this->requestFactory->getShipmentRates($shipment, $rateOptions)->send();
@@ -169,11 +169,11 @@ class ShipEngine
     }
 
     /**
-     * @param Labels\Shipment      $shipment
-     * @param bool                 $testMode
+     * Create a Shipping Label
+     *
+     * @param Labels\Shipment $shipment
+     * @param bool            $testMode
      * @return Labels\Response
-     * @throws Exception\ApiErrorResponse
-     * @throws Exception\ApiRequestFailed
      */
     public function createLabel(Labels\Shipment $shipment, $testMode = false)
     {
