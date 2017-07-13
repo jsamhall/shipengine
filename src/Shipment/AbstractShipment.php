@@ -76,9 +76,9 @@ abstract class AbstractShipment
     public function toArray()
     {
         return [
-            'ship_to'          => $this->shipTo->toArray(),
-            'ship_from'        => $this->shipFrom->toArray(),
-            'packages'         => array_map(function ($package) {
+            'ship_to'   => $this->shipTo->toArray(),
+            'ship_from' => $this->shipFrom->toArray(),
+            'packages'  => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 return [
                     'weight' => [

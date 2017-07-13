@@ -91,7 +91,7 @@ class Carrier
     protected $packageTypes = [];
 
     /**
-     * @var Option[]
+     * @var AvailableOption[]
      */
     protected $options = [];
 
@@ -210,7 +210,7 @@ class Carrier
     }
 
     /**
-     * @return Option[]
+     * @return AvailableOption[]
      */
     public function getOptions()
     {
@@ -239,7 +239,7 @@ class Carrier
     private function setOptions(array $options)
     {
         foreach ($options as $option) {
-            $this->options[] = new Option($option);
+            $this->options[] = new AvailableOption($option);
         }
 
         return $this;

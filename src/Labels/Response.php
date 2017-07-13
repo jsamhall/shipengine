@@ -105,4 +105,76 @@ class Response extends ShipEngine\Api\Response
         $this->trackingNumber = $labelResponse['tracking_number'];
         $this->labelDownloadUrl = $labelResponse['label_download']['href'];
     }
+
+    /**
+     * @return LabelId
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return ShipEngine\Shipment\ShipmentId
+     */
+    public function getShipmentId()
+    {
+        return $this->shipmentId;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getShipDate()
+    {
+        return $this->shipDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return ShipEngine\ValueObject\Amount
+     */
+    public function getShipmentCost()
+    {
+        return $this->shipmentCost;
+    }
+
+    /**
+     * @return ShipEngine\ValueObject\Amount
+     */
+    public function getInsuranceCost()
+    {
+        return $this->insuranceCost;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTrackingNumber()
+    {
+        return $this->trackingNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelDownloadUrl()
+    {
+        return $this->labelDownloadUrl;
+    }
 }

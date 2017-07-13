@@ -174,11 +174,13 @@ class RequestFactory
      * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
      *
      * @param ShipEngine\Labels\Shipment $shipment
-     * @param bool                          $testMode
+     * @param bool                       $testMode
      * @return Request
      */
-    public function createLabel(ShipEngine\Labels\Shipment $shipment, $testMode = false)
-    {
+    public function createLabel(
+        ShipEngine\Labels\Shipment $shipment,
+        $testMode = false
+    ) {
         $url = $this->buildUrl('labels');
 
         return $this->initRequest($url, [

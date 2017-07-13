@@ -32,13 +32,24 @@ class ShipEngine
     /**
      * ShipEngine constructor.
      *
-     * @param string          $apiKey
-     * @param Address\Factory $addressFactory
+     * @param string                     $apiKey
+     * @param Address\FormatterInterface $addressFormatter
      */
-    public function __construct(string $apiKey, Address\Factory $addressFactory)
+    public function __construct(string $apiKey, Address\FormatterInterface $addressFormatter)
     {
         $this->requestFactory = new Api\RequestFactory($apiKey);
-        $this->addressFactory = $addressFactory;
+        $this->addressFactory = new Address\Factory($addressFormatter);
+    }
+
+    /**
+     * Format an address using the Factory's Formatter
+     *
+     * @param mixed $address Domain address as expected by the Address\Formatter implementation
+     * @return Address\Address
+     */
+    public function formatAddress($address)
+    {
+        return $this->addressFactory->factory($address);
     }
 
     /**
@@ -128,14 +139,14 @@ class ShipEngine
      * Get all Options offered by a Carrier
      *
      * @param string $carrierId
-     * @return Carriers\Option[]
+     * @return Carriers\AvailableOption[]
      */
     public function getCarrierOptions(string $carrierId)
     {
         $response = $this->requestFactory->getCarrierOptions($carrierId)->send();
 
         return array_map(function ($carrier) {
-            return new Carriers\Option($carrier);
+            return new Carriers\AvailableOption($carrier);
         }, $response->getData('options'));
     }
 
@@ -157,6 +168,13 @@ class ShipEngine
         return new Rating\RateResponse($response->getData('rate_response'));
     }
 
+    /**
+     * @param Labels\Shipment      $shipment
+     * @param bool                 $testMode
+     * @return Labels\Response
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
     public function createLabel(Labels\Shipment $shipment, $testMode = false)
     {
         $response = $this->requestFactory->createLabel($shipment, $testMode)->send();

@@ -11,14 +11,14 @@
 namespace jsamhall\ShipEngine\Carriers;
 
 /**
- * Class Option
+ * Class AvailableOption
  *
  * A Data Transfer Object wrapping an Option provided by the Carrier
  * For example, UPS provides a Saturday Delivery option
  *
  * @package ShipEngine\Carriers
  */
-class Option
+class AvailableOption
 {
     /**
      * The name of the Option
@@ -55,6 +55,16 @@ class Option
      * @return string
      */
     public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Alias for getName
+     *
+     * @return string
+     */
+    public function getCode()
     {
         return $this->name;
     }
