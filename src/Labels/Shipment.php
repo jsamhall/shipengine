@@ -103,8 +103,7 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
     public function toArray()
     {
         $data = array_merge(parent::toArray(), [
-            'service_code'     => $this->serviceCode->__toString(),
-            'advanced_options' => []
+            'service_code'     => $this->serviceCode->__toString()
         ]);
 
         if (! is_null($this->deliveryConfirmation)) {
@@ -115,8 +114,11 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
             $data['carrier_id'] = $this->carrierId->__toString();
         }
 
-        foreach ($this->advancedOptions as $advancedOption) {
-            $data['advanced_options'] = [$advancedOption->getCode() => $advancedOption->getValue()];
+        if(count($this->advancedOptions)){
+            $data['advanced_options'] = array_map(function($option){
+                /** @var ShipEngine\Carriers\AdvancedOption $option */
+                return [$option->getCode() => $option->getValue()];
+            }, $this->advancedOptions);
         }
 
         return $data;
