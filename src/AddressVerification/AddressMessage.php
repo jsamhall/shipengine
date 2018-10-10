@@ -34,9 +34,35 @@ class AddressMessage
      */
     protected $type;
 
+    /**
+     * The field with error.
+     *
+     * @var string
+     */
+    protected $field;
+
+    /**
+     * Field names returned in response.
+     *
+     * @var array
+     */
+    private $propertyNames = [
+        'name',
+        'phone',
+        'company_name',
+        'address_line1',
+        'address_line2',
+        'address_line3',
+        'city_locality',
+        'state_province',
+        'postal_code',
+        'country_code',
+    ];
+
     public function __construct(array $message)
     {
         $this->reason = $this->translateErrorCode($message['code']);
+        $this->field = $this->identifyFieldFromMessage($message['message']);
         $this->message = $message['message'];
         $this->type = $message['type'];
     }
@@ -54,6 +80,22 @@ class AddressMessage
     public function getMessage()
     {
         return $this->message;
+    }
+
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    private function identifyFieldFromMessage(string $message)
+    {
+        foreach ($this->propertyNames as $propertyName) {
+            if (strpos($message, $propertyName) !== false) {
+                return $propertyName;
+            }
+        }
+
+        return 'unknown';
     }
 
     private function translateErrorCode(string $code)
