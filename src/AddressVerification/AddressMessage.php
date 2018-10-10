@@ -14,6 +14,24 @@ namespace jsamhall\ShipEngine\AddressVerification;
 class AddressMessage
 {
     /**
+     * Field names returned in response.
+     *
+     * @var array
+     */
+    const PROPERTY_NAMES = [
+        'name',
+        'phone',
+        'company_name',
+        'address_line1',
+        'address_line2',
+        'address_line3',
+        'city_locality',
+        'state_province',
+        'postal_code',
+        'country_code',
+    ];
+
+    /**
      * The reason why the Address failed verification
      *
      * @var string
@@ -40,24 +58,6 @@ class AddressMessage
      * @var string
      */
     protected $field;
-
-    /**
-     * Field names returned in response.
-     *
-     * @var array
-     */
-    private $propertyNames = [
-        'name',
-        'phone',
-        'company_name',
-        'address_line1',
-        'address_line2',
-        'address_line3',
-        'city_locality',
-        'state_province',
-        'postal_code',
-        'country_code',
-    ];
 
     public function __construct(array $message)
     {
@@ -89,7 +89,7 @@ class AddressMessage
 
     private function identifyFieldFromMessage(string $message)
     {
-        foreach ($this->propertyNames as $propertyName) {
+        foreach (self::PROPERTY_NAMES as $propertyName) {
             if (strpos($message, $propertyName) !== false) {
                 return $propertyName;
             }
