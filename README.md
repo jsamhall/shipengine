@@ -39,7 +39,7 @@ ShipEngine connects with many carriers. This library can connect with the follow
 Each carrier is created differently. For example, for stamps.com you may do the following:
 
 ```php
-$stampsDotCom = jsamhall\ShipEngine\Carriers\USPS\Factory("nickname", "username", "password");
+$stampsDotCom = jsamhall\ShipEngine\Carriers\USPS\Factory::factory("nickname", "username", "password");
 
 $shipEngine->connectStampsDotCom($stampsDotCom);
 // returns "carrierId"
