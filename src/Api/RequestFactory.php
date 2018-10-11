@@ -193,6 +193,24 @@ class RequestFactory
     }
 
     /**
+     * Connects a "stamps.com" account via the "Carriers" Endpoint.
+     *
+     * @link https://docs.shipengine.com/docs/connect-stampscom
+     *
+     * @param ShipEngine\Carriers\USPS\StampsDotCom $stampsDotCom
+     * @return Request
+     */
+    public function connectStampsDotCom(ShipEngine\Carriers\USPS\StampsDotCom $stampsDotCom)
+    {
+        $url = $this->buildUrl('connections/carriers/stamps_com');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST        => true,
+            CURLOPT_POSTFIELDS  => $stampsDotCom
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url    Request URL or endpoint (e.g., /addresses/validate)
