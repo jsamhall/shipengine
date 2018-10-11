@@ -12,7 +12,9 @@
             "email": "john@johnhall.io"
         }
     ],
-    "require": {},
+    "require": {
+        "php": "^7.1.3"
+    },
     "require-dev": {
         "phpunit/phpunit": "4.0.*"
     },
