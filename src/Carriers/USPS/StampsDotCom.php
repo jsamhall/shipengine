@@ -48,7 +48,7 @@ class StampsDotCom
      */
     public function setUsername(string $username)
     {
-        $this->nickname = $username;
+        $this->username = $username;
         return $this;
     }
 
@@ -58,7 +58,7 @@ class StampsDotCom
      */
     public function setPassword(string $password)
     {
-        $this->nickname = $password;
+        $this->password = $password;
         return $this;
     }
 
