@@ -10,6 +10,9 @@
  */
 namespace jsamhall\ShipEngine;
 
+use jsamhall\ShipEngine\Carriers\CarrierId;
+use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
+
 /**
  * Class ShipEngine
  *
@@ -180,5 +183,20 @@ class ShipEngine
         $response = $this->requestFactory->createLabel($shipment, $testMode)->send();
 
         return new Labels\Response($response->getData());
+    }
+
+    /**
+     * Connect a Stamps.com account.
+     *
+     * @param StampsDotCom $stampsDotCom
+     * @return CarrierId
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function connectStampsDotCom(StampsDotCom $stampsDotCom)
+    {
+        $response = $this->requestFactory->connectStampsDotCom($stampsDotCom)->send();
+
+        return new CarrierId($response->getData('carrier_id'));
     }
 }
