@@ -29,6 +29,22 @@ $shipEngineAddress = $shipEngine->formatAddress($domainAddress);
 // now $shipEngineAddress can be used for building e.g. an instance of Labels\Shipment
 ```
 
+## Carriers
+ShipEngine connects with many carriers. This library can connect with the following carriers:
+
+ * USPS via (Stamps.com)
+ * UPS (Worldwide)
+ * FedEx (US & CA)
+
+Each carrier is created differently. For example, for stamps.com you may do the following:
+
+```php
+$stampsDotCom = jsamhall\ShipEngine\Carriers\USPS\Factory("nickname", "username", "password");
+
+$shipEngine->connectStampsDotCom($stampsDotCom);
+// returns "carrierId"
+```
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
