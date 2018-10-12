@@ -52,6 +52,13 @@ class Error
         return $this->errorMessage;
     }
 
+    public function toArray()
+    {
+        return [
+            $this->getErrorCode() => $this->getErrorMessage()
+        ];
+    }
+
     public function __toString()
     {
         /** @var string $message */
