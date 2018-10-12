@@ -66,7 +66,7 @@ class Error
     public function toArray()
     {
         return [
-            $this->getErrorCode() => $this->getErrorMessage()
+            $this->getSluggedErrorCode() => $this->getErrorMessage()
         ];
     }
 
