@@ -52,6 +52,9 @@ class Error
         return $this->errorMessage;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return [
