@@ -45,6 +45,14 @@ class Error
     }
 
     /**
+     * @return null|string
+     */
+    public function getSluggedErrorCode()
+    {
+        return preg_replace('~[^\pL\d]+~u', '-', $this->getErrorCode());
+    }
+
+    /**
      * @return mixed
      */
     public function getErrorMessage()
