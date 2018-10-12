@@ -206,7 +206,7 @@ class RequestFactory
 
         return $this->initRequest($url, [
             CURLOPT_POST        => true,
-            CURLOPT_POSTFIELDS  => $stampsDotCom->toArray(),
+            CURLOPT_POSTFIELDS  => json_encode($stampsDotCom->toArray()),
         ]);
     }
 
