@@ -55,6 +55,16 @@ $shipEngine->connectUps($ups);
 // returns "CarrierId"
 ```
 
+For FedEx, there is no factory to generate the class. This is because, like UPS, FedEx takes too many
+parameters to easily create an interface.
+
+```php
+$fedex = new jsamhall\ShipEngine\Carriers\FedEx();
+
+$shipEngine->connectFedEx($fedex);
+// returns "CarrierId"
+```
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
