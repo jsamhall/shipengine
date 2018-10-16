@@ -229,6 +229,24 @@ class RequestFactory
     }
 
     /**
+     * Connects a "fedex.com" account via the "Carriers" Endpoint.
+     *
+     * @link https://docs.shipengine.com/docs/connect-fedex
+     *
+     * @param ShipEngine\Carriers\FedEx\FedEx $fedEx
+     * @return Request
+     */
+    public function connectFedEx(ShipEngine\Carriers\FedEx\FedEx $fedEx)
+    {
+        $url = $this->buildUrl('connections/carriers/fedex');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST        => true,
+            CURLOPT_POSTFIELDS  => json_encode($fedEx->toArray()),
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url    Request URL or endpoint (e.g., /addresses/validate)
