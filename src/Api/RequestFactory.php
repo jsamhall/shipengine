@@ -211,6 +211,24 @@ class RequestFactory
     }
 
     /**
+     * Connects a "ups.com" account via the "Carriers" Endpoint.
+     *
+     * @link https://docs.shipengine.com/docs/connect-ups
+     *
+     * @param ShipEngine\Carriers\UPS\UPS $UPS
+     * @return Request
+     */
+    public function connectUps(ShipEngine\Carriers\UPS\UPS $UPS)
+    {
+        $url = $this->buildUrl('connections/carriers/ups');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST        => true,
+            CURLOPT_POSTFIELDS  => json_encode($UPS->toArray())
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url    Request URL or endpoint (e.g., /addresses/validate)
