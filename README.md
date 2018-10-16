@@ -45,6 +45,16 @@ $shipEngine->connectStampsDotCom($stampsDotCom);
 // returns "carrierId"
 ```
 
+For UPS, there is no factory method to generate the class. This is because UPS takes too many parameters
+to easily create an interface.
+
+```php
+$ups = new jsamhall\ShipEngine\Carriers\UPS();
+
+$shipEngine->connectUps($ups);
+// returns "CarrierId"
+```
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
