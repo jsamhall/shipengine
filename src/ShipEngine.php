@@ -11,6 +11,7 @@
 namespace jsamhall\ShipEngine;
 
 use jsamhall\ShipEngine\Carriers\CarrierId;
+use jsamhall\ShipEngine\Carriers\UPS\UPS;
 use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
 
 /**
@@ -196,6 +197,21 @@ class ShipEngine
     public function connectStampsDotCom(StampsDotCom $stampsDotCom)
     {
         $response = $this->requestFactory->connectStampsDotCom($stampsDotCom)->send();
+
+        return new CarrierId($response->getData('carrier_id'));
+    }
+
+    /**
+     * Connect a ups.com account.
+     *
+     * @param UPS $UPS
+     * @return CarrierId
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function connectUps(UPS $UPS): CarrierId
+    {
+        $response = $this->requestFactory->connectUps($UPS)->send();
 
         return new CarrierId($response->getData('carrier_id'));
     }
