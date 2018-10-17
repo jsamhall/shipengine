@@ -26,13 +26,20 @@ class Response
     protected $rawData;
 
     /**
+     * @var int
+     */
+    protected $statusCode;
+
+    /**
      * Response constructor.
      *
      * @param array $responseData
+     * @param int $statusCode
      */
-    public function __construct(array $responseData)
+    public function __construct(array $responseData, int $statusCode)
     {
         $this->rawData = $responseData;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -46,5 +53,23 @@ class Response
         return $key == null
             ? $this->rawData
             : $this->rawData[$key];
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccessful(): bool
+    {
+        $successful = [200, 201, 202, 203, 204];
+
+        return in_array($this->getStatusCode(), $successful);
     }
 }

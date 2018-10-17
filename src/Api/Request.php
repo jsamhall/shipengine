@@ -56,6 +56,7 @@ class Request
             throw Exception::apiErrorResponse($data);
         }
 
-        return new Response($data);
+        $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+        return new Response($data, $statusCode);
     }
 }
