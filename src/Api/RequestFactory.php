@@ -92,6 +92,25 @@ class RequestFactory
     }
 
     /**
+     * Builds a request to a delete a carrier. Requires a CarrierType to identify which carrier to delete.
+     *
+     * @link https://docs.shipengine.com/reference#carrier-accounts
+     *
+     * @param ShipEngine\Carriers\CarrierType $carrierType
+     * @param string $carrierId
+     * @return Request
+     */
+    public function deleteCarrier(ShipEngine\Carriers\CarrierType $carrierType, string $carrierId)
+    {
+        $endpoint = sprintf("carriers/$1%s/$2%s", $carrierType, $carrierId);
+        $url = $this->buildUrl($endpoint);
+
+        return $this->initRequest($url, [
+            CURLOPT_CUSTOMREQUEST => 'DELETE'
+        ]);
+    }
+
+    /**
      * Build a Request to the Carriers "ListServices" API endpoint
      *
      * @link https://shipengine-docs.readme.io/reference#Carriers_ListServices
