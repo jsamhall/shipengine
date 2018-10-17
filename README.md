@@ -2,6 +2,7 @@
 A PHP wrapper for the accessing and interacting with the ShipEngine v1 API.
 
 **Entirely untested and still in development**
+**ST: Tested via the consumer of the SDK, but still in active deployment**
 
 ## How to use
 ```php
