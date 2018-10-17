@@ -29,7 +29,7 @@ class Request
      */
     public function __construct(array $params)
     {
-        $curlHandle = curl_init($params['url']);
+        $curlHandle = curl_init($params[CURLOPT_URL]);
         curl_setopt_array($curlHandle, $params);
 
         $this->curlHandle = $curlHandle;
