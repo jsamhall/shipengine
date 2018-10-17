@@ -102,7 +102,7 @@ class RequestFactory
      */
     public function deleteCarrier(ShipEngine\Carriers\CarrierType $carrierType, string $carrierId)
     {
-        $endpoint = sprintf('carriers/%1$s/%2$s', $carrierType, $carrierId);
+        $endpoint = sprintf('connections/carriers/%1$s/%2$s', $carrierType, $carrierId);
         $url = $this->buildUrl($endpoint);
 
         return $this->initRequest($url, [
