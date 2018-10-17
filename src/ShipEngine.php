@@ -11,6 +11,7 @@
 namespace jsamhall\ShipEngine;
 
 use jsamhall\ShipEngine\Carriers\CarrierId;
+use jsamhall\ShipEngine\Carriers\CarrierType;
 use jsamhall\ShipEngine\Carriers\FedEx\FedEx;
 use jsamhall\ShipEngine\Carriers\UPS\UPS;
 use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
@@ -108,6 +109,20 @@ class ShipEngine
         $response = $this->requestFactory->getCarrier($carrierId)->send();
 
         return new Carriers\Carrier($response->getData());
+    }
+
+    /**
+     * @param CarrierType $carrierType
+     * @param string $carrierId
+     * @return bool
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function removeCarrier(CarrierType $carrierType, string $carrierId): bool
+    {
+        $response = $this->requestFactory->deleteCarrier($carrierType, $carrierId)->send();
+
+        return $response->isSuccessful();
     }
 
     /**
