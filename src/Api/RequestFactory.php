@@ -277,6 +277,7 @@ class RequestFactory
         $params = $params + [
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
                 CURLOPT_HTTPHEADER     => [
                     "Content-Type: application/json",
                     "api-key: " . $this->apiKey
