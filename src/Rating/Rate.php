@@ -188,7 +188,7 @@ class Rate
             'carrier_delivery_days'   => 'carrierDeliveryDays',
             'ship_date'               => 'shipDate',
             'negotiated_rate'         => 'negotiatedRatesApplied',
-            'service_type'            => 'service_name',
+            'service_type'            => 'serviceName',
             'trackable'               => 'trackable',
             'warning_messages'        => 'warningMessages',
             'error_messages'          => 'errorMessages'
