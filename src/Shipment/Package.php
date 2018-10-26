@@ -16,6 +16,7 @@ class Package
 {
     const UNIT_OUNCE = 'ounce';
     const UNIT_POUND = 'pound';
+    const UNIT_GRAM  = 'gram';
 
     /**
      * The package weight
@@ -32,13 +33,20 @@ class Package
     protected $weightUnit = self::UNIT_OUNCE;
 
     /**
+     * @var Dimension
+     */
+    protected $dimension;
+
+    /**
      * Package constructor.
      *
+     * @param Dimension $dimension
      * @param float  $weightAmount
      * @param string $weightUnit
      */
-    public function __construct($weightAmount, $weightUnit = self::UNIT_OUNCE)
+    public function __construct(Dimension $dimension, $weightAmount, $weightUnit = self::UNIT_OUNCE)
     {
+        $this->dimension = $dimension;
         $this->weightAmount = $weightAmount;
         $this->weightUnit = $weightUnit;
     }
@@ -57,5 +65,13 @@ class Package
     public function getWeightUnit()
     {
         return $this->weightUnit;
+    }
+
+    /**
+     * @return Dimension
+     */
+    public function getDimension(): Dimension
+    {
+        return $this->dimension;
     }
 }
