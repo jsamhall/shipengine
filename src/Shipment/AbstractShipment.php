@@ -78,13 +78,18 @@ abstract class AbstractShipment
         return [
             'ship_to'   => $this->shipTo->toArray(),
             'ship_from' => $this->shipFrom->toArray(),
-            'packages'  => array_map(function ($package) {
-                /** @var ShipEngine\Shipment\Package $package */
+            'packages'  => array_map(function (Package $package) {
                 return [
                     'weight' => [
                         'value' => $package->getWeightAmount(),
                         'unit'  => $package->getWeightUnit()
-                    ]
+                    ],
+                    'dimensions' => [
+                        'unit'   => $package->getDimension()->getDimensionUnit(),
+                        'length' => $package->getDimension()->getDimensionLength(),
+                        'width'  => $package->getDimension()->getDimensionWidth(),
+                        'height' => $package->getDimension()->getDimensionHeight(),
+                    ],
                 ];
             }, $this->packages)
         ];
