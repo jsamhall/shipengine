@@ -92,6 +92,7 @@ class RateLabel
         if (! in_array($flag, [self::ADDRESS_VALIDATE_CLEAN, self::ADDRESS_VALIDATE_NONE, self::ADDRESS_VALIDATE_ONLY])) {
             throw new \InvalidArgumentException($flag . ' value is not supported for RateLabel (validate_address)');
         }
+        $this->validateAddress = $flag;
     }
 
     public function getLabelFormat(): string
