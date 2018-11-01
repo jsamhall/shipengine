@@ -66,6 +66,8 @@ class ShipEngine
      * @param array $addresses Array of Address\Address or domain Addresses which are passed through the Formatter
      *
      * @return AddressVerification\VerificationResult[] Array of Verification Results for every address requested
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function validateAddresses(array $addresses)
     {
@@ -88,6 +90,8 @@ class ShipEngine
      * @link https://docs.shipengine.com/docs/list-your-carriers
      *
      * @return Carriers\Carrier[]
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function listCarriers()
     {
@@ -103,6 +107,8 @@ class ShipEngine
      *
      * @param string $carrierId
      * @return Carriers\Carrier
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function getCarrier(string $carrierId)
     {
@@ -130,6 +136,8 @@ class ShipEngine
      *
      * @param string $carrierId
      * @return Carriers\Service[]
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function listCarrierServices(string $carrierId)
     {
@@ -145,6 +153,8 @@ class ShipEngine
      *
      * @param string $carrierId
      * @return Carriers\PackageType[]
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function listCarrierPackageTypes(string $carrierId)
     {
@@ -160,6 +170,8 @@ class ShipEngine
      *
      * @param string $carrierId
      * @return Carriers\AvailableOption[]
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function getCarrierOptions(string $carrierId)
     {
@@ -174,8 +186,10 @@ class ShipEngine
      * Get all Rates for the given Shipment and RateOptions
      *
      * @param Rating\Shipment $shipment
-     * @param Rating\Options  $rateOptions
+     * @param Rating\Options $rateOptions
      * @return Api\Response|Rating\RateResponse
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
     {
@@ -192,8 +206,10 @@ class ShipEngine
      * Create a Shipping Label
      *
      * @param Labels\Shipment $shipment
-     * @param bool            $testMode
+     * @param bool $testMode
      * @return Labels\Response
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
      */
     public function createLabel(Labels\Shipment $shipment, $testMode = false)
     {
