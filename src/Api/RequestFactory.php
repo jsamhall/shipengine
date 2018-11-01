@@ -212,6 +212,30 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to the "Labels via Rate" Endpoint
+     *
+     * @link https://docs.shipengine.com/docs/use-a-rate-to-print-a-label
+     *
+     * @param ShipEngine\Labels\RateLabel $rateLabel
+     * @param bool $testMode
+     * @return Request
+     */
+    public function createLabelFromRate(ShipEngine\Labels\RateLabel $rateLabel, $testMode = false)
+    {
+        $url = $this->buildUrl('labels/rates/' . (string) $rateLabel->getRateId());
+
+        return $this->initRequest($url, [
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                'validate_address' => $rateLabel->getAddressValidation(),
+                'label_layout'     => $rateLabel->getLabelLayout(),
+                'label_format'     => $rateLabel->getLabelFormat(),
+                'test_label'       => $testMode,
+            ]),
+        ]);
+    }
+
+    /**
      * Connects a "stamps.com" account via the "Carriers" Endpoint.
      *
      * @link https://docs.shipengine.com/docs/connect-stampscom

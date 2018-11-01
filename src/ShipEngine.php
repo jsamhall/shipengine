@@ -203,6 +203,22 @@ class ShipEngine
     }
 
     /**
+     * Create a Shipping Label via Rate
+     *
+     * @param Labels\RateLabel $rateLabel
+     * @param bool $testMode
+     * @return Labels\Response
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function createLabelFromRate(Labels\RateLabel $rateLabel, $testMode = false)
+    {
+        $response = $this->requestFactory->createLabelFromRate($rateLabel, $testMode)->send();
+
+        return new Labels\Response($response->getData());
+    }
+
+    /**
      * Connect a Stamps.com account.
      *
      * @param StampsDotCom $stampsDotCom
