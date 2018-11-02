@@ -39,6 +39,13 @@ class Response extends ShipEngine\Api\Response
     protected $shipmentId;
 
     /**
+     * The ID of the Carrier within ShipEngine that produced this Label
+     *
+     * @var ShipEngine\Carriers\CarrierId
+     */
+    protected $carrierId;
+
+    /**
      * The Date on which the Shipment is to be picked up by the Carrier
      *
      * @var \DateTime
@@ -80,12 +87,41 @@ class Response extends ShipEngine\Api\Response
      */
     protected $labelDownloadUrl;
 
+    /**
+     * The URL from which the required Form can be downloaded.
+     *
+     * @var string|null
+     */
+    protected $formDownloadUrl;
+
+    /**
+     * The URL from which the insurance claim form can be downloaded.
+     *
+     * @var string|null
+     */
+    protected $insuranceClaimUrl;
+
+    /**
+     * The Service code for this label.
+     *
+     * @var string
+     */
+    protected $serviceCode;
+
+    /**
+     * The Package code for this label.
+     *
+     * @var string
+     */
+    protected $packageCode;
+
     public function __construct(array $labelResponse)
     {
-        parent::__construct($labelResponse);
+        parent::__construct($labelResponse, 200);
 
         $this->id = new LabelId($labelResponse['label_id']);
         $this->shipmentId = new ShipEngine\Shipment\ShipmentId($labelResponse['shipment_id']);
+        $this->carrierId = new ShipEngine\Carriers\CarrierId($labelResponse['carrier_id']);
 
         $this->shipDate = new \DateTime($labelResponse['ship_date']);
         $this->createdAt = new \DateTime($labelResponse['created_at']);
@@ -103,7 +139,13 @@ class Response extends ShipEngine\Api\Response
         // @todo good cases for ValueObjects?
         $this->status = $labelResponse['status'];
         $this->trackingNumber = $labelResponse['tracking_number'];
+
         $this->labelDownloadUrl = $labelResponse['label_download']['href'];
+        $this->formDownloadUrl = $labelResponse['form_download']['href'] ?? null;
+        $this->insuranceClaimUrl = $labelResponse['insurance_claim']['href'] ?? null;
+
+        $this->serviceCode = $labelResponse['service_code'];
+        $this->packageCode = $labelResponse['package_code'];
     }
 
     /**
@@ -128,6 +170,14 @@ class Response extends ShipEngine\Api\Response
     public function getShipmentId()
     {
         return $this->shipmentId;
+    }
+
+    /**
+     * @return ShipEngine\Carriers\CarrierId
+     */
+    public function getCarrierId(): ShipEngine\Carriers\CarrierId
+    {
+        return $this->carrierId;
     }
 
     /**
@@ -176,5 +226,37 @@ class Response extends ShipEngine\Api\Response
     public function getLabelDownloadUrl()
     {
         return $this->labelDownloadUrl;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFormDownloadUrl(): ?string
+    {
+        return $this->formDownloadUrl;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getInsuranceClaimUrl(): ?string
+    {
+        return $this->insuranceClaimUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceCode(): string
+    {
+        return $this->serviceCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPackageCode(): string
+    {
+        return $this->packageCode;
     }
 }
