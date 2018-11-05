@@ -115,6 +115,33 @@ class Response extends ShipEngine\Api\Response
      */
     protected $packageCode;
 
+    /**
+     * The flag for whether the Label is International.
+     *
+     * @var boolean
+     */
+    protected $isInternational;
+
+    /**
+     * The flag for whether the Label is a return Label.
+     *
+     * @var boolean
+     */
+    protected $isReturnLabel;
+
+    /**
+     * The flag for whether the Label is voided.
+     * @var boolean
+     */
+    protected $isVoided;
+
+    /**
+     * The DateTime representing the time the Label was voided, defaulted to null.
+     *
+     * @var \DateTime|null
+     */
+    protected $voidedDate;
+
     public function __construct(array $labelResponse)
     {
         parent::__construct($labelResponse, 200);
@@ -146,6 +173,12 @@ class Response extends ShipEngine\Api\Response
 
         $this->serviceCode = $labelResponse['service_code'];
         $this->packageCode = $labelResponse['package_code'];
+
+        $this->isInternational = (bool) $labelResponse['is_international'];
+        $this->isReturnLabel = (bool) $labelResponse['is_return_label'];
+        $this->isVoided = (bool) $labelResponse['voided'];
+
+        $this->voidedDate = empty($labelResponse['voided_at']) ? null : new \DateTime($labelResponse['voided_at']);
     }
 
     /**
@@ -258,5 +291,37 @@ class Response extends ShipEngine\Api\Response
     public function getPackageCode(): string
     {
         return $this->packageCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInternational(): bool
+    {
+        return $this->isInternational;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReturnLabel(): bool
+    {
+        return $this->isReturnLabel;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVoided(): bool
+    {
+        return $this->isVoided;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getVoidedDate(): ?\DateTime
+    {
+        return $this->voidedDate;
     }
 }
