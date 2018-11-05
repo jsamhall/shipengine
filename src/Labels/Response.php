@@ -81,6 +81,13 @@ class Response extends ShipEngine\Api\Response
     protected $trackingNumber;
 
     /**
+     * The Tracking Status for this Label.
+     *
+     * @var string
+     */
+    protected $trackingStatus;
+
+    /**
      * The URL from which this Label can be downloaded
      *
      * @var string
@@ -166,6 +173,7 @@ class Response extends ShipEngine\Api\Response
         // @todo good cases for ValueObjects?
         $this->status = $labelResponse['status'];
         $this->trackingNumber = $labelResponse['tracking_number'];
+        $this->trackingStatus = $labelResponse['tracking_status'];
 
         $this->labelDownloadUrl = $labelResponse['label_download']['href'];
         $this->formDownloadUrl = $labelResponse['form_download']['href'] ?? null;
@@ -251,6 +259,14 @@ class Response extends ShipEngine\Api\Response
     public function getTrackingNumber()
     {
         return $this->trackingNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTrackingStatus(): string
+    {
+        return $this->trackingStatus;
     }
 
     /**
