@@ -79,18 +79,27 @@ abstract class AbstractShipment
             'ship_to'   => $this->shipTo->toArray(),
             'ship_from' => $this->shipFrom->toArray(),
             'packages'  => array_map(function (Package $package) {
-                return [
+                $response = [
                     'weight' => [
                         'value' => $package->getWeightAmount(),
-                        'unit'  => $package->getWeightUnit()
+                        'unit'  => $package->getWeightUnit(),
                     ],
-                    'dimensions' => [
+                ];
+
+                if (! empty($package->getDimension())) {
+                    $response['dimensions'] =  [
                         'unit'   => $package->getDimension()->getDimensionUnit(),
                         'length' => $package->getDimension()->getDimensionLength(),
                         'width'  => $package->getDimension()->getDimensionWidth(),
                         'height' => $package->getDimension()->getDimensionHeight(),
-                    ],
-                ];
+                    ];
+                }
+
+                if (! empty($package->getPackageCode())) {
+                    $response['package_code'] = $package->getPackageCode();
+                }
+
+                return $response;
             }, $this->packages)
         ];
     }

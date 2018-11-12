@@ -33,22 +33,28 @@ class Package
     protected $weightUnit = self::UNIT_OUNCE;
 
     /**
-     * @var Dimension
+     * @var Dimension|null
      */
     protected $dimension;
 
     /**
-     * Package constructor.
-     *
-     * @param Dimension $dimension
-     * @param float  $weightAmount
-     * @param string $weightUnit
+     * @var string|null
      */
-    public function __construct(Dimension $dimension, $weightAmount, $weightUnit = self::UNIT_OUNCE)
+    protected $packageCode;
+
+    /**
+     * Package constructor.
+     * @param Dimension|null $dimension
+     * @param $weightAmount
+     * @param string $weightUnit
+     * @param null $packageCode
+     */
+    public function __construct(?Dimension $dimension, $weightAmount, $weightUnit = self::UNIT_OUNCE, $packageCode = null)
     {
         $this->dimension = $dimension;
         $this->weightAmount = $weightAmount;
         $this->weightUnit = $weightUnit;
+        $this->packageCode = $packageCode;
     }
 
     /**
@@ -70,8 +76,16 @@ class Package
     /**
      * @return Dimension
      */
-    public function getDimension(): Dimension
+    public function getDimension(): ?Dimension
     {
         return $this->dimension;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPackageCode(): ?string
+    {
+        return $this->packageCode;
     }
 }
