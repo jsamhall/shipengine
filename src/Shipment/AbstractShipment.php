@@ -30,6 +30,13 @@ abstract class AbstractShipment
     protected $shipFrom;
 
     /**
+     * The DateTime of the Shipment. The day the package will be shipped.
+     *
+     * @var \DateTime
+     */
+    protected $shipDate;
+
+    /**
      * One or more packages to be quoted
      *
      * @var Package[]
@@ -75,7 +82,7 @@ abstract class AbstractShipment
 
     public function toArray()
     {
-        return [
+        $shipment = [
             'ship_to'   => $this->shipTo->toArray(),
             'ship_from' => $this->shipFrom->toArray(),
             'packages'  => array_map(function (Package $package) {
@@ -102,5 +109,11 @@ abstract class AbstractShipment
                 return $response;
             }, $this->packages)
         ];
+
+        if (! empty($this->shipDate)) {
+            $shipment['ship_date'] = $this->shipDate->format('Y-m-d');
+        }
+
+        return $shipment;
     }
 }
