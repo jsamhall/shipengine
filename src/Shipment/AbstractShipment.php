@@ -73,6 +73,17 @@ abstract class AbstractShipment
     }
 
     /**
+     * @param \DateTime $dateTime
+     * @return $this
+     */
+    public function setShipDate(\DateTime $dateTime)
+    {
+        $this->shipDate = $dateTime;
+
+        return $this;
+    }
+
+    /**
      * @return Package[]
      */
     public function getPackages()
