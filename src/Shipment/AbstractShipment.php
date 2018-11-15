@@ -37,6 +37,13 @@ abstract class AbstractShipment
     protected $shipDate;
 
     /**
+     * The Customs information block of the Shipment. This is optional.
+     *
+     * @var Customs|null
+     */
+    protected $customs = null;
+
+    /**
      * One or more packages to be quoted
      *
      * @var Package[]
@@ -84,6 +91,17 @@ abstract class AbstractShipment
     }
 
     /**
+     * @param Customs $customs
+     * @return AbstractShipment
+     */
+    public function setCustoms(Customs $customs): self
+    {
+        $this->customs = $customs;
+
+        return $this;
+    }
+
+    /**
      * @return Package[]
      */
     public function getPackages()
@@ -120,6 +138,31 @@ abstract class AbstractShipment
                 return $response;
             }, $this->packages)
         ];
+
+        if (! empty($this->customs)) {
+            $customItems = [];
+            foreach ($this->customs->getCustomItems() as $customItem) {
+                $item = [
+                    'description'       => $customItem->getDescription(),
+                    'quantity'          => $customItem->getQuantity(),
+                    'value'             => $customItem->getValue(),
+                    'country_of_origin' => $customItem->getCountryOfOrigin(),
+                ];
+
+                if (! empty($customItem->getTariffCode())) {
+                    $item['harmonized_tariff_code'] = $customItem->getTariffCode();
+                }
+                $customItems[] = $item;
+            }
+
+            $customs = [
+                'contents'     => $this->customs->getContents(),
+                'non_delivery' => $this->customs->getNonDelivery(),
+                'customs_items'=> $customItems
+            ];
+
+            $shipment['customs'] = $customs;
+        }
 
         if (! empty($this->shipDate)) {
             $shipment['ship_date'] = $this->shipDate->format('Y-m-d');
