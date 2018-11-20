@@ -278,6 +278,16 @@ class UPS
     }
 
     /**
+     * @param bool $flag
+     * @return UPS
+     */
+    public function setAgreementToTechnologyAgreement(bool $flag): self
+    {
+        $this->agree_to_technology_agreement = $flag;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getNickname(): string
@@ -414,6 +424,14 @@ class UPS
     }
 
     /**
+     * @return bool
+     */
+    public function getAgreementToTechnologyAgreement(): bool
+    {
+        return $this->agree_to_technology_agreement;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -436,6 +454,9 @@ class UPS
             'email'                => $this->getEmail(),
             'phone'                => $this->getPhone(),
             'invoice'              => $this->getInvoice()->toArray(),
+
+            // https://www.ups.com/media/en/UTA_with_EUR.pdf
+            'agree_to_technology_agreement' => $this->getAgreementToTechnologyAgreement(),
         ];
     }
 }
