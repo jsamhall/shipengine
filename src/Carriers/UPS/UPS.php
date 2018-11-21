@@ -63,7 +63,7 @@ class UPS
     protected $address1;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $address2;
 
@@ -198,10 +198,10 @@ class UPS
     }
 
     /**
-     * @param string $line2
+     * @param string|null $line2
      * @return UPS
      */
-    public function setAddress2(string $line2): self
+    public function setAddress2(?string $line2): self
     {
         $this->address2 = $line2;
         return $this;
@@ -360,11 +360,11 @@ class UPS
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAddress2(): string
+    public function getAddress2(): ?string
     {
-        return $this->address2 ?? '';
+        return $this->address2;
     }
 
     /**
