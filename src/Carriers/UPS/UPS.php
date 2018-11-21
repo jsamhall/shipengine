@@ -38,7 +38,7 @@ class UPS
     protected $account_postal_code;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $title;
 
@@ -53,7 +53,7 @@ class UPS
     protected $last_name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $company;
 
@@ -98,7 +98,7 @@ class UPS
     protected $phone;
 
     /**
-     * @var Invoice
+     * @var Invoice|null
      */
     protected $invoice;
 
@@ -148,10 +148,10 @@ class UPS
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      * @return UPS
      */
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
         return $this;
@@ -178,10 +178,10 @@ class UPS
     }
 
     /**
-     * @param string $company
+     * @param string|null $company
      * @return UPS
      */
-    public function setCompany(string $company): self
+    public function setCompany(?string $company): self
     {
         $this->company = $company;
         return $this;
@@ -268,10 +268,10 @@ class UPS
     }
 
     /**
-     * @param Invoice $invoice
+     * @param Invoice|null $invoice
      * @return UPS
      */
-    public function setInvoice(Invoice $invoice): self
+    public function setInvoice(?Invoice $invoice): self
     {
         $this->invoice = $invoice;
         return $this;
@@ -320,11 +320,11 @@ class UPS
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
-        return $this->title ?? '';
+        return $this->title;
     }
 
     /**
@@ -344,11 +344,11 @@ class UPS
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
-        return $this->company ?? '';
+        return $this->company;
     }
 
     /**
@@ -416,9 +416,9 @@ class UPS
     }
 
     /**
-     * @return Invoice
+     * @return Invoice|null
      */
-    public function getInvoice(): Invoice
+    public function getInvoice(): ?Invoice
     {
         return $this->invoice;
     }
