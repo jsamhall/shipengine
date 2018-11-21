@@ -436,7 +436,7 @@ class UPS
      */
     public function toArray()
     {
-        return [
+        $data = [
             'nickname'             => $this->getNickname(),
             'account_number'       => $this->getAccountNumber(),
             'account_country_code' => $this->getAccountCountryCode(),
@@ -453,10 +453,15 @@ class UPS
             'country_code'         => $this->getCountryCode(),
             'email'                => $this->getEmail(),
             'phone'                => $this->getPhone(),
-            'invoice'              => $this->getInvoice()->toArray(),
 
             // https://www.ups.com/media/en/UTA_with_EUR.pdf
             'agree_to_technology_agreement' => $this->getAgreementToTechnologyAgreement(),
         ];
+
+        if (! empty($this->getInvoice())) {
+            $data['invoice'] = $this->getInvoice()->toArray();
+        }
+
+        return $data;
     }
 }
