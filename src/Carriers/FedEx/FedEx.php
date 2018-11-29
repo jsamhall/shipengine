@@ -73,7 +73,7 @@ class FedEx
     protected $phone;
 
     /**
-     * @var string
+     * @var int
      */
     protected $postal_code;
 
@@ -203,10 +203,10 @@ class FedEx
     }
 
     /**
-     * @param string $postalCode
+     * @param int $postalCode
      * @return FedEx
      */
-    public function setPostalCode(string $postalCode): self
+    public function setPostalCode(int $postalCode): self
     {
         $this->postal_code = $postalCode;
         return $this;
@@ -323,9 +323,9 @@ class FedEx
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): int
     {
         return $this->postal_code;
     }
@@ -379,7 +379,7 @@ class FedEx
             'first_name'     => $this->getFirstName(),
             'last_name'      => $this->getLastName(),
             'phone'          => $this->getPhone(),
-            'postal_code'    => $this->getPhone(),
+            'postal_code'    => $this->getPostalCode(),
             'state'          => $this->getState(),
             'agree_to_eula'  => $this->getAgreeToEula(),
             'meter_number'   => $this->getMeterNumber(),
