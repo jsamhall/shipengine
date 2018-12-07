@@ -15,6 +15,7 @@ use jsamhall\ShipEngine\Carriers\CarrierType;
 use jsamhall\ShipEngine\Carriers\FedEx\FedEx;
 use jsamhall\ShipEngine\Carriers\UPS\UPS;
 use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
+use jsamhall\ShipEngine\Labels\LabelId;
 
 /**
  * Class ShipEngine
@@ -232,6 +233,16 @@ class ShipEngine
         $response = $this->requestFactory->createLabelFromRate($rateLabel, $testMode)->send();
 
         return new Labels\Response($response->getData());
+    }
+
+    /**
+     * @param LabelId $label
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function voidLabel(LabelId $label)
+    {
+        $response = $this->requestFactory->voidLabel($label)->send();
     }
 
     /**

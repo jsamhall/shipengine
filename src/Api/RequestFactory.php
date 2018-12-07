@@ -236,6 +236,23 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to "Void Label" Endpoint.
+     *
+     * @link https://docs.shipengine.com/docs/void-a-label
+     *
+     * @param ShipEngine\Labels\LabelId $labelId
+     * @return Request
+     */
+    public function voidLabel(ShipEngine\Labels\LabelId $labelId)
+    {
+        $url = $this->buildUrl('labels/' . (string) $labelId . '/void');
+
+        return $this->initRequest($url, [
+            CURLOPT_PUT => true
+        ]);
+    }
+
+    /**
      * Connects a "stamps.com" account via the "Carriers" Endpoint.
      *
      * @link https://docs.shipengine.com/docs/connect-stampscom
