@@ -79,6 +79,14 @@ $response = $shipEngine->removeCarrier($stamps, "se-333333");
 if ($response->isSuccesful()) // removed w/ no error.
 ```
 
+### Voiding Labels
+In order to void a label, you need a `LabelId` object.
+
+```php
+$labelId = new jsamhall\ShipEngine\Labels\LabelId("asdfadsf");
+$response = $shipEngine->voidLabel($labelId);
+```
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
