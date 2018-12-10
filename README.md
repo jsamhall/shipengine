@@ -84,7 +84,8 @@ In order to void a label, you need a `LabelId` object.
 
 ```php
 $labelId = new jsamhall\ShipEngine\Labels\LabelId("asdfadsf");
-$response = $shipEngine->voidLabel($labelId);
+
+$response = $shipEngine->voidLabel($labelId); // Labels\VoidResponse
 ```
 
 ## Information
