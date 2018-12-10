@@ -237,12 +237,15 @@ class ShipEngine
 
     /**
      * @param LabelId $label
+     * @return Labels\VoidResponse
      * @throws Exception\ApiErrorResponse
      * @throws Exception\ApiRequestFailed
      */
     public function voidLabel(LabelId $label)
     {
         $response = $this->requestFactory->voidLabel($label)->send();
+
+        return new Labels\VoidResponse($response->getData());
     }
 
     /**
