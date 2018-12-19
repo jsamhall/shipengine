@@ -231,7 +231,7 @@ class Settings
     /**
      * @return bool|null
      */
-    public function isUseCarbonNeutralShippingProgram(): ?bool
+    public function useCarbonNeutralShippingProgram(): ?bool
     {
         return $this->use_carbon_neutral_shipping_program;
     }
@@ -239,7 +239,7 @@ class Settings
     /**
      * @return bool|null
      */
-    public function isUseGroundFreightPricing(): ?bool
+    public function useGroundFreightPricing(): ?bool
     {
         return $this->use_ground_freight_pricing;
     }
@@ -247,7 +247,7 @@ class Settings
     /**
      * @return bool|null
      */
-    public function isUseNegotiatedRates(): ?bool
+    public function useNegotiatedRates(): ?bool
     {
         return $this->use_negotiated_rates;
     }
@@ -271,7 +271,7 @@ class Settings
     /**
      * @return bool|null
      */
-    public function isUseConsolidationServices(): ?bool
+    public function useConsolidationServices(): ?bool
     {
         return $this->use_consolidation_services;
     }
@@ -279,7 +279,7 @@ class Settings
     /**
      * @return bool|null
      */
-    public function isUseOrderNumberOnMailInnovationsLabels(): ?bool
+    public function useOrderNumberOnMailInnovationsLabels(): ?bool
     {
         return $this->use_order_number_on_mail_innovations_labels;
     }
@@ -305,7 +305,58 @@ class Settings
      */
     public function toArray()
     {
-        return [
-        ];
+        $response = [];
+
+        // Since this is a PUT request, so iterate every field looking for non-empty things. If so, include it.
+        // There has got to be a better way to do this, but in a hurry.
+        if (! empty($this->getNickname())) {
+            $response['nickname'] = $this->getNickname();
+        }
+
+        if (! empty($this->isPrimaryAccount())) {
+            $response['is_primary_account'] = $this->isPrimaryAccount();
+        }
+
+        if (! empty($this->getPickupType())) {
+            $response['pickup_type'] = $this->getPickupType();
+        }
+
+        if (! empty($this->useCarbonNeutralShippingProgram())) {
+            $response['use_carbon_neutral_shipping_program'] = $this->useCarbonNeutralShippingProgram();
+        }
+
+        if (! empty($this->useGroundFreightPricing())) {
+            $response['use_ground_freight_pricing'] = $this->useGroundFreightPricing();
+        }
+
+        if (! empty($this->useNegotiatedRates())) {
+            $response['use_negotiated_rates'] = $this->useNegotiatedRates();
+        }
+
+        if (! empty($this->getAccountPostalCode())) {
+            $response['account_postal_code'] = $this->getAccountPostalCode();
+        }
+
+        if (! empty($this->getInvoice())) {
+            $response['invoice'] = $this->getInvoice()->toArray();
+        }
+
+        if (! empty($this->useConsolidationServices())) {
+            $response['use_consolidation_services'] = $this->useConsolidationServices();
+        }
+
+        if (! empty($this->useOrderNumberOnMailInnovationsLabels())) {
+            $response['use_order_number_on_mail_innovations_labels'] = $this->useOrderNumberOnMailInnovationsLabels();
+        }
+
+        if (! empty($this->getMailInnovationsEndorsement())) {
+            $response['mail_innovations_endorsement'] = $this->getMailInnovationsEndorsement();
+        }
+
+        if (! empty($this->getMailInnovationsCostCenter())) {
+            $response['mail_innovations_cost_center'] = $this->getMailInnovationsCostCenter();
+        }
+
+        return $response;
     }
 }
