@@ -289,6 +289,21 @@ class RequestFactory
     }
 
     /**
+     * @param ShipEngine\Carriers\CarrierId $carrierId
+     * @param ShipEngine\Carriers\UPS\Settings $settings
+     * @return Request
+     */
+    public function adjustUps(ShipEngine\Carriers\CarrierId $carrierId, ShipEngine\Carriers\UPS\Settings $settings)
+    {
+        $url = $this->buildUrl('connections/carriers/ups/' . $carrierId . '/settings');
+
+        return $this->initRequest($url, [
+            CURLOPT_PUT         => true,
+            CURLOPT_POSTFIELDS  => json_encode($settings->toArray())
+        ]);
+    }
+
+    /**
      * Connects a "fedex.com" account via the "Carriers" Endpoint.
      *
      * @link https://docs.shipengine.com/docs/connect-fedex

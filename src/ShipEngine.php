@@ -13,6 +13,7 @@ namespace jsamhall\ShipEngine;
 use jsamhall\ShipEngine\Carriers\CarrierId;
 use jsamhall\ShipEngine\Carriers\CarrierType;
 use jsamhall\ShipEngine\Carriers\FedEx\FedEx;
+use jsamhall\ShipEngine\Carriers\UPS\Settings as UpsSettings;
 use jsamhall\ShipEngine\Carriers\UPS\UPS;
 use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
 use jsamhall\ShipEngine\Labels\LabelId;
@@ -276,6 +277,21 @@ class ShipEngine
         $response = $this->requestFactory->connectUps($UPS)->send();
 
         return new CarrierId($response->getData('carrier_id'));
+    }
+
+    /**
+     * @param CarrierId $carrierId
+     * @param UpsSettings $settings
+     * @return Api\Response
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function adjustUps(CarrierId $carrierId, UpsSettings $settings)
+    {
+        $response = $this->requestFactory->adjustUps($carrierId, $settings)->send();
+
+        // todo - map response to whatever return is
+        return $response;
     }
 
     /**
