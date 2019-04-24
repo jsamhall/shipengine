@@ -10,6 +10,49 @@ $shipEngine = new jsamhall\ShipEngine('your_shipengine_api_key', $addressFormatt
 $carriers = $shipEngine->listCarriers();
 ```
 
+## Example
+Minimal example to implement the [Quick Start](https://docs.shipengine.com/docs/quickstart-create-a-label) example:
+
+```php
+
+use jsamhall\ShipEngine\Address\ArrayFormatter;
+use jsamhall\ShipEngine\ShipEngine;
+use jsamhall\ShipEngine\Address\Address;
+use jsamhall\ShipEngine\Shipment\Package;
+use jsamhall\ShipEngine\Labels\Shipment;
+use jsamhall\ShipEngine\Carriers\USPS\ServiceCode;
+
+$to = new Address();
+$to->setName('Mickey and Minnie Mouse');
+$to->setPhone('+1 (714) 781-456');
+$to->setCompanyName('The Walt Disney Company');
+$to->setAddressLine1('address_line1');
+$to->setCityLocality('Burbank');
+$to->setStateProvince('CA');
+$to->setPostalCode('91521');
+$to->setCountryCode('US');
+$to->setAddressResidentialIndicator('No');
+
+$from = new Address;
+$from->setName('Mickey and Minnie Mouse');
+$from->setPhone('+1 (714) 781-456');
+$from->setCompanyName('The Walt Disney Company');
+$from->setAddressLine1('address_line1');
+$from->setCityLocality('Burbank');
+$from->setStateProvince('CA');
+$from->setPostalCode('91521');
+$from->setCountryCode('US');
+$from->setAddressResidentialIndicator('No');
+
+$package = new Package(1.0);
+
+$shipment = new Shipment(ServiceCode::priorityMail(), $to, $from, [$package]);
+
+$addressFormatter = new ArrayFormatter();
+$shipEngine = new ShipEngine('your_shipengine_api_key', $addressFormatter);
+$testMode = true;
+$label = $shipEngine->createLabel($shipment, $testMode);
+```
 ## Addresses
 ShipEngine expects a certain address format. This Library offers the `Address\Address` class which conforms
 to this format. All methods that require an Address as part of the request (e.g., validation, rating, labels etc.)
