@@ -33,7 +33,7 @@ class UPS
     protected $account_country_code;
 
     /**
-     * @var int
+     * @var string
      */
     protected $account_postal_code;
 
@@ -312,9 +312,9 @@ class UPS
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getAccountPostalCode(): int
+    public function getAccountPostalCode(): string
     {
         return $this->account_postal_code;
     }
