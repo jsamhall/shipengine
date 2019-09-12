@@ -133,6 +133,7 @@ class Settings
     public function setUseNegotiatedRates(bool $useNegotiatedRates): self
     {
         $this->use_negotiated_rates = $useNegotiatedRates;
+        return $this;
     }
 
     /**
