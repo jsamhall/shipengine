@@ -74,6 +74,13 @@ class Response extends ShipEngine\Api\Response
     protected $insuranceCost;
 
     /**
+     * The cost of the Shipment + Insurance
+     *
+     * @var ShipEngine\ValueObject\Amount
+     */
+    protected $totalCost;
+
+    /**
      * The Tracking Number for this Label
      *
      * @var string
@@ -170,6 +177,11 @@ class Response extends ShipEngine\Api\Response
             $labelResponse['insurance_cost']['currency']
         );
 
+        $this->totalCost = new ShipEngine\ValueObject\Amount(
+            $labelResponse['shipment_cost']['amount'] + $labelResponse['insurance_cost']['amount'],
+            $labelResponse['insurance_cost']['currency']
+        );
+
         // @todo good cases for ValueObjects?
         $this->status = $labelResponse['status'];
         $this->trackingNumber = $labelResponse['tracking_number'];
@@ -189,153 +201,101 @@ class Response extends ShipEngine\Api\Response
         $this->voidedDate = empty($labelResponse['voided_at']) ? null : new \DateTime($labelResponse['voided_at']);
     }
 
-    /**
-     * @return LabelId
-     */
-    public function getId()
+    public function getId(): LabelId
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @return ShipEngine\Shipment\ShipmentId
-     */
-    public function getShipmentId()
+    public function getShipmentId(): ShipEngine\Shipment\ShipmentId
     {
         return $this->shipmentId;
     }
 
-    /**
-     * @return ShipEngine\Carriers\CarrierId
-     */
     public function getCarrierId(): ShipEngine\Carriers\CarrierId
     {
         return $this->carrierId;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getShipDate()
+    public function getShipDate(): \DateTime
     {
         return $this->shipDate;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getShipmentCost()
+    public function getShipmentCost(): ShipEngine\ValueObject\Amount
     {
         return $this->shipmentCost;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getInsuranceCost()
+    public function getInsuranceCost(): ShipEngine\ValueObject\Amount
     {
         return $this->insuranceCost;
     }
 
-    /**
-     * @return string
-     */
-    public function getTrackingNumber()
+    public function getTotalCost(): ShipEngine\ValueObject\Amount
+    {
+        return $this->totalCost;
+    }
+
+    public function getTrackingNumber(): string
     {
         return $this->trackingNumber;
     }
 
-    /**
-     * @return string
-     */
     public function getTrackingStatus(): string
     {
         return $this->trackingStatus;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabelDownloadUrl()
+    public function getLabelDownloadUrl(): string
     {
         return $this->labelDownloadUrl;
     }
 
-    /**
-     * @return null|string
-     */
     public function getFormDownloadUrl(): ?string
     {
         return $this->formDownloadUrl;
     }
 
-    /**
-     * @return null|string
-     */
     public function getInsuranceClaimUrl(): ?string
     {
         return $this->insuranceClaimUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getServiceCode(): string
     {
         return $this->serviceCode;
     }
 
-    /**
-     * @return string
-     */
     public function getPackageCode(): string
     {
         return $this->packageCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isInternational(): bool
     {
         return $this->isInternational;
     }
 
-    /**
-     * @return bool
-     */
     public function isReturnLabel(): bool
     {
         return $this->isReturnLabel;
     }
 
-    /**
-     * @return bool
-     */
     public function isVoided(): bool
     {
         return $this->isVoided;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getVoidedDate(): ?\DateTime
     {
         return $this->voidedDate;
