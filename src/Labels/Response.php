@@ -74,6 +74,13 @@ class Response extends ShipEngine\Api\Response
     protected $insuranceCost;
 
     /**
+     * The cost of the Shipment + Insurance
+     *
+     * @var ShipEngine\ValueObject\Amount
+     */
+    protected $totalCost;
+
+    /**
      * The Tracking Number for this Label
      *
      * @var string
@@ -170,6 +177,11 @@ class Response extends ShipEngine\Api\Response
             $labelResponse['insurance_cost']['currency']
         );
 
+        $this->totalCost = new ShipEngine\ValueObject\Amount(
+            $labelResponse['shipment_cost']['amount'] + $labelResponse['insurance_cost']['amount'],
+            $labelResponse['insurance_cost']['currency']
+        );
+
         // @todo good cases for ValueObjects?
         $this->status = $labelResponse['status'];
         $this->trackingNumber = $labelResponse['tracking_number'];
@@ -251,6 +263,11 @@ class Response extends ShipEngine\Api\Response
     public function getInsuranceCost()
     {
         return $this->insuranceCost;
+    }
+
+    public function getTotalCost(): ShipEngine\ValueObject\Amount
+    {
+        return $this->totalCost;
     }
 
     /**
