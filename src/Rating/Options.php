@@ -23,17 +23,43 @@ class Options implements \Countable, \IteratorAggregate
     protected $carriers = [];
 
     /**
+     * Array of service codes to filter by.
+     *
+     * @var string[]
+     */
+    protected $serviceCodes = [];
+
+    /**
+     * Array of service codes to filter by.
+     *
+     * @var string[]
+     */
+    protected $packageTypes = [];
+
+    /**
      * Options constructor.
      *
      * @param mixed $carriers A carrierId or array of CarrierIds
+     * @param string|array $serviceCodes A serviceCode (string) or an array of service codes
+     * @param string|array $packageTypes A packageType (string) or an array of package types
      */
-    public function __construct($carriers = [])
+    public function __construct($carriers = [], $serviceCodes = [], $packageTypes = [])
     {
         if (! is_array($carriers)) {
             $carriers = [$carriers];
         }
 
+        if (! is_array($serviceCodes)) {
+            $serviceCodes = [$serviceCodes];
+        }
+
+        if (! is_array($packageTypes)) {
+            $packageTypes = [$packageTypes];
+        }
+
         array_map([$this, 'addCarrierId'], $carriers);
+        array_map([$this, 'addServiceCode'], $serviceCodes);
+        array_map([$this, 'addPackageType'], $packageTypes);
     }
 
     /**
@@ -42,7 +68,7 @@ class Options implements \Countable, \IteratorAggregate
      * @param string|ShipEngine\Carriers\CarrierId $carrierId
      * @return static $this
      */
-    public function addCarrierId($carrierId)
+    public function addCarrierId($carrierId): self
     {
         $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class) 
             ? $carrierId->__toString() 
@@ -51,29 +77,59 @@ class Options implements \Countable, \IteratorAggregate
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function addServiceCode(string $serviceCode): self
+    {
+        $this->serviceCodes[] = $serviceCode;
+
+        return $this;
+    }
+
+    public function setServiceCodes(array $serviceCodes): self
+    {
+        $this->serviceCodes = $serviceCodes;
+
+        return $this;
+    }
+
+    public function addPackageType(string $packageType): self
+    {
+        $this->packageTypes[] = $packageType;
+
+        return $this;
+    }
+
+    public function setPackageTypes(array $packageTypes): self
+    {
+        $this->packageTypes = $packageTypes;
+
+        return $this;
+    }
+
+    public function count(): int
     {
         return count($this->carriers);
     }
 
-    /**
-     * @return \string[]
-     */
-    public function getIterator()
+    public function getIterator(): array
     {
         return $this->carriers;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
-        return [
+        $data = [
             'carrier_ids' => array_values($this->carriers)
         ];
+
+        // If you pass an empty array to ShipEngine, it does not filter properly. Only apply if we have an item
+        if (count($this->serviceCodes) > 0) {
+            $data['service_codes'] = array_values($this->serviceCodes);
+        }
+
+        if (count($this->packageTypes) > 0) {
+            $data['package_types'] = array_values($this->packageTypes);
+        }
+
+        return $data;
     }
 }
