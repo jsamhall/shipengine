@@ -83,14 +83,14 @@ class Response extends ShipEngine\Api\Response
     /**
      * The Tracking Number for this Label
      *
-     * @var string
+     * @var string|null
      */
     protected $trackingNumber;
 
     /**
      * The Tracking Status for this Label.
      *
-     * @var string
+     * @var string|null
      */
     protected $trackingStatus;
 
@@ -246,12 +246,12 @@ class Response extends ShipEngine\Api\Response
         return $this->totalCost;
     }
 
-    public function getTrackingNumber(): string
+    public function getTrackingNumber(): ?string
     {
         return $this->trackingNumber;
     }
 
-    public function getTrackingStatus(): string
+    public function getTrackingStatus(): ?string
     {
         return $this->trackingStatus;
     }
