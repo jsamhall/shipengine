@@ -88,6 +88,15 @@ $labelId = new jsamhall\ShipEngine\Labels\LabelId("asdfadsf");
 $response = $shipEngine->voidLabel($labelId); // Labels\VoidResponse
 ```
 
+### Rates
+In order to get a rate, you need a `RateId` object.
+
+```php
+$labelId = new jsamhall\ShipEngine\Rating\RateId("se-99999999");
+
+$response = $shipEngine->getRate($labelId); // Rating\Rate
+```
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
