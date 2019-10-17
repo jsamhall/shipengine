@@ -188,6 +188,21 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to the Rating "RateShipment" API endpoint. Return a rate.
+     *
+     * @param ShipEngine\Rating\RateId $rateId
+     * @return Request
+     */
+    public function getShipmentRate(ShipEngine\Rating\RateId $rateId)
+    {
+        $url = $this->buildUrl('rates/' . $rateId);
+
+        return $this->initRequest($url, [
+            CURLOPT_HTTPGET => true
+        ]);
+    }
+
+    /**
      * Build a Request to the Labels "PurchaseLabel" Endpoint
      *
      * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel

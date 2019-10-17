@@ -17,6 +17,8 @@ use jsamhall\ShipEngine\Carriers\UPS\Settings as UpsSettings;
 use jsamhall\ShipEngine\Carriers\UPS\UPS;
 use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
 use jsamhall\ShipEngine\Labels\LabelId;
+use jsamhall\ShipEngine\Rating\Rate;
+use jsamhall\ShipEngine\Rating\RateId;
 
 /**
  * Class ShipEngine
@@ -202,6 +204,21 @@ class ShipEngine
         $response = $this->requestFactory->getShipmentRates($shipment, $rateOptions)->send();
 
         return new Rating\RateResponse($response->getData('rate_response'));
+    }
+
+    /**
+     * Gets a specific Rate from known rateId.
+     *
+     * @param RateId $rateId
+     * @return Rate
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function getRate(RateId $rateId): Rate
+    {
+        $response = $this->requestFactory->getShipmentRate($rateId)->send();
+
+        return new Rating\Rate($response->getData());
     }
 
     /**
