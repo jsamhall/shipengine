@@ -118,7 +118,7 @@ class Invoice
     public function toArray()
     {
         return [
-            'invoice_date'   => $this->getInvoiceDate(),
+            'invoice_date'   => $this->getInvoiceDate()->format('Y-m-d'),
             'invoice_number' => $this->getInvoiceNumber(),
             'control_id'     => $this->getControlId(),
             'invoice_amount' => $this->getInvoiceAmount(),
