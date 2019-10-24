@@ -286,7 +286,8 @@ class Address
             'city_locality'  => $this->getCityLocality(),
             'state_province' => $this->getStateProvince(),
             'postal_code'    => $this->getPostalCode(),
-            'country_code'   => $this->getCountryCode()
+            'country_code'   => $this->getCountryCode(),
+            'address_residential_indicator' => $this->getAddressResidentialIndicator()
         ];
     }
 }
