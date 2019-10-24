@@ -50,6 +50,7 @@ class Factory
             ->setCityLocality($formatted['city_locality'] ?? '')
             ->setStateProvince($formatted['state_province'] ?? '')
             ->setPostalCode($formatted['postal_code'] ?? '')
-            ->setCountryCode($formatted['country_code'] ?? '');
+            ->setCountryCode($formatted['country_code'] ?? '')
+            ->setAddressResidentialIndicator($formatted['address_residential_indicator'] ?? 'unknown');
     }
 }

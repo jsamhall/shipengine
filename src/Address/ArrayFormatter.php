@@ -27,7 +27,8 @@ class ArrayFormatter implements FormatterInterface
             'city_locality'  => $address['city_locality'] ?? '',
             'state_province' => $address['state_province'] ?? '',
             'postal_code'    => $address['postal_code'] ?? '',
-            'country_code'   => $address['country_code'] ?? ''
+            'country_code'   => $address['country_code'] ?? '',
+            'address_residential_indicator' => $address['address_residential_indicator'] ?? 'unknown',
         ];
     }
 }

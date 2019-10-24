@@ -29,6 +29,7 @@ class AddressMessage
         'state_province',
         'postal_code',
         'country_code',
+        'address_residential_indicator',
     ];
 
     /**
