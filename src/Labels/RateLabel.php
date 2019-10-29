@@ -26,6 +26,9 @@ class RateLabel
     const ADDRESS_VALIDATE_ONLY = 'validateOnly';
     const ADDRESS_VALIDATE_CLEAN = 'validateAndClean';
 
+    const DOWNLOAD_TYPE_URL = 'url';
+    const DOWNLOAD_TYPE_INLINE = 'inline';
+
     /**
      * @var ShipEngine\Rating\RateId
      */
@@ -53,22 +56,32 @@ class RateLabel
     protected $labelFormat;
 
     /**
+     * Valid values are listed above with DOWNLOAD_TYPE_*
+     *
+     * @var string
+     */
+    protected $labelDownloadFormat;
+
+    /**
      * RateLabel constructor.
      * @param string $rateId
      * @param string $validateAddress
      * @param string $labelLayout
      * @param string $labelFormat
+     * @param string $labelDownloadFormat
      */
     public function __construct(
         string $rateId,
         string $validateAddress = self::ADDRESS_VALIDATE_CLEAN,
         string $labelLayout = self::LABEL_LAYOUT_4x6,
-        string $labelFormat = self::LABEL_FORMAT_PDF
+        string $labelFormat = self::LABEL_FORMAT_PDF,
+        string $labelDownloadFormat = self::DOWNLOAD_TYPE_URL
     ) {
         $this->rateId = new ShipEngine\Rating\RateId($rateId);
         $this->setLabelFormat($labelFormat);
         $this->setLabelLayout($labelLayout);
         $this->setValidateAddress($validateAddress);
+        $this->setLabelDownloadFormat($labelDownloadFormat);
     }
 
     protected function setLabelFormat(string $format): void
@@ -95,6 +108,15 @@ class RateLabel
         $this->validateAddress = $flag;
     }
 
+    protected function setLabelDownloadFormat(string $format): void
+    {
+        if (! in_array($format, [self::DOWNLOAD_TYPE_URL, self::DOWNLOAD_TYPE_INLINE])) {
+            throw new \InvalidArgumentException($format . ' value is not supported for RateLabel (label_download_type)');
+        }
+
+        $this->labelDownloadFormat = $format;
+    }
+
     public function getLabelFormat(): string
     {
         return $this->labelFormat;
@@ -103,6 +125,11 @@ class RateLabel
     public function getLabelLayout(): string
     {
         return $this->labelLayout;
+    }
+
+    public function getLabelDownloadFormat(): string
+    {
+        return $this->labelDownloadFormat;
     }
 
     public function getAddressValidation(): string
