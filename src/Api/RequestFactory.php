@@ -242,10 +242,11 @@ class RequestFactory
         return $this->initRequest($url, [
             CURLOPT_POST       => true,
             CURLOPT_POSTFIELDS => json_encode([
-                'validate_address' => $rateLabel->getAddressValidation(),
-                'label_layout'     => $rateLabel->getLabelLayout(),
-                'label_format'     => $rateLabel->getLabelFormat(),
-                'test_label'       => $testMode,
+                'validate_address'    => $rateLabel->getAddressValidation(),
+                'label_layout'        => $rateLabel->getLabelLayout(),
+                'label_format'        => $rateLabel->getLabelFormat(),
+                'label_download_type' => $rateLabel->getLabelDownloadFormat(),
+                'test_label'          => $testMode,
             ]),
         ]);
     }
