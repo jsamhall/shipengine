@@ -52,7 +52,7 @@ class Request
 
         $data = json_decode($response, true);
 
-        if (isset($data['errors'])) {
+        if (isset($data['errors']) && !empty($data['errors'])) {
             throw Exception::apiErrorResponse($data);
         }
 
