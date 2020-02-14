@@ -73,7 +73,7 @@ class FedEx
     protected $phone;
 
     /**
-     * @var int
+     * @var string
      */
     protected $postal_code;
 
@@ -203,10 +203,10 @@ class FedEx
     }
 
     /**
-     * @param int $postalCode
+     * @param string $postalCode
      * @return FedEx
      */
-    public function setPostalCode(int $postalCode): self
+    public function setPostalCode(string $postalCode): self
     {
         $this->postal_code = $postalCode;
         return $this;
@@ -323,9 +323,9 @@ class FedEx
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPostalCode(): int
+    public function getPostalCode(): string
     {
         return $this->postal_code;
     }
