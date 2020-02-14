@@ -78,7 +78,7 @@ class UPS
     protected $state;
 
     /**
-     * @var int
+     * @var string
      */
     protected $postal_code;
 
@@ -138,10 +138,10 @@ class UPS
     }
 
     /**
-     * @param int $postalCode
+     * @param string $postalCode
      * @return UPS
      */
-    public function setAccountPostalCode(int $postalCode): self
+    public function setAccountPostalCode(string $postalCode): self
     {
         $this->account_postal_code = $postalCode;
         return $this;
@@ -228,10 +228,10 @@ class UPS
     }
 
     /**
-     * @param int $postalCode
+     * @param string $postalCode
      * @return UPS
      */
-    public function setPostalCode(int $postalCode): self
+    public function setPostalCode(string $postalCode): self
     {
         $this->postal_code = $postalCode;
         return $this;
@@ -384,9 +384,9 @@ class UPS
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPostalCode(): int
+    public function getPostalCode(): string
     {
         return $this->postal_code;
     }
