@@ -57,6 +57,6 @@ class Request
         }
 
         $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-        return new Response($data, $statusCode);
+        return new Response($data ?? [], $statusCode);
     }
 }
