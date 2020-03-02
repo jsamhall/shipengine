@@ -92,7 +92,7 @@ class RequestFactory
     }
 
     /**
-     * Builds a request to a delete a carrier. Requires a CarrierType to identify which carrier to delete.
+     * Builds a request to a delete a carrier. Requires a CarrierCode to identify which carrier to delete.
      *
      * @link https://docs.shipengine.com/reference#carrier-accounts
      *
