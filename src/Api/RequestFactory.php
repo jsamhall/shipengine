@@ -96,13 +96,13 @@ class RequestFactory
      *
      * @link https://docs.shipengine.com/reference#carrier-accounts
      *
-     * @param ShipEngine\Carriers\CarrierType $carrierType
+     * @param ShipEngine\Carriers\CarrierCode $carrierCode
      * @param string $carrierId
      * @return Request
      */
-    public function deleteCarrier(ShipEngine\Carriers\CarrierType $carrierType, string $carrierId)
+    public function deleteCarrier(ShipEngine\Carriers\CarrierCode $carrierCode, string $carrierId)
     {
-        $endpoint = sprintf('connections/carriers/%1$s/%2$s', $carrierType, $carrierId);
+        $endpoint = sprintf('connections/carriers/%1$s/%2$s', $carrierCode, $carrierId);
         $url = $this->buildUrl($endpoint);
 
         return $this->initRequest($url, [
