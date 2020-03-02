@@ -90,7 +90,7 @@ class Response extends ShipEngine\Api\Response
     /**
      * The Carrier Code for this Label.
      *
-     * @var string
+     * @var ShipEngine\Carriers\CarrierCode
      */
     protected $carrierCode;
 
@@ -200,7 +200,7 @@ class Response extends ShipEngine\Api\Response
 
         $this->serviceCode = $labelResponse['service_code'];
         $this->packageCode = $labelResponse['package_code'];
-        $this->carrierCode = $labelResponse['carrier_code'];
+        $this->carrierCode = new ShipEngine\Carriers\CarrierCode($labelResponse['carrier_code']);
 
         $this->isInternational = (bool) $labelResponse['is_international'];
         $this->isReturnLabel = (bool) $labelResponse['is_return_label'];
@@ -289,7 +289,7 @@ class Response extends ShipEngine\Api\Response
         return $this->packageCode;
     }
 
-    public function getCarrierCode(): string
+    public function getCarrierCode(): ShipEngine\Carriers\CarrierCode
     {
         return $this->carrierCode;
     }
