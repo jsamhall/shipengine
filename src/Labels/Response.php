@@ -88,6 +88,13 @@ class Response extends ShipEngine\Api\Response
     protected $trackingNumber;
 
     /**
+     * The Carrier Code for this Label.
+     *
+     * @var string
+     */
+    protected $carrierCode;
+
+    /**
      * The Tracking Status for this Label.
      *
      * @var string|null
@@ -193,6 +200,7 @@ class Response extends ShipEngine\Api\Response
 
         $this->serviceCode = $labelResponse['service_code'];
         $this->packageCode = $labelResponse['package_code'];
+        $this->carrierCode = $labelResponse['carrier_code'];
 
         $this->isInternational = (bool) $labelResponse['is_international'];
         $this->isReturnLabel = (bool) $labelResponse['is_return_label'];
@@ -279,6 +287,11 @@ class Response extends ShipEngine\Api\Response
     public function getPackageCode(): string
     {
         return $this->packageCode;
+    }
+
+    public function getCarrierCode(): string
+    {
+        return $this->carrierCode;
     }
 
     public function isInternational(): bool
