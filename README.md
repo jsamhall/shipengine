@@ -68,11 +68,11 @@ $shipEngine->connectFedEx($fedex);
 ```
 
 ### Removing Carriers
-In order to remove Carriers, you need the `CarrierType` class that represents the Carrier you wish to delete
+In order to remove Carriers, you need the `CarrierCode` class that represents the Carrier you wish to delete
 as well as the `carrierId`, which usually begins with `se-######`.
 
 ```php
-$stamps = new jsamhall\ShipEngine\Carriers\CarrierType("usps");
+$stamps = new jsamhall\ShipEngine\Carriers\CarrierCode("usps");
 
 $response = $shipEngine->removeCarrier($stamps, "se-333333");
 
