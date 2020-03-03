@@ -123,16 +123,16 @@ class Response extends ShipEngine\Api\Response
     protected $insuranceClaimUrl;
 
     /**
-     * The Service code for this label.
+     * The Service Code for this label.
      *
-     * @var string
+     * @var ShipEngine\Carriers\ServiceCode
      */
     protected $serviceCode;
 
     /**
-     * The Package code for this label.
+     * The Package Code for this label.
      *
-     * @var string
+     * @var ShipEngine\Carriers\PackageCode
      */
     protected $packageCode;
 
@@ -198,8 +198,8 @@ class Response extends ShipEngine\Api\Response
         $this->formDownloadUrl = $labelResponse['form_download']['href'] ?? null;
         $this->insuranceClaimUrl = $labelResponse['insurance_claim']['href'] ?? null;
 
-        $this->serviceCode = $labelResponse['service_code'];
-        $this->packageCode = $labelResponse['package_code'];
+        $this->serviceCode = new ShipEngine\Carriers\ServiceCode($labelResponse['service_code']);
+        $this->packageCode = new ShipEngine\Carriers\PackageCode($labelResponse['package_code']);
         $this->carrierCode = new ShipEngine\Carriers\CarrierCode($labelResponse['carrier_code']);
 
         $this->isInternational = (bool) $labelResponse['is_international'];

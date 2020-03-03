@@ -11,7 +11,7 @@
 namespace jsamhall\ShipEngine;
 
 use jsamhall\ShipEngine\Carriers\CarrierId;
-use jsamhall\ShipEngine\Carriers\CarrierType;
+use jsamhall\ShipEngine\Carriers\CarrierCode;
 use jsamhall\ShipEngine\Carriers\FedEx\FedEx;
 use jsamhall\ShipEngine\Carriers\UPS\Settings as UpsSettings;
 use jsamhall\ShipEngine\Carriers\UPS\UPS;
@@ -122,15 +122,15 @@ class ShipEngine
     }
 
     /**
-     * @param CarrierType $carrierType
+     * @param CarrierCode $carrierCode
      * @param string $carrierId
      * @return bool
      * @throws Exception\ApiErrorResponse
      * @throws Exception\ApiRequestFailed
      */
-    public function removeCarrier(CarrierType $carrierType, string $carrierId): bool
+    public function removeCarrier(CarrierCode $carrierCode, string $carrierId): bool
     {
-        $response = $this->requestFactory->deleteCarrier($carrierType, $carrierId)->send();
+        $response = $this->requestFactory->deleteCarrier($carrierCode, $carrierId)->send();
 
         return $response->isSuccessful();
     }

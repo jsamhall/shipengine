@@ -30,6 +30,21 @@ class CarrierCode
         $this->code = $code;
     }
 
+    public static function ups()
+    {
+        return new static("ups");
+    }
+
+    public static function fedex()
+    {
+        return new static("fedex");
+    }
+
+    public static function usps()
+    {
+        return new static("stamps_com");
+    }
+
     public function __toString()
     {
         return $this->code;
