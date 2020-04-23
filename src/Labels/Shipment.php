@@ -114,8 +114,8 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
             $data['carrier_id'] = $this->carrierId->__toString();
         }
 
-        if(count($this->advancedOptions)){
-            $data['advanced_options'] = array_map(function($option){
+        if (count($this->advancedOptions)) {
+            $data['advanced_options'] = array_map(function ($option) {
                 /** @var ShipEngine\Carriers\AdvancedOption $option */
                 return [$option->getCode() => $option->getValue()];
             }, $this->advancedOptions);

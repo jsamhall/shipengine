@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Shipment;
 
-
 class Dimension
 {
     const UNIT_INCH = 'inch';

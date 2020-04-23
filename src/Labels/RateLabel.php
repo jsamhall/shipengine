@@ -19,7 +19,7 @@ class RateLabel
     const LABEL_FORMAT_PNG = 'png';
     const LABEL_FORMAT_ZPL = 'zpl';
 
-    const LABEL_LAYOUT_4x6 = '4x6';
+    const LABEL_LAYOUT_4X6 = '4x6';
     const LABEL_LAYOUT_LETTER = 'letter';
 
     const ADDRESS_VALIDATE_NONE = 'noValidation';

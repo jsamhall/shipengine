@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Shipment;
 
-
 class Customs
 {
     const CONTENT_GIFT = 'gift';

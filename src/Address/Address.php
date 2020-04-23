@@ -12,7 +12,7 @@
 namespace jsamhall\ShipEngine\Address;
 
 /**
- * Class 
+ * Class
  *
  * @package jsamhall\ShipEngine\Address
  */

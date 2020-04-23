@@ -13,7 +13,7 @@ namespace jsamhall\ShipEngine\Api;
 
 /**
  * Class Response
- * 
+ *
  * Wrapper for a Response from the ShipEngine API
  *
  * @package jsamhall\ShipEngine\Api

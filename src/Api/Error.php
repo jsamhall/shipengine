@@ -13,7 +13,7 @@ namespace jsamhall\ShipEngine\Api;
 
 /**
  * Class Error
- * 
+ *
  * Wrapper for an error returned by the ShipEngine API
  *
  * @package ShipEngine\Api

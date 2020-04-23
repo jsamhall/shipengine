@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Shipment;
 
-
 class Package
 {
     const UNIT_OUNCE = 'ounce';

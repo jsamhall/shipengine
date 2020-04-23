@@ -13,8 +13,7 @@ namespace jsamhall\ShipEngine\Exception;
 use jsamhall\ShipEngine\Api\Error;
 use jsamhall\ShipEngine\Exception;
 
-class ApiErrorResponse
-    extends Exception
+class ApiErrorResponse extends Exception
 {
     /**
      * The internal id of the Request

@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\ValueObject;
 
-
 class Id
 {
     /**
