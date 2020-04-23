@@ -1,0 +1,28 @@
+name: main
+on:
+  push:
+jobs:
+  code_styles:
+    runs-on: ubuntu-latest
+    name: Code Style
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.2'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-suggest --prefer-dist -n -o
+
+      - name: Run code style detection
+        run: vendor/bin/phpcs

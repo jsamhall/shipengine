@@ -17,7 +17,7 @@ use jsamhall\ShipEngine\Carriers;
  * Class ServiceCode
  *
  * Named constructors for USPS service codes in ShipEngine
- * 
+ *
  * @package jsamhall\ShipEngine\Carriers\USPS
  */
 class ServiceCode extends Carriers\ServiceCode

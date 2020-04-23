@@ -70,8 +70,8 @@ class Options implements \Countable, \IteratorAggregate
      */
     public function addCarrierId($carrierId): self
     {
-        $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class) 
-            ? $carrierId->__toString() 
+        $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class)
+            ? $carrierId->__toString()
             : $carrierId;
 
         return $this;

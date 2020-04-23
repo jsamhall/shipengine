@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Carriers;
 
-
 class DeliveryConfirmation
 {
     /**
@@ -44,7 +43,7 @@ class DeliveryConfirmation
         return new static("direct_signature");
     }
 
-    function __toString()
+    public function __toString()
     {
         return $this->confirmationType;
     }

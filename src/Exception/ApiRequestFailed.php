@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Exception;
 
-
 use jsamhall\ShipEngine\Exception;
 
 /**

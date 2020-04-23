@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="PHP_CodeSniffer">
+    <file>./src</file>
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <rule ref="PSR2" />
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="240"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+</ruleset>

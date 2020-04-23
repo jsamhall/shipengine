@@ -11,7 +11,6 @@
 
 namespace jsamhall\ShipEngine\Address;
 
-
 class ArrayFormatter implements FormatterInterface
 {
     /** @inheritdoc */
