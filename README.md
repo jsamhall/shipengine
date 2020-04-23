@@ -97,6 +97,10 @@ $labelId = new jsamhall\ShipEngine\Rating\RateId("se-99999999");
 $response = $shipEngine->getRate($labelId); // Rating\Rate
 ```
 
+## Development
+
+ * All branches must pass phpcs (`./vendor/bin/phpcs`) to have no errors.
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
