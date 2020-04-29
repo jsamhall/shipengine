@@ -123,7 +123,7 @@ class VerificationResult
         return [
             'status'          => $this->status,
             'messages'        => $this->messages,
-            'matched_address' => $this->matchedAddress->toArray() ?? null,
+            'matched_address' => !empty($this->matchedAddress) ? $this->matchedAddress->toArray() : null,
         ];
     }
 }
