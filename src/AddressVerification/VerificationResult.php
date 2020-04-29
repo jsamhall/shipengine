@@ -117,4 +117,13 @@ class VerificationResult
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'status'          => $this->status,
+            'messages'        => $this->messages,
+            'matched_address' => $this->matchedAddress->toArray() ?? null,
+        ];
+    }
 }
