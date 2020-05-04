@@ -53,4 +53,13 @@ class Factory
             ->setCountryCode($formatted['country_code'] ?? '')
             ->setAddressResidentialIndicator($formatted['address_residential_indicator'] ?? 'unknown');
     }
+
+    public function getAddressData($addresses): array
+    {
+        return array_map(function ($address) {
+            return $address instanceof Address
+                ? $address->toArray()
+                : $this->factory($address)->toArray();
+        }, $addresses);
+    }
 }
