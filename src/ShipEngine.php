@@ -63,7 +63,7 @@ class ShipEngine
 
         $options = $options + $defaultOptions;
         $this->addressFactory = new Factory($addressFormatter);
-        $this->client = new Client($options);
+        $this->client = new HttpClient($options);
     }
 
     /**
