@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Api\Validation;
+namespace Tests\Feature\Api\Validation;
 
 use GuzzleHttp\Exception\ClientException;
 use jsamhall\ShipEngine\Address\Address;
@@ -9,7 +9,6 @@ use Tests\Mocks\Validation\AddressMock;
 
 class AddressTest extends TestCase
 {
-
     public function testValidateAddress(): void
     {
         // Arrange
