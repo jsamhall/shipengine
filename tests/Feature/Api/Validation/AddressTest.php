@@ -1,15 +1,15 @@
 <?php
 
-namespace Feature\Api\Validation;
+namespace Tests\Feature\Api\Validation;
 
-use GuzzleHttp\Exception\ClientException;
 use jsamhall\ShipEngine\Address\Address;
+use jsamhall\ShipEngine\Exception\ApiErrorResponse;
+use jsamhall\ShipEngine\Exception\ApiRequestFailed;
 use PHPUnit\Framework\TestCase;
 use Tests\Mocks\Validation\AddressMock;
 
 class AddressTest extends TestCase
 {
-
     public function testValidateAddress(): void
     {
         // Arrange
@@ -32,13 +32,29 @@ class AddressTest extends TestCase
         $this->assertSame(strtoupper($address->getCityLocality()), $response->getMatchedAddress()->getCityLocality());
     }
 
-    public function testInsufficientValidation(): void
+    public function testApiResponseCaptured(): void
     {
+        // Expects
+        $this->expectException(ApiErrorResponse::class);
+
         // Arrange
         $address = new Address();
         $shipEngineMock = new AddressMock();
-        $this->expectException(ClientException::class);
-        $request = $shipEngineMock->mockValidationFailure();
+        $request = $shipEngineMock->mockInvalidErrorFromShipEngine();
+
+        // Act
+        $request->validateAddress($address);
+    }
+
+    public function testApiRequestFailedCaptured(): void
+    {
+        // Expects
+        $this->expectException(ApiRequestFailed::class);
+
+        // Arrange
+        $address = new Address();
+        $shipEngineMock = new AddressMock();
+        $request = $shipEngineMock->mockInvalidConnectionToShipEngine();
 
         // Act
         $request->validateAddress($address);

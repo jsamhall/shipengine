@@ -2,7 +2,7 @@
 
 namespace Tests\Mocks\Validation;
 
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -55,9 +55,34 @@ class AddressMock
         return new ShipEngine("", $addressFormatter, $mockOptions);
     }
 
-    public function mockValidationFailure(): ShipEngine
+    public function mockInvalidErrorFromShipEngine(): ShipEngine
     {
-        $mock = new MockHandler([new ClientException("Insufficient or Incorrect Address Data", new Request('POST', 'https://api.shipengine.com/v1/addresses/validate'))]);
+        $response = [
+            'request_id' => 'c57869c1-a123-444e-80da-a7e7fedf4c27',
+            'errors' => [
+                [
+                    'error_source' => 'shipengine',
+                    'error_type' => 'security',
+                    'error_code' => 'unauthorized',
+                    'message' => 'The API key is invalid. Please see https://www.shipengine.com/docs/auth'
+                ]
+            ]
+        ];
+
+        $mock = new MockHandler([new Response(200, [], json_encode($response))]);
+        $mockStack = HandlerStack::create($mock);
+        $mockOptions = ['handler' => $mockStack];
+
+        $addressFormatter = new ArrayFormatter();
+
+        return new ShipEngine("", $addressFormatter, $mockOptions);
+    }
+
+    public function mockInvalidConnectionToShipEngine(): ShipEngine
+    {
+        $mock = new MockHandler([
+            new BadResponseException("Insufficient or Incorrect Address Data", new Request('POST', 'https://api.shipengine.com/v1/addresses/validate'))
+        ]);
         $mockStack = HandlerStack::create($mock);
         $mockOptions = ['handler' => $mockStack];
 
