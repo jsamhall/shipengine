@@ -22,7 +22,6 @@ use jsamhall\ShipEngine\Carriers\USPS\StampsDotCom;
 use jsamhall\ShipEngine\Labels\LabelId;
 use jsamhall\ShipEngine\Rating\Rate;
 use jsamhall\ShipEngine\Rating\RateId;
-use Psr\Http\Message\ResponseInterface;
 use jsamhall\ShipEngine\Address\Factory;
 use jsamhall\ShipEngine\Address\Address;
 use jsamhall\ShipEngine\Address\FormatterInterface;
@@ -91,14 +90,11 @@ class ShipEngine
     public function validateAddresses(array $addresses)
     {
         $addressData = $this->addressFactory->getAddressData($addresses);
-
-        $response = $this->client->post('addresses/validate', [
-            'json' => $addressData
-        ]);
+        $response = $this->client->postJson('addresses/validate', $addressData);
 
         return array_map(function ($data) {
             return new AddressVerification\VerificationResult($data);
-        }, $this->getResponseData($response));
+        }, $response);
     }
 
     /**
@@ -110,12 +106,9 @@ class ShipEngine
     public function validateAddress(Address $address)
     {
         $addressData = $address->toArray();
+        $response = $this->client->postJson('addresses/validate', $addressData, 0);
 
-        $response = $this->client->post('addresses/validate', [
-            'json' => $addressData
-        ]);
-
-        return new AddressVerification\VerificationResult($this->getResponseData($response, 0));
+        return new AddressVerification\VerificationResult($response);
     }
 
     /**
@@ -129,11 +122,11 @@ class ShipEngine
      */
     public function listCarriers()
     {
-        $response = $this->client->get('carriers');
+        $response = $this->client->getJson('carriers', [], 'carriers');
 
         return array_map(function ($carrier) {
             return new Carriers\Carrier($carrier);
-        }, $this->getResponseData($response, 'carriers'));
+        }, $response);
     }
 
     /**
@@ -146,10 +139,10 @@ class ShipEngine
      */
     public function getCarrier(string $carrierId)
     {
-        $endpoint = sprintf("carriers/%s", $carrierId);
-        $response = $this->client->get($endpoint);
+        $endpoint = sprintf('carriers/%s', $carrierId);
+        $response = $this->client->getJson($endpoint);
 
-        return new Carriers\Carrier($this->getResponseData($response));
+        return new Carriers\Carrier($response);
     }
 
     /**
@@ -162,9 +155,7 @@ class ShipEngine
     public function removeCarrier(CarrierCode $carrierCode, string $carrierId): bool
     {
         $endpoint = sprintf('connections/carriers/%1$s/%2$s', $carrierCode, $carrierId);
-        $response = $this->client->delete($endpoint);
-
-        return $this->isSuccessful($response);
+        return $this->client->deleteJson($endpoint);
     }
 
     /**
@@ -178,11 +169,11 @@ class ShipEngine
     public function listCarrierServices(string $carrierId)
     {
         $endpoint = sprintf("carriers/%s/services", $carrierId);
-        $response = $this->client->get($endpoint);
+        $response = $this->client->getJson($endpoint, [], 'services');
 
         return array_map(function ($carrier) {
             return new Carriers\Service($carrier);
-        }, $this->getResponseData($response, 'services'));
+        }, $response);
     }
 
     /**
@@ -196,11 +187,11 @@ class ShipEngine
     public function listCarrierPackageTypes(string $carrierId)
     {
         $endpoint = sprintf("carriers/%s/packages", $carrierId);
-        $response = $this->client->get($endpoint);
+        $response = $this->client->getJson($endpoint, [], 'packages');
 
         return array_map(function ($carrier) {
             return new Carriers\PackageType($carrier);
-        }, $this->getResponseData($response, 'packages'));
+        }, $response);
     }
 
     /**
@@ -213,12 +204,12 @@ class ShipEngine
      */
     public function getCarrierOptions(string $carrierId)
     {
-        $endpoint = sprintf("carriers/%s/options", $carrierId);
-        $response = $this->client->get($endpoint);
+        $endpoint = sprintf('carriers/%s/options', $carrierId);
+        $response = $this->client->getJson($endpoint, [], 'options');
 
         return array_map(function ($carrier) {
             return new Carriers\AvailableOption($carrier);
-        }, $this->getResponseData($response, 'options'));
+        }, $response);
     }
 
     /**
@@ -236,14 +227,12 @@ class ShipEngine
             throw new \InvalidArgumentException("\$rateOptions cannot be empty");
         }
 
-        $response = $this->client->post('rates', [
-            'json' => json_encode([
-                'shipment'     => $shipment->toArray(),
-                'rate_options' => $rateOptions->toArray()
-            ])
-        ]);
+        $response = $this->client->postJson('rates', [
+            'shipment'     => $shipment->toArray(),
+            'rate_options' => $rateOptions->toArray(),
+        ], 'rate_response');
 
-        return new Rating\RateResponse($this->getResponseData($response, 'rate_response'));
+        return new Rating\RateResponse($response);
     }
 
     /**
@@ -257,9 +246,9 @@ class ShipEngine
     public function getRate(RateId $rateId): Rate
     {
         $endpoint = 'rates/' . $rateId;
-        $response = $this->client->get($endpoint);
+        $response = $this->client->getJson($endpoint);
 
-        return new Rating\Rate($this->getResponseData($response));
+        return new Rating\Rate($response);
     }
 
     /**
@@ -273,14 +262,12 @@ class ShipEngine
      */
     public function createLabel(Labels\Shipment $shipment, $testMode = false)
     {
-        $response = $this->client->post('labels', [
-            'json' => json_encode([
-                'shipment'   => $shipment->toArray(),
-                'test_label' => $testMode
-            ])
+        $response = $this->client->postJson('labels', [
+            'shipment'   => $shipment->toArray(),
+            'test_label' => $testMode
         ]);
 
-        return new Labels\Response($this->getResponseData($response));
+        return new Labels\Response($response);
     }
 
     /**
@@ -294,17 +281,16 @@ class ShipEngine
      */
     public function createLabelFromRate(Labels\RateLabel $rateLabel, $testMode = false)
     {
-        $response = $this->client->post('labels/rates/' . (string) $rateLabel->getRateId(), [
-            'json' => json_encode([
-                'validate_address'    => $rateLabel->getAddressValidation(),
-                'label_layout'        => $rateLabel->getLabelLayout(),
-                'label_format'        => $rateLabel->getLabelFormat(),
-                'label_download_type' => $rateLabel->getLabelDownloadFormat(),
-                'test_label'          => $testMode,
-            ]),
+        $url = 'labels/rates/' . (string) $rateLabel->getRateId();
+        $response = $this->client->postJson($url, [
+            'validate_address'    => $rateLabel->getAddressValidation(),
+            'label_layout'        => $rateLabel->getLabelLayout(),
+            'label_format'        => $rateLabel->getLabelFormat(),
+            'label_download_type' => $rateLabel->getLabelDownloadFormat(),
+            'test_label'          => $testMode,
         ]);
 
-        return new Labels\Response($this->getResponseData($response));
+        return new Labels\Response($response);
     }
 
     /**
@@ -315,9 +301,10 @@ class ShipEngine
      */
     public function voidLabel(LabelId $label)
     {
-        $response = $this->client->put('labels/' . (string) $label . '/void');
+        $url = 'labels/' . (string) $label . '/void';
+        $response = $this->client->putJson($url);
 
-        return new Labels\VoidResponse($this->getResponseData($response));
+        return new Labels\VoidResponse($response);
     }
 
     /**
@@ -330,11 +317,9 @@ class ShipEngine
      */
     public function connectStampsDotCom(StampsDotCom $stampsDotCom)
     {
-        $response = $this->client->post('connections/carriers/stamps_com', [
-            'json' => json_encode($stampsDotCom->toArray())
-        ]);
+        $response = $this->client->postJson('connections/carriers/stamps_com', $stampsDotCom->toArray(), 'carrier_id');
 
-        return new CarrierId($this->getResponseData($response, 'carrier_id'));
+        return new CarrierId($response);
     }
 
     /**
@@ -347,11 +332,9 @@ class ShipEngine
      */
     public function connectUps(UPS $UPS): CarrierId
     {
-        $response = $this->client->post('connections/carriers/ups', [
-            'json' => json_encode($UPS->toArray())
-        ]);
+        $response = $this->client->postJson('connections/carriers/ups', $UPS->toArray(), 'carrier_id');
 
-        return new CarrierId($this->getResponseData($response, 'carrier_id'));
+        return new CarrierId($response);
     }
 
     /**
@@ -363,12 +346,10 @@ class ShipEngine
      */
     public function adjustUps(CarrierId $carrierId, UpsSettings $settings)
     {
-        $response = $this->client->put('connections/carriers/ups/' . $carrierId . '/settings', [
-            'json'  => json_encode($settings->toArray())
-        ]);
+        $response = $this->client->putJson('connections/carriers/ups/' . $carrierId . '/settings', $settings->toArray());
 
         // 4/29/2020 TODO: fix response for UPS adjustments
-        return $this->getResponseData($response);
+        return $response;
     }
 
     /**
@@ -381,26 +362,8 @@ class ShipEngine
      */
     public function connectFedEx(FedEx $fedEx): CarrierId
     {
-        $response = $this->client->post('connections/carriers/fedex', [
-            'json' => json_encode($fedEx->toArray())
-        ]);
+        $response = $this->client->postJson('connections/carriers/fedex', $fedEx->toArray(), 'carrier_id');
 
-        return new CarrierId($this->getResponseData($response, 'carrier_id'));
-    }
-
-    public function isSuccessful(ResponseInterface $response): bool
-    {
-        $successful = [200, 201, 202, 203, 204];
-
-        return in_array($response->getStatusCode(), $successful);
-    }
-
-    private function getResponseData(ResponseInterface $data, $key = null)
-    {
-        $response = json_decode($data->getBody()->getContents(), 1);
-
-        return $key === null
-            ? $response
-            : $response[$key];
+        return new CarrierId($response);
     }
 }
