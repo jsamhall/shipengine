@@ -4,7 +4,7 @@ on:
 jobs:
   code_styles:
     runs-on: ubuntu-latest
-    name: Code Style
+    name: CS & Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,3 +26,6 @@ jobs:
 
       - name: Run code style detection
         run: vendor/bin/phpcs
+
+      - name: Run phpunit
+        run: vendor/bin/phpunit
