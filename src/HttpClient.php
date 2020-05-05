@@ -24,22 +24,22 @@ class HttpClient extends Client
 
     public function postJson(string $route, array $payload, string $key = null)
     {
-        return $this->tryCatchRequest('POST', $route, $payload, $key);
+        return $this->sendRequest('POST', $route, $payload, $key);
     }
 
     public function getJson(string $route, array $params = [], string $key = null)
     {
-        return $this->tryCatchRequest('GET', $route, $params, $key);
+        return $this->sendRequest('GET', $route, $params, $key);
     }
 
     public function putJson(string $route, array $payload = [], string $key = null)
     {
-        return $this->tryCatchRequest('PUT', $route, $payload, $key);
+        return $this->sendRequest('PUT', $route, $payload, $key);
     }
 
     public function deleteJson(string $route, array $params = []): bool
     {
-        $this->tryCatchRequest('DELETE', $route, $params);
+        $this->sendRequest('DELETE', $route, $params);
         return $this->isSuccessful();
     }
 
@@ -50,16 +50,16 @@ class HttpClient extends Client
         return in_array($this->lastStatus, $successful);
     }
 
+    # endregion
+
+    # Private Functions
+
     private function getResponseData(array $data, $key = null)
     {
         return $key === null ? $data : $data[$key];
     }
 
-    # endregion
-
-    # Private Functions
-
-    private function tryCatchRequest(string $method, string $route, array $payload = [], string $key = null)
+    private function sendRequest(string $method, string $route, array $payload = [], string $key = null)
     {
         try {
             switch ($method) {
