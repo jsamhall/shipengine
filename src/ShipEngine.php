@@ -139,8 +139,7 @@ class ShipEngine
      */
     public function getCarrier(string $carrierId)
     {
-        $endpoint = sprintf('carriers/%s', $carrierId);
-        $response = $this->client->getJson($endpoint);
+        $response = $this->client->getJson("carriers/{$carrierId}");
 
         return new Carriers\Carrier($response);
     }
@@ -154,8 +153,7 @@ class ShipEngine
      */
     public function removeCarrier(CarrierCode $carrierCode, string $carrierId): bool
     {
-        $endpoint = sprintf('connections/carriers/%1$s/%2$s', $carrierCode, $carrierId);
-        return $this->client->deleteJson($endpoint);
+        return $this->client->deleteJson("connections/carriers/{$carrierCode}/{$carrierId}");
     }
 
     /**
@@ -168,8 +166,7 @@ class ShipEngine
      */
     public function listCarrierServices(string $carrierId)
     {
-        $endpoint = sprintf("carriers/%s/services", $carrierId);
-        $response = $this->client->getJson($endpoint, [], 'services');
+        $response = $this->client->getJson("carriers/{$carrierId}/services", [], 'services');
 
         return array_map(function ($carrier) {
             return new Carriers\Service($carrier);
@@ -186,8 +183,7 @@ class ShipEngine
      */
     public function listCarrierPackageTypes(string $carrierId)
     {
-        $endpoint = sprintf("carriers/%s/packages", $carrierId);
-        $response = $this->client->getJson($endpoint, [], 'packages');
+        $response = $this->client->getJson("carriers/{$carrierId}/packages", [], 'packages');
 
         return array_map(function ($carrier) {
             return new Carriers\PackageType($carrier);
@@ -204,8 +200,7 @@ class ShipEngine
      */
     public function getCarrierOptions(string $carrierId)
     {
-        $endpoint = sprintf('carriers/%s/options', $carrierId);
-        $response = $this->client->getJson($endpoint, [], 'options');
+        $response = $this->client->getJson("carriers/{$carrierId}/options", [], 'options');
 
         return array_map(function ($carrier) {
             return new Carriers\AvailableOption($carrier);
@@ -245,8 +240,7 @@ class ShipEngine
      */
     public function getRate(RateId $rateId): Rate
     {
-        $endpoint = 'rates/' . $rateId;
-        $response = $this->client->getJson($endpoint);
+        $response = $this->client->getJson("rates/{$rateId}");
 
         return new Rating\Rate($response);
     }
@@ -281,8 +275,7 @@ class ShipEngine
      */
     public function createLabelFromRate(Labels\RateLabel $rateLabel, $testMode = false)
     {
-        $url = 'labels/rates/' . (string) $rateLabel->getRateId();
-        $response = $this->client->postJson($url, [
+        $response = $this->client->postJson("labels/rates/{$rateLabel->getRateId()}", [
             'validate_address'    => $rateLabel->getAddressValidation(),
             'label_layout'        => $rateLabel->getLabelLayout(),
             'label_format'        => $rateLabel->getLabelFormat(),
@@ -301,8 +294,7 @@ class ShipEngine
      */
     public function voidLabel(LabelId $label)
     {
-        $url = 'labels/' . (string) $label . '/void';
-        $response = $this->client->putJson($url);
+        $response = $this->client->putJson("labels/{$label}/void");
 
         return new Labels\VoidResponse($response);
     }
@@ -346,7 +338,7 @@ class ShipEngine
      */
     public function adjustUps(CarrierId $carrierId, UpsSettings $settings)
     {
-        $response = $this->client->putJson('connections/carriers/ups/' . $carrierId . '/settings', $settings->toArray());
+        $response = $this->client->putJson("connections/carriers/ups/{$carrierId}/settings", $settings->toArray());
 
         // 4/29/2020 TODO: fix response for UPS adjustments
         return $response;
