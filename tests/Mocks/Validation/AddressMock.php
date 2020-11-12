@@ -81,7 +81,11 @@ class AddressMock
     public function mockInvalidConnectionToShipEngine(): ShipEngine
     {
         $mock = new MockHandler([
-            new BadResponseException("Insufficient or Incorrect Address Data", new Request('POST', 'https://api.shipengine.com/v1/addresses/validate'))
+            new BadResponseException(
+                "Insufficient or Incorrect Address Data",
+                new Request('POST', 'https://api.shipengine.com/v1/addresses/validate'),
+                new Response
+            )
         ]);
         $mockStack = HandlerStack::create($mock);
         $mockOptions = ['handler' => $mockStack];

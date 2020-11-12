@@ -24,22 +24,22 @@ class HttpClient extends Client
 
     public function postJson(string $route, array $payload, string $key = null)
     {
-        return $this->sendRequest('POST', $route, $payload, $key);
+        return $this->sendJsonRequest('POST', $route, $payload, $key);
     }
 
     public function getJson(string $route, array $params = [], string $key = null)
     {
-        return $this->sendRequest('GET', $route, $params, $key);
+        return $this->sendJsonRequest('GET', $route, $params, $key);
     }
 
     public function putJson(string $route, array $payload = [], string $key = null)
     {
-        return $this->sendRequest('PUT', $route, $payload, $key);
+        return $this->sendJsonRequest('PUT', $route, $payload, $key);
     }
 
     public function deleteJson(string $route, array $params = []): bool
     {
-        $this->sendRequest('DELETE', $route, $params);
+        $this->sendJsonRequest('DELETE', $route, $params);
         return $this->isSuccessful();
     }
 
@@ -59,7 +59,7 @@ class HttpClient extends Client
         return $key === null ? $data : $data[$key];
     }
 
-    private function sendRequest(string $method, string $route, array $payload = [], string $key = null)
+    private function sendJsonRequest(string $method, string $route, array $payload = [], string $key = null)
     {
         try {
             switch ($method) {
