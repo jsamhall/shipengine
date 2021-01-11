@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Setup PHP
@@ -35,19 +35,28 @@ jobs:
         run: vendor/bin/phpunit
   code_styles:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.0]
     name: Code Styles
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache Dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.composer/cache/files
-          key: dependencies-php-8.0-composer-${{ hashFiles('composer.json') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: ${{ matrix.php }}
           coverage: none
       - name: Install Dependencies
         run: composer install --no-suggest --prefer-dist -n -o
