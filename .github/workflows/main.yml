@@ -2,30 +2,48 @@ name: main
 on:
   push:
 jobs:
-  code_styles:
+  tests:
     runs-on: ubuntu-latest
-    name: CS & Tests
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [7.2, 7.3, 7.4, 8.0]
+        stability: [prefer-lowest, prefer-stable]
+    name: Tests on ${{ matrix.php }} - ${{ matrix.stability }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Cache dependencies
+      - name: Cache Dependencies
         uses: actions/cache@v1
         with:
           path: ~/.composer/cache/files
-          key: dependencies-php-composer-${{ hashFiles('composer.json') }}
-
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.2'
+          php-version: ${{ matrix.php }}
           coverage: none
-
-      - name: Install dependencies
-        run: composer install --no-suggest --prefer-dist -n -o
-
-      - name: Run code style detection
-        run: vendor/bin/phpcs
-
-      - name: Run phpunit
+      - name: Install Dependencies
+        run: composer install --${{ matrix.stability }} --no-suggest --prefer-dist -n -o
+      - name: Run Tests
         run: vendor/bin/phpunit
+  code_styles:
+    runs-on: ubuntu-latest
+    name: Code Styles
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache Dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-8.0-composer-${{ hashFiles('composer.json') }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: none
+      - name: Install Dependencies
+        run: composer install --no-suggest --prefer-dist -n -o
+      - name: Run Code Styles Check
+        run: vendor/bin/phpcs
