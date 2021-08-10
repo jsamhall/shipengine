@@ -78,6 +78,50 @@ class AddressMock
         return new ShipEngine("", $addressFormatter, $mockOptions);
     }
 
+    public function mockUnverifiedErrorFromShipEngine(): ShipEngine
+    {
+        $addressResponse = [
+            [
+                "status" => "unverified",
+                "original_address" => [
+                    "name"                          => null,
+                    "phone"                         => null,
+                    "company_name"                  => null,
+                    "address_line1"                 => "525 S Winchester Blvd",
+                    "address_line2"                 => null,
+                    "address_line3"                 => null,
+                    "city_locality"                 => "San Jose",
+                    "state_province"                => null,
+                    "postal_code"                   => "95128",
+                    "country_code"                  => "United States",
+                    "address_residential_indicator" => "unknown"
+                ],
+                "matched_address" => null,
+                "messages" => [
+                    [
+                        "code" => "a1005",
+                        "message" => "Length of property 'country_code' must equal exactly 2",
+                        "type" => "error",
+                        "detail_code" => "country_invalid_length"
+                    ],
+                    [
+                        "code" => "a1001",
+                        "message" => "country_code is not a currently a supported country, please check the documentation for acceptable 2-letter country codes.",
+                        "type" => "error",
+                        "detail_code" => "unsupported_country"
+                    ]
+                ]
+            ]
+        ];
+        $mock = new MockHandler([new Response(200, [], json_encode($addressResponse))]);
+        $mockStack = HandlerStack::create($mock);
+        $mockOptions = ['handler' => $mockStack];
+
+        $addressFormatter = new ArrayFormatter();
+
+        return new ShipEngine("", $addressFormatter, $mockOptions);
+    }
+
     public function mockInvalidConnectionToShipEngine(): ShipEngine
     {
         $mock = new MockHandler([
