@@ -91,6 +91,11 @@ class VerificationResult
         return $statusMessages[$this->status];
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     /**
      * Returns any Messages included in the response
      *
