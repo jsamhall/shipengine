@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Validation;
 
 use jsamhall\ShipEngine\Address\Address;
+use jsamhall\ShipEngine\AddressVerification\VerificationResult;
 use jsamhall\ShipEngine\Exception\ApiErrorResponse;
 use jsamhall\ShipEngine\Exception\ApiRequestFailed;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,27 @@ class AddressTest extends TestCase
         // Assert
         $this->assertSame(strtoupper($address->getAddressLine1()), $response->getMatchedAddress()->getAddressLine1());
         $this->assertSame(strtoupper($address->getCityLocality()), $response->getMatchedAddress()->getCityLocality());
+    }
+
+    public function testUnverifiedValidatedAddress(): void
+    {
+        // Arrange
+        $address = new Address();
+        $address->setAddressLine1("525 S Winchester Blvd")
+            ->setCityLocality("San Jose")
+            ->setPostalCode("95128")
+            ->setCountryCode("United States")
+            ->setAddressResidentialIndicator("unknown");
+        $shipEngineMock = new AddressMock();
+
+        $request = $shipEngineMock->mockUnverifiedErrorFromShipEngine();
+
+        // Act
+        $response = $request->validateAddress($address);
+
+        // Assert
+        $this->assertCount(2, $response->getMessages());
+        $this->assertSame(VerificationResult::STATUS_UNVERIFIED, $response->getStatus());
     }
 
     public function testApiResponseCaptured(): void
