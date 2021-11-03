@@ -1,7 +1,7 @@
 ## About
 A PHP wrapper for the accessing and interacting with the ShipEngine v1 API.
 
-**Entirely untested and still in development**
+**Not actively maintained though functional for my own needs. Use at your own discretion**
 
 ## How to use
 ```php
