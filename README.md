@@ -44,7 +44,9 @@ $from->setPostalCode('91521');
 $from->setCountryCode('US');
 $from->setAddressResidentialIndicator('No');
 
-$package = new Package(1.0);
+$weight = new Package\Weight(1.0);
+$dimensions = new Package\Dimensions(10.0, 15.0, 8.0);
+$package = new Package($weight, $dimensions);
 
 $shipment = new Shipment(ServiceCode::priorityMail(), $to, $from, [$package]);
 
