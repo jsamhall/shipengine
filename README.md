@@ -6,7 +6,7 @@ A PHP wrapper for the accessing and interacting with the ShipEngine v1 API.
 ## How to use
 ```php
 $addressFormatter = new Acme\AddressFormatter; // implements Address\FormatterInterface
-$shipEngine = new jsamhall\ShipEngine('your_shipengine_api_key', $addressFormatter);
+$shipEngine = new jsamhall\ShipEngine\ShipEngine('your_shipengine_api_key', $addressFormatter);
 $carriers = $shipEngine->listCarriers();
 ```
 
