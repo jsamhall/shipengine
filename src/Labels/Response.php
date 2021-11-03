@@ -80,6 +80,18 @@ class Response extends ShipEngine\Api\Response
      */
     protected $labelDownloadUrl;
 
+    /**
+     * The Carrier Code for which this Label is handled (e.g., ups)
+     * @var string
+     */
+    protected $carrierCode;
+
+    /**
+     * The Carrier's Service Code for this Label (e.g., ups_ground)
+     * @var string
+     */
+    protected $serviceCode;
+
     public function __construct(array $labelResponse)
     {
         parent::__construct($labelResponse);
@@ -99,6 +111,9 @@ class Response extends ShipEngine\Api\Response
             $labelResponse['insurance_cost']['amount'],
             $labelResponse['insurance_cost']['currency']
         );
+
+        $this->carrierCode = $labelResponse['carrier_code'];
+        $this->serviceCode = $labelResponse['service_code'];
 
         // @todo good cases for ValueObjects?
         $this->status = $labelResponse['status'];
@@ -176,5 +191,21 @@ class Response extends ShipEngine\Api\Response
     public function getLabelDownloadUrl()
     {
         return $this->labelDownloadUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCarrierCode()
+    {
+        return $this->carrierCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceCode()
+    {
+        return $this->serviceCode;
     }
 }
