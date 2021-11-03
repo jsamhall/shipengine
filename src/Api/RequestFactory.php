@@ -152,7 +152,7 @@ class RequestFactory
      * @link https://shipengine-docs.readme.io/reference#Rates_RateShipment
      *
      * @param ShipEngine\Rating\Shipment $shipment
-     * @param ShipEngine\Rating\Options  $options
+     * @param ShipEngine\Rating\Options $options
      * @return Request
      */
     public function getShipmentRates(ShipEngine\Rating\Shipment $shipment, ShipEngine\Rating\Options $options)
@@ -174,12 +174,12 @@ class RequestFactory
      * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
      *
      * @param ShipEngine\Labels\Shipment $shipment
-     * @param bool                       $testMode
+     * @param bool $testMode
      * @return Request
      */
     public function createLabel(
         ShipEngine\Labels\Shipment $shipment,
-        $testMode = false
+                                   $testMode = false
     ) {
         $url = $this->buildUrl('labels');
 
@@ -192,11 +192,21 @@ class RequestFactory
         ]);
     }
 
+    public function voidLabel(string $labelId)
+    {
+        $endpoint = sprintf("labels/%s/void", $labelId);
+        $url = $this->buildUrl($endpoint);
+
+        return $this->initRequest($url, [
+            CURLOPT_PUT      => true
+        ]);
+    }
+
     /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
-     * @param string $url    Request URL or endpoint (e.g., /addresses/validate)
-     * @param array  $params Request Parameters
+     * @param string $url Request URL or endpoint (e.g., /addresses/validate)
+     * @param array $params Request Parameters
      * @return Request
      */
     private function initRequest(string $url, array $params = [])

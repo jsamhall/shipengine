@@ -8,6 +8,7 @@
  *
  * @author    John Hall
  */
+
 namespace jsamhall\ShipEngine;
 
 /**
@@ -32,7 +33,7 @@ class ShipEngine
     /**
      * ShipEngine constructor.
      *
-     * @param string                     $apiKey
+     * @param string $apiKey
      * @param Address\FormatterInterface $addressFormatter
      */
     public function __construct(string $apiKey, Address\FormatterInterface $addressFormatter)
@@ -154,12 +155,12 @@ class ShipEngine
      * Get all Rates for the given Shipment and RateOptions
      *
      * @param Rating\Shipment $shipment
-     * @param Rating\Options  $rateOptions
+     * @param Rating\Options $rateOptions
      * @return Api\Response|Rating\RateResponse
      */
     public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
     {
-        if (! count($rateOptions)) {
+        if (!count($rateOptions)) {
             throw new \InvalidArgumentException("\$rateOptions cannot be empty");
         }
 
@@ -172,13 +173,26 @@ class ShipEngine
      * Create a Shipping Label
      *
      * @param Labels\Shipment $shipment
-     * @param bool            $testMode
+     * @param bool $testMode
      * @return Labels\Response
      */
-    public function createLabel(Labels\Shipment $shipment, $testMode = false)
+    public function createLabel(Labels\Shipment $shipment, bool $testMode): Labels\Response
     {
         $response = $this->requestFactory->createLabel($shipment, $testMode)->send();
 
         return new Labels\Response($response->getData());
+    }
+
+    /**
+     * @param string $labelId
+     * @return Labels\Void\Response
+     * @throws Exception\ApiErrorResponse
+     * @throws Exception\ApiRequestFailed
+     */
+    public function voidLabel(string $labelId): Labels\Void\Response
+    {
+        $response = $this->requestFactory->voidLabel($labelId)->send();
+
+        return new Labels\Void\Response($response->getData());
     }
 }

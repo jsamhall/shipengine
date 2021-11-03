@@ -12,35 +12,45 @@
 namespace jsamhall\ShipEngine\Shipment;
 
 
+use jsamhall\ShipEngine\Shipment\Package\Dimensions;
+use jsamhall\ShipEngine\Shipment\Package\Weight;
+
 class Package
 {
-    const UNIT_OUNCE = 'ounce';
-    const UNIT_POUND = 'pound';
+    /**
+     * @var Weight
+     */
+    private $weight;
 
     /**
-     * The package weight
-     *
-     * @var float
+     * @var Dimensions
      */
-    protected $weightAmount;
+    private $dimensions;
 
     /**
-     * The unit of measurement for the package weight
-     *
-     * @var string
+     * @param Weight $weight
+     * @param Dimensions $dimensions
      */
-    protected $weightUnit = self::UNIT_OUNCE;
-
-    /**
-     * Package constructor.
-     *
-     * @param float  $weightAmount
-     * @param string $weightUnit
-     */
-    public function __construct($weightAmount, $weightUnit = self::UNIT_OUNCE)
+    public function __construct(Weight $weight, Dimensions $dimensions)
     {
-        $this->weightAmount = $weightAmount;
-        $this->weightUnit = $weightUnit;
+        $this->weight = $weight;
+        $this->dimensions = $dimensions;
+    }
+
+    /**
+     * @return Weight
+     */
+    public function getWeight(): Weight
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @return Dimensions
+     */
+    public function getDimensions(): Dimensions
+    {
+        return $this->dimensions;
     }
 
     /**
@@ -48,7 +58,7 @@ class Package
      */
     public function getWeightAmount()
     {
-        return $this->weightAmount;
+        return $this->weight->getValue();
     }
 
     /**
@@ -56,6 +66,6 @@ class Package
      */
     public function getWeightUnit()
     {
-        return $this->weightUnit;
+        return $this->weight->getUnit();
     }
 }

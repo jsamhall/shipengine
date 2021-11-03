@@ -41,10 +41,12 @@ abstract class AbstractShipment
      *
      * @param ShipEngine\Address\Address $shipTo
      * @param ShipEngine\Address\Address $shipFrom
-     * @param Package[]                  $packages
+     * @param Package[] $packages
      */
-    public function __construct(ShipEngine\Address\Address $shipTo, ShipEngine\Address\Address $shipFrom, array $packages = [])
-    {
+    public function __construct(ShipEngine\Address\Address $shipTo,
+                                ShipEngine\Address\Address $shipFrom,
+                                array                      $packages = []
+    ) {
         $this->shipTo = $shipTo;
         $this->shipFrom = $shipFrom;
 
@@ -75,18 +77,41 @@ abstract class AbstractShipment
 
     public function toArray()
     {
+        $totalWeight = $this->getTotalWeight();
         return [
-            'ship_to'   => $this->shipTo->toArray(),
-            'ship_from' => $this->shipFrom->toArray(),
-            'packages'  => array_map(function ($package) {
+            'ship_to'      => $this->shipTo->toArray(),
+            'ship_from'    => $this->shipFrom->toArray(),
+            'total_weight' => [
+                'value' => $totalWeight->getValue(),
+                'unit'  => $totalWeight->getUnit()
+            ],
+            'packages'     => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
+                $weight = $package->getWeight();
+                $dimensions = $package->getDimensions();
                 return [
-                    'weight' => [
-                        'value' => $package->getWeightAmount(),
-                        'unit'  => $package->getWeightUnit()
+                    'weight'     => [
+                        'value' => $weight->getValue(),
+                        'unit'  => $weight->getUnit()
+                    ],
+                    'dimensions' => [
+                        'unit'   => $dimensions->getUnit(),
+                        'length' => $dimensions->getLength(),
+                        'width'  => $dimensions->getWidth(),
+                        'height' => $dimensions->getHeight()
                     ]
                 ];
             }, $this->packages)
         ];
+    }
+
+    private function getTotalWeight(): ShipEngine\Shipment\Package\Weight
+    {
+        $total = 0;
+        foreach ($this->packages as $package) {
+            $total += $package->getWeight()->inOunces();
+        }
+
+        return new ShipEngine\Shipment\Package\Weight($total);
     }
 }
