@@ -50,6 +50,6 @@ class Weight
     {
         return $this->unit === self::UNIT_OUNCE
             ? $this->value
-            : $this->value / 16;
+            : $this->value * 16;
     }
 }
