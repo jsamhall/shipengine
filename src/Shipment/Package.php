@@ -11,11 +11,11 @@
 
 namespace jsamhall\ShipEngine\Shipment;
 
+use jsamhall\ShipEngine\Shipment\Package\Dimensions;
+use jsamhall\ShipEngine\Shipment\Package\Weight;
+
 class Package
 {
-    const UNIT_OUNCE = 'ounce';
-    const UNIT_POUND = 'pound';
-    const UNIT_GRAM  = 'gram';
 
     /**
      * The package weight
@@ -29,10 +29,10 @@ class Package
      *
      * @var string
      */
-    protected $weightUnit = self::UNIT_OUNCE;
+    protected $weightUnit = Weight::UNIT_OUNCE;
 
     /**
-     * @var Dimension|null
+     * @var Dimensions|null
      */
     protected $dimension;
 
@@ -43,12 +43,12 @@ class Package
 
     /**
      * Package constructor.
-     * @param Dimension|null $dimension
+     * @param Dimensions|null $dimension
      * @param $weightAmount
      * @param string $weightUnit
      * @param null $packageCode
      */
-    public function __construct(?Dimension $dimension, $weightAmount, $weightUnit = self::UNIT_OUNCE, $packageCode = null)
+    public function __construct(?Dimensions $dimension, $weightAmount, string $weightUnit = Weight::UNIT_OUNCE, $packageCode = null)
     {
         $this->dimension = $dimension;
         $this->weightAmount = $weightAmount;
@@ -73,9 +73,9 @@ class Package
     }
 
     /**
-     * @return Dimension
+     * @return Dimensions
      */
-    public function getDimension(): ?Dimension
+    public function getDimension(): ?Dimensions
     {
         return $this->dimension;
     }
