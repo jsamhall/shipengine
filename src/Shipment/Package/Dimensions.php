@@ -9,9 +9,9 @@
  * @author    John Hall
  */
 
-namespace jsamhall\ShipEngine\Shipment;
+namespace jsamhall\ShipEngine\Shipment\Package;
 
-class Dimension
+class Dimensions
 {
     const UNIT_INCH = 'inch';
     const UNIT_CENTIMETER = 'centimeter';
@@ -45,7 +45,7 @@ class Dimension
     protected $dimensionUnit = self::UNIT_INCH;
 
     /**
-     * Dimension constructor.
+     * Dimensions constructor.
      * @param float $dimensionLength
      * @param float $dimensionWidth
      * @param float $dimensionHeight
