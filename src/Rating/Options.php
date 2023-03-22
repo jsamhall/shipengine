@@ -11,6 +11,7 @@
 
 namespace jsamhall\ShipEngine\Rating;
 
+use ArrayIterator;
 use jsamhall\ShipEngine;
 
 class Options implements \Countable, \IteratorAggregate
@@ -22,18 +23,25 @@ class Options implements \Countable, \IteratorAggregate
      */
     protected $carriers = [];
 
+    protected $services = [];
+
+    protected $packageTypes = [];
+
     /**
      * Options constructor.
      *
-     * @param mixed $carriers A carrierId or array of CarrierIds
+     * @param mixed $carrierIds A carrierId or array of CarrierIds
+     * @param string[] $serviceCodes Service codes for which to retrieve rates
+     * @param string[] $packageTypes Package Type Codes for which to retrieve rates
      */
-    public function __construct($carriers = [])
-    {
-        if (! is_array($carriers)) {
-            $carriers = [$carriers];
-        }
-
-        array_map([$this, 'addCarrierId'], $carriers);
+    public function __construct(
+        array $carrierIds = [],
+        array $serviceCodes = [],
+        array $packageTypes = []
+    ) {
+        array_map([$this, 'addCarrierId'], $carrierIds);
+        array_map([$this, 'addServiceCode'], $serviceCodes);
+        array_map([$this, 'addPackageType'], $packageTypes);
     }
 
     /**
@@ -44,11 +52,21 @@ class Options implements \Countable, \IteratorAggregate
      */
     public function addCarrierId($carrierId)
     {
-        $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class) 
-            ? $carrierId->__toString() 
+        $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class)
+            ? $carrierId->__toString()
             : $carrierId;
 
         return $this;
+    }
+
+    public function addServiceCode(string $serviceCode)
+    {
+        $this->services[] = $serviceCode;
+    }
+
+    public function addPackageType(string $packageType)
+    {
+        $this->packageTypes[] = $packageType;
     }
 
     /**
@@ -60,11 +78,11 @@ class Options implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return \string[]
+     * @return ArrayIterator|\string[]
      */
     public function getIterator()
     {
-        return $this->carriers;
+        return new ArrayIterator($this->carriers);
     }
 
     /**
@@ -73,7 +91,9 @@ class Options implements \Countable, \IteratorAggregate
     public function toArray()
     {
         return [
-            'carrier_ids' => array_values($this->carriers)
+            'carrier_ids'   => array_values($this->carriers),
+            'service_codes' => array_values($this->services),
+            'package_types' => array_values($this->packageTypes)
         ];
     }
 }
