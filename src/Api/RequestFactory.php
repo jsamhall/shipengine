@@ -192,13 +192,23 @@ class RequestFactory
         ]);
     }
 
+    public function createLabelFromRate(ShipEngine\Rating\Rate $rate)
+    {
+        $endpoint = sprintf('labels/rates/%s', $rate->getId());
+        $url = $this->buildUrl($endpoint);
+
+        return $this->initRequest($url, [
+            CURLOPT_POST => true
+        ]);
+    }
+
     public function voidLabel(string $labelId)
     {
         $endpoint = sprintf("labels/%s/void", $labelId);
         $url = $this->buildUrl($endpoint);
 
         return $this->initRequest($url, [
-            CURLOPT_PUT      => true
+            CURLOPT_PUT => true
         ]);
     }
 

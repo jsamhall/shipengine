@@ -11,6 +11,8 @@
 
 namespace jsamhall\ShipEngine;
 
+use jsamhall\ShipEngine\Rating\Rate;
+
 /**
  * Class ShipEngine
  *
@@ -179,6 +181,13 @@ class ShipEngine
     public function createLabel(Labels\Shipment $shipment, bool $testMode): Labels\Response
     {
         $response = $this->requestFactory->createLabel($shipment, $testMode)->send();
+
+        return new Labels\Response($response->getData());
+    }
+
+    public function createLabelFromRate(Rate $rate): Labels\Response
+    {
+        $response = $this->requestFactory->createLabelFromRate($rate)->send();
 
         return new Labels\Response($response->getData());
     }
