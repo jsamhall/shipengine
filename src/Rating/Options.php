@@ -47,24 +47,34 @@ class Options
      * Add a Carrier ID to retrieve Rates for
      *
      * @param string|ShipEngine\Carriers\CarrierId $carrierId
-     * @return static $this
+     * @return void
      */
     public function addCarrierId($carrierId)
     {
-        $this->carriers[] = is_a($carrierId, ShipEngine\Carriers\CarrierId::class)
-            ? $carrierId->__toString()
-            : $carrierId;
+        $id = is_a($carrierId, ShipEngine\Carriers\CarrierId::class) ? $carrierId->__toString() : $carrierId;
 
-        return $this;
+        if (in_array($id, $this->carriers)) {
+            return;
+        }
+
+        $this->carriers[] = $id;
     }
 
     public function addServiceCode(string $serviceCode)
     {
+        if (in_array($serviceCode, $this->services)) {
+            return;
+        }
+
         $this->services[] = $serviceCode;
     }
 
     public function addPackageType(string $packageType)
     {
+        if (in_array($packageType, $this->packageTypes)) {
+            return;
+        }
+
         $this->packageTypes[] = $packageType;
     }
 
