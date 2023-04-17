@@ -162,10 +162,6 @@ class ShipEngine
      */
     public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
     {
-        if (!count($rateOptions)) {
-            throw new \InvalidArgumentException("\$rateOptions cannot be empty");
-        }
-
         $response = $this->requestFactory->getShipmentRates($shipment, $rateOptions)->send();
 
         return new Rating\RateResponse($response->getData('rate_response'));

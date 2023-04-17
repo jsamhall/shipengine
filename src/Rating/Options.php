@@ -11,10 +11,9 @@
 
 namespace jsamhall\ShipEngine\Rating;
 
-use ArrayIterator;
 use jsamhall\ShipEngine;
 
-class Options implements \Countable, \IteratorAggregate
+class Options
 {
     /**
      * Array of CarrierIds
@@ -67,22 +66,6 @@ class Options implements \Countable, \IteratorAggregate
     public function addPackageType(string $packageType)
     {
         $this->packageTypes[] = $packageType;
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->carriers);
-    }
-
-    /**
-     * @return ArrayIterator|\string[]
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->carriers);
     }
 
     /**

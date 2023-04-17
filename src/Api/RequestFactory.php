@@ -177,10 +177,8 @@ class RequestFactory
      * @param bool $testMode
      * @return Request
      */
-    public function createLabel(
-        ShipEngine\Labels\Shipment $shipment,
-                                   $testMode = false
-    ) {
+    public function createLabel(ShipEngine\Labels\Shipment $shipment, $testMode = false)
+    {
         $url = $this->buildUrl('labels');
 
         return $this->initRequest($url, [
