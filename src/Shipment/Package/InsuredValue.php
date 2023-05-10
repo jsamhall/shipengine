@@ -21,4 +21,14 @@ class InsuredValue
             'amount'   => $this->amount
         ];
     }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function getCurrencyCode(): string
+    {
+        return $this->currency;
+    }
 }
