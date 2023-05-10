@@ -34,7 +34,7 @@ class Package
      * @param Weight $weight
      * @param Dimensions $dimensions
      */
-    public function __construct(Weight $weight, Dimensions $dimensions, ?InsuredValue $insuredValue)
+    public function __construct(Weight $weight, Dimensions $dimensions, ?InsuredValue $insuredValue = null)
     {
         $this->weight = $weight;
         $this->dimensions = $dimensions;
