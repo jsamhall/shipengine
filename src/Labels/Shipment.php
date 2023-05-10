@@ -9,6 +9,7 @@
  *
  * @author    John Hall
  */
+
 namespace jsamhall\ShipEngine\Labels;
 
 use jsamhall\ShipEngine;
@@ -40,15 +41,24 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
      */
     protected $advancedOptions = [];
 
+    protected ?InsuranceProvider $insuranceProvider = null;
+
     public function __construct(
         ShipEngine\Carriers\ServiceCode $service,
-        ShipEngine\Address\Address $shipTo,
-        ShipEngine\Address\Address $shipFrom,
-        array $packages = []
+        ShipEngine\Address\Address      $shipTo,
+        ShipEngine\Address\Address      $shipFrom,
+        array                           $packages = [],
+        ?InsuranceProvider              $insuranceProvider = null
     ) {
         parent::__construct($shipTo, $shipFrom, $packages);
 
         $this->serviceCode = $service;
+        $this->insuranceProvider = $insuranceProvider;
+    }
+
+    public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
+    {
+        $this->insuranceProvider = $insuranceProvider;
     }
 
     /**
@@ -103,19 +113,23 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
     public function toArray()
     {
         $data = array_merge(parent::toArray(), [
-            'service_code'     => $this->serviceCode->__toString()
+            'service_code' => $this->serviceCode->__toString()
         ]);
 
-        if (! is_null($this->deliveryConfirmation)) {
+        if (!is_null($this->insuranceProvider)) {
+            $data['insurance_provider'] = $this->insuranceProvider->__toString();
+        }
+
+        if (!is_null($this->deliveryConfirmation)) {
             $data['confirmation'] = $this->deliveryConfirmation->__toString();
         }
 
-        if (! is_null($this->carrierId)) {
+        if (!is_null($this->carrierId)) {
             $data['carrier_id'] = $this->carrierId->__toString();
         }
 
-        if(count($this->advancedOptions)){
-            $data['advanced_options'] = array_map(function($option){
+        if (count($this->advancedOptions)) {
+            $data['advanced_options'] = array_map(function ($option) {
                 /** @var ShipEngine\Carriers\AdvancedOption $option */
                 return [$option->getCode() => $option->getValue()];
             }, $this->advancedOptions);

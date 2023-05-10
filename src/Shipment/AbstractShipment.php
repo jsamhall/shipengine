@@ -89,7 +89,8 @@ abstract class AbstractShipment
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
                 $dimensions = $package->getDimensions();
-                return [
+
+                $data = [
                     'weight'     => [
                         'value' => $weight->getValue(),
                         'unit'  => $weight->getUnit()
@@ -101,6 +102,12 @@ abstract class AbstractShipment
                         'height' => $dimensions->getHeight()
                     ]
                 ];
+
+                if ($package->hasInsuredValue()) {
+                    $data['insured_value'] = $package->getInsuredValue()->toArray();
+                }
+
+                return $data;
             }, $this->packages)
         ];
     }

@@ -13,6 +13,7 @@ namespace jsamhall\ShipEngine\Shipment;
 
 
 use jsamhall\ShipEngine\Shipment\Package\Dimensions;
+use jsamhall\ShipEngine\Shipment\Package\InsuredValue;
 use jsamhall\ShipEngine\Shipment\Package\Weight;
 
 class Package
@@ -27,14 +28,17 @@ class Package
      */
     private $dimensions;
 
+    private ?InsuredValue $insuredValue;
+
     /**
      * @param Weight $weight
      * @param Dimensions $dimensions
      */
-    public function __construct(Weight $weight, Dimensions $dimensions)
+    public function __construct(Weight $weight, Dimensions $dimensions, ?InsuredValue $insuredValue)
     {
         $this->weight = $weight;
         $this->dimensions = $dimensions;
+        $this->insuredValue = $insuredValue;
     }
 
     /**
@@ -67,5 +71,15 @@ class Package
     public function getWeightUnit()
     {
         return $this->weight->getUnit();
+    }
+
+    public function hasInsuredValue(): bool
+    {
+        return !is_null($this->insuredValue);
+    }
+
+    public function getInsuredValue(): ?InsuredValue
+    {
+        return $this->insuredValue;
     }
 }
