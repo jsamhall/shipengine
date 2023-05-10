@@ -56,6 +56,11 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         $this->insuranceProvider = $insuranceProvider;
     }
 
+    public function getServiceCode(): ShipEngine\Carriers\ServiceCode
+    {
+        return $this->serviceCode;
+    }
+
     public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
     {
         $this->insuranceProvider = $insuranceProvider;
