@@ -49,6 +49,8 @@ class RateResponse
         foreach ($rateResponse['rates'] as $rate) {
             $this->rates[] = new Rate($rate);
         }
+
+        $this->invalidRates = $rateResponse['invalid_rates'] ?? [];
     }
 
     /**
