@@ -194,7 +194,7 @@ class ShipEngine
         string          $labelImageId,
         bool            $testMode
     ): Labels\Response {
-        $response = $this->requestFactory->createLabel($shipment, $labelImageId, $testMode)->send();
+        $response = $this->requestFactory->createLabelWithCustomImage($shipment, $labelImageId, $testMode)->send();
 
         return new Labels\Response($response->getData());
     }
