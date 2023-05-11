@@ -12,8 +12,10 @@
 namespace jsamhall\ShipEngine\Shipment;
 
 
+use BadMethodCallException;
 use jsamhall\ShipEngine\Shipment\Package\Dimensions;
 use jsamhall\ShipEngine\Shipment\Package\InsuredValue;
+use jsamhall\ShipEngine\Shipment\Package\LabelMessage;
 use jsamhall\ShipEngine\Shipment\Package\Weight;
 
 class Package
@@ -31,6 +33,11 @@ class Package
     private ?InsuredValue $insuredValue;
 
     /**
+     * @var LabelMessage[]
+     */
+    private array $messages = [];
+
+    /**
      * @param Weight $weight
      * @param Dimensions $dimensions
      */
@@ -39,6 +46,37 @@ class Package
         $this->weight = $weight;
         $this->dimensions = $dimensions;
         $this->insuredValue = $insuredValue;
+    }
+
+    /**
+     * Label Messages are rendered on Shipping Labels in the footer.
+     * Up to (3) messages can be added, after which an error will be thrown.
+     * @param string $messageLabel The label for the message, such as "Purchase Order", "Reference", etc.
+     * @param string $message The message to display, limited to 60 characters
+     */
+    public function addLabelMessage(string $messageLabel, string $message)
+    {
+        if (count($this->messages) === 3) {
+            throw new BadMethodCallException('Cannot add label message; there are already 3 messages present');
+        }
+
+        $this->messages[] = new LabelMessage($messageLabel, $message);
+    }
+
+    /**
+     * @return LabelMessage[]
+     */
+    public function getLabelMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLabelMessages(): bool
+    {
+        return count($this->messages) > 0;
     }
 
     /**
