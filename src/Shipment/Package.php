@@ -13,6 +13,8 @@ namespace jsamhall\ShipEngine\Shipment;
 
 
 use BadMethodCallException;
+use Exception;
+use InvalidArgumentException;
 use jsamhall\ShipEngine\Shipment\Package\Dimensions;
 use jsamhall\ShipEngine\Shipment\Package\InsuredValue;
 use jsamhall\ShipEngine\Shipment\Package\LabelMessage;
@@ -51,7 +53,7 @@ class Package
     /**
      * Label Messages are rendered on Shipping Labels in the footer.
      * Up to (3) messages can be added, after which an error will be thrown.
-     * @param string $message The message to display, limited to 60 characters
+     * @param string $message The message to display. If the message exceeds 35 characters, it will be rejected.
      */
     public function addLabelMessage(string $message)
     {
@@ -63,7 +65,11 @@ class Package
         $referenceNumber = $messageCount + 1; // e.g., 0 + 1 = 1, 1+1=2, 2+1 = 3, etc.
         $messageLabel = "reference" . $referenceNumber;
 
-        $this->messages[] = new LabelMessage($messageLabel, $message);
+        try {
+            $this->messages[] = new LabelMessage($messageLabel, $message);
+        } catch (InvalidArgumentException $e) {
+            // do nothing; message too long
+        }
     }
 
     /**
