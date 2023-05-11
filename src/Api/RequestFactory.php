@@ -190,6 +190,34 @@ class RequestFactory
         ]);
     }
 
+
+    /**
+     * Build a Request to the Labels "PurchaseLabel" Endpoint using a Custom Image uploaded via ShipEngine back-office
+     *
+     * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
+     *
+     * @param ShipEngine\Labels\Shipment $shipment
+     * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
+     * @param bool $testMode
+     * @return Request
+     */
+    public function createLabelWithCustomImage(
+        ShipEngine\Labels\Shipment $shipment,
+        string                     $labelImageId,
+                                   $testMode = false
+    ) {
+        $url = $this->buildUrl('labels');
+
+        return $this->initRequest($url, [
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                'label_image_id' => $labelImageId,
+                'shipment'       => $shipment->toArray(),
+                'test_label'     => $testMode
+            ])
+        ]);
+    }
+
     public function createLabelFromRate(ShipEngine\Rating\Rate $rate)
     {
         $endpoint = sprintf('labels/rates/%s', $rate->getId());

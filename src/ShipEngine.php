@@ -181,6 +181,24 @@ class ShipEngine
         return new Labels\Response($response->getData());
     }
 
+    /**
+     * Create a Shipping Label with a Custom Image
+     *
+     * @param Labels\Shipment $shipment
+     * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
+     * @param bool $testMode
+     * @return Labels\Response
+     */
+    public function createLabelWithCustomImage(
+        Labels\Shipment $shipment,
+        string          $labelImageId,
+        bool            $testMode
+    ): Labels\Response {
+        $response = $this->requestFactory->createLabel($shipment, $labelImageId, $testMode)->send();
+
+        return new Labels\Response($response->getData());
+    }
+
     public function createLabelFromRate(Rate $rate): Labels\Response
     {
         $response = $this->requestFactory->createLabelFromRate($rate)->send();
