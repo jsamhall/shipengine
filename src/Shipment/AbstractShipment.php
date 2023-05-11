@@ -12,6 +12,7 @@
 namespace jsamhall\ShipEngine\Shipment;
 
 use jsamhall\ShipEngine;
+use jsamhall\ShipEngine\Labels\InsuranceProvider;
 
 abstract class AbstractShipment
 {
@@ -36,6 +37,8 @@ abstract class AbstractShipment
      */
     protected $packages = [];
 
+    protected ?InsuranceProvider $insuranceProvider = null;
+
     /**
      * AbstractShipment constructor.
      *
@@ -45,14 +48,22 @@ abstract class AbstractShipment
      */
     public function __construct(ShipEngine\Address\Address $shipTo,
                                 ShipEngine\Address\Address $shipFrom,
-                                array                      $packages = []
+                                array                      $packages = [],
+                                ?InsuranceProvider         $insuranceProvider = null
     ) {
         $this->shipTo = $shipTo;
         $this->shipFrom = $shipFrom;
+        $this->insuranceProvider = $insuranceProvider;
 
         foreach ($packages as $package) {
             $this->addPackage($package);
         }
+    }
+
+
+    public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
+    {
+        $this->insuranceProvider = $insuranceProvider;
     }
 
 
@@ -79,13 +90,14 @@ abstract class AbstractShipment
     {
         $totalWeight = $this->getTotalWeight();
         return [
-            'ship_to'      => $this->shipTo->toArray(),
-            'ship_from'    => $this->shipFrom->toArray(),
-            'total_weight' => [
+            'ship_to'            => $this->shipTo->toArray(),
+            'ship_from'          => $this->shipFrom->toArray(),
+            'insurance_provider' => $this->insuranceProvider ? $this->insuranceProvider->__toString() : 'none',
+            'total_weight'       => [
                 'value' => $totalWeight->getValue(),
                 'unit'  => $totalWeight->getUnit()
             ],
-            'packages'     => array_map(function ($package) {
+            'packages'           => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
                 $dimensions = $package->getDimensions();
@@ -109,7 +121,7 @@ abstract class AbstractShipment
 
                 if ($package->hasLabelMessages()) {
                     $data['label_messages'] = [];
-                    foreach($package->getLabelMessages() as $labelMessage){
+                    foreach ($package->getLabelMessages() as $labelMessage) {
                         $data['label_messages'][$labelMessage->getLabel()] = $labelMessage->getMessage();
                     }
                 }

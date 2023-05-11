@@ -41,7 +41,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
      */
     protected $advancedOptions = [];
 
-    protected ?InsuranceProvider $insuranceProvider = null;
 
     public function __construct(
         ShipEngine\Carriers\ServiceCode $service,
@@ -50,10 +49,8 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         array                           $packages = [],
         ?InsuranceProvider              $insuranceProvider = null
     ) {
-        parent::__construct($shipTo, $shipFrom, $packages);
-
+        parent::__construct($shipTo, $shipFrom, $packages, $insuranceProvider);
         $this->serviceCode = $service;
-        $this->insuranceProvider = $insuranceProvider;
     }
 
     public function getServiceCode(): ShipEngine\Carriers\ServiceCode
@@ -61,10 +58,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         return $this->serviceCode;
     }
 
-    public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
-    {
-        $this->insuranceProvider = $insuranceProvider;
-    }
 
     /**
      * Specify a specific carrierId for which this Shipment applies
@@ -120,10 +113,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         $data = array_merge(parent::toArray(), [
             'service_code' => $this->serviceCode->__toString()
         ]);
-
-        if (!is_null($this->insuranceProvider)) {
-            $data['insurance_provider'] = $this->insuranceProvider->__toString();
-        }
 
         if (!is_null($this->deliveryConfirmation)) {
             $data['confirmation'] = $this->deliveryConfirmation->__toString();
