@@ -207,6 +207,19 @@ class ShipEngine
     }
 
     /**
+     * Create a Shipping Label from a previous Rate including a Custom Image
+     *
+     * @param Rating\Rate $rate
+     * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
+     * @return Labels\Response
+     */
+    public function createLabelFromRateWithCustomImage(Rate $rate, string $labelImageId): Labels\Response
+    {
+        $response = $this->requestFactory->createLabelFromRateWithCustomImage($rate, $labelImageId)->send();
+
+        return new Labels\Response($response->getData());
+    }
+    /**
      * @param string $labelId
      * @return Labels\Void\Response
      * @throws Exception\ApiErrorResponse

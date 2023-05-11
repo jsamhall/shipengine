@@ -228,6 +228,22 @@ class RequestFactory
         ]);
     }
 
+    public function createLabelFromRateWithCustomImage(
+        ShipEngine\Rating\Rate $rate,
+        string                 $labelImageId
+
+    ) {
+        $endpoint = sprintf('labels/rates/%s', $rate->getId());
+        $url = $this->buildUrl($endpoint);
+
+        return $this->initRequest($url, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                'label_image_id' => $labelImageId
+            ])
+        ]);
+    }
+
     public function voidLabel(string $labelId)
     {
         $endpoint = sprintf("labels/%s/void", $labelId);
