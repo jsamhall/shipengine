@@ -51,14 +51,17 @@ class Package
     /**
      * Label Messages are rendered on Shipping Labels in the footer.
      * Up to (3) messages can be added, after which an error will be thrown.
-     * @param string $messageLabel The label for the message, such as "Purchase Order", "Reference", etc.
      * @param string $message The message to display, limited to 60 characters
      */
-    public function addLabelMessage(string $messageLabel, string $message)
+    public function addLabelMessage(string $message)
     {
+        $messageCount = count($this->messages);
         if (count($this->messages) === 3) {
             throw new BadMethodCallException('Cannot add label message; there are already 3 messages present');
         }
+
+        $referenceNumber = $messageCount + 1; // e.g., 0 + 1 = 1, 1+1=2, 2+1 = 3, etc.
+        $messageLabel = "reference" . $referenceNumber;
 
         $this->messages[] = new LabelMessage($messageLabel, $message);
     }
