@@ -107,6 +107,13 @@ abstract class AbstractShipment
                     $data['insured_value'] = $package->getInsuredValue()->toArray();
                 }
 
+                if ($package->hasLabelMessages()) {
+                    $data['label_messages'] = [];
+                    foreach($package->getLabelMessages() as $labelMessage){
+                        $data['label_messages'][$labelMessage->getLabel()] = $labelMessage->getMessage();
+                    }
+                }
+
                 return $data;
             }, $this->packages)
         ];
