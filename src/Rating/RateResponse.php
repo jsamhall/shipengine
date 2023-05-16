@@ -150,7 +150,7 @@ class RateResponse
     }
 
     /**
-     * @return \string[]
+     * @return RatingError[]
      */
     public function getErrors()
     {
