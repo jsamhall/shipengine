@@ -51,6 +51,10 @@ class RateResponse
         }
 
         $this->invalidRates = $rateResponse['invalid_rates'] ?? [];
+
+        foreach($rateResponse['errors'] ?? [] as $errorDetails){
+            $this->errors[] = RatingError::fromRateResponseError($errorDetails);
+        }
     }
 
     /**
