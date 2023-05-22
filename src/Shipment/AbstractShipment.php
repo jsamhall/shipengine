@@ -108,6 +108,10 @@ abstract class AbstractShipment
 
     public function toArray()
     {
+        $advancedOptions = [];
+        foreach ($this->advancedOptions as $advancedOption) {
+            $advancedOptions[$advancedOption->getCode()] = $advancedOption->getValue();
+        }
 
         $totalWeight = $this->getTotalWeight();
         return [
@@ -118,11 +122,8 @@ abstract class AbstractShipment
                 'value' => $totalWeight->getValue(),
                 'unit'  => $totalWeight->getUnit()
             ],
-            'advanced_options'   => array_map(function ($option) {
-                /** @var ShipEngine\Carriers\AdvancedOption $option */
-                return [$option->getCode() => $option->getValue()];
-            }, $this->advancedOptions),
-            'packages' => array_map(function ($package) {
+            'advanced_options'   => $advancedOptions,
+            'packages'           => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
                 $dimensions = $package->getDimensions();
