@@ -36,11 +36,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
      */
     protected $deliveryConfirmation = null;
 
-    /**
-     * @var ShipEngine\Carriers\AdvancedOption[]
-     */
-    protected $advancedOptions = [];
-
 
     public function __construct(
         ShipEngine\Carriers\ServiceCode $service,
@@ -72,22 +67,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
 
         return $this;
     }
-
-    /**
-     * Add an Advanced Option to the Label Shipment
-     *
-     * @link https://docs.shipengine.com/docs/specify-advanced-options
-     *
-     * @param ShipEngine\Carriers\AdvancedOption $advancedOption
-     * @return static $this
-     */
-    public function addAdvancedOption(ShipEngine\Carriers\AdvancedOption $advancedOption)
-    {
-        $this->advancedOptions[] = $advancedOption;
-
-        return $this;
-    }
-
     /**
      * Add Delivery Confirmation to the Label Shipment
      *
@@ -120,13 +99,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
 
         if (!is_null($this->carrierId)) {
             $data['carrier_id'] = $this->carrierId->__toString();
-        }
-
-        if (count($this->advancedOptions)) {
-            $data['advanced_options'] = array_map(function ($option) {
-                /** @var ShipEngine\Carriers\AdvancedOption $option */
-                return [$option->getCode() => $option->getValue()];
-            }, $this->advancedOptions);
         }
 
         return $data;

@@ -13,6 +13,7 @@ namespace jsamhall\ShipEngine\Shipment;
 
 use jsamhall\ShipEngine;
 use jsamhall\ShipEngine\Labels\InsuranceProvider;
+use jsamhall\ShipEngine\Labels\Shipment;
 
 abstract class AbstractShipment
 {
@@ -37,6 +38,11 @@ abstract class AbstractShipment
      */
     protected $packages = [];
 
+    /**
+     * @var ShipEngine\Carriers\AdvancedOption[]
+     */
+    protected $advancedOptions = [];
+
     protected ?InsuranceProvider $insuranceProvider = null;
 
     /**
@@ -44,12 +50,13 @@ abstract class AbstractShipment
      *
      * @param ShipEngine\Address\Address $shipTo
      * @param ShipEngine\Address\Address $shipFrom
-     * @param Package[] $packages
+     * @param Package[]                  $packages
      */
-    public function __construct(ShipEngine\Address\Address $shipTo,
-                                ShipEngine\Address\Address $shipFrom,
-                                array                      $packages = [],
-                                ?InsuranceProvider         $insuranceProvider = null
+    public function __construct(
+        ShipEngine\Address\Address $shipTo,
+        ShipEngine\Address\Address $shipFrom,
+        array $packages = [],
+        ?InsuranceProvider $insuranceProvider = null
     ) {
         $this->shipTo = $shipTo;
         $this->shipFrom = $shipFrom;
@@ -60,12 +67,25 @@ abstract class AbstractShipment
         }
     }
 
+    /**
+     * Add an Advanced Option to the Shipment
+     *
+     * @link https://docs.shipengine.com/docs/specify-advanced-options
+     *
+     * @param ShipEngine\Carriers\AdvancedOption $advancedOption
+     * @return static $this
+     */
+    public function addAdvancedOption(ShipEngine\Carriers\AdvancedOption $advancedOption)
+    {
+        $this->advancedOptions[] = $advancedOption;
+
+        return $this;
+    }
 
     public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
     {
         $this->insuranceProvider = $insuranceProvider;
     }
-
 
     /**
      * @param Package $package
@@ -88,6 +108,7 @@ abstract class AbstractShipment
 
     public function toArray()
     {
+
         $totalWeight = $this->getTotalWeight();
         return [
             'ship_to'            => $this->shipTo->toArray(),
@@ -97,7 +118,11 @@ abstract class AbstractShipment
                 'value' => $totalWeight->getValue(),
                 'unit'  => $totalWeight->getUnit()
             ],
-            'packages'           => array_map(function ($package) {
+            'advanced_options'   => array_map(function ($option) {
+                /** @var ShipEngine\Carriers\AdvancedOption $option */
+                return [$option->getCode() => $option->getValue()];
+            }, $this->advancedOptions),
+            'packages' => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
                 $dimensions = $package->getDimensions();
