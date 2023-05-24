@@ -122,7 +122,7 @@ abstract class AbstractShipment
                 'value' => $totalWeight->getValue(),
                 'unit'  => $totalWeight->getUnit()
             ],
-            'advanced_options'   => $advancedOptions,
+            'advanced_options'   => count($advancedOptions) ? $advancedOptions : null,
             'packages'           => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
