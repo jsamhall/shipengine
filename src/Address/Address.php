@@ -31,6 +31,11 @@ class Address
     /**
      * @var string|null
      */
+    protected $email;
+
+    /**
+     * @var string|null
+     */
     protected $companyName;
 
     /**
