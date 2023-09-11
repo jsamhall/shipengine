@@ -33,6 +33,7 @@ class AddressMock
                 "matched_address" => [
                     "name"                          => null,
                     "phone"                         => null,
+                    "email"                         => null,
                     "company_name"                  => null,
                     "address_line1"                 => "525 S WINCHESTER BLVD",
                     "address_line2"                 => "",

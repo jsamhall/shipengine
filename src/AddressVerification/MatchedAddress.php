@@ -25,6 +25,7 @@ class MatchedAddress extends Address
         list(
             $this->name,
             $this->phone,
+            $this->email,
             $this->companyName,
             $this->addressLine1,
             $this->addressLine2,
