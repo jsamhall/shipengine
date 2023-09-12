@@ -22,19 +22,17 @@ class MatchedAddress extends Address
      */
     public function __construct(array $matchedAddress)
     {
-        list(
-            $this->name,
-            $this->phone,
-            $this->email,
-            $this->companyName,
-            $this->addressLine1,
-            $this->addressLine2,
-            $this->addressLine3,
-            $this->cityLocality,
-            $this->stateProvince,
-            $this->postalCode,
-            $this->countryCode,
-            $this->addressResidentialIndicator
-            ) = array_values($matchedAddress);
+        $this->name = $matchedAddress['name'];
+        $this->phone = $matchedAddress['phone'];
+        $this->email = $matchedAddress['email'];
+        $this->companyName = $matchedAddress['company_name'];
+        $this->addressLine1 = $matchedAddress['address_line1'];
+        $this->addressLine2 = $matchedAddress['address_line2'];
+        $this->addressLine3 = $matchedAddress['address_line3'];
+        $this->cityLocality = $matchedAddress['city_locality'];
+        $this->stateProvince = $matchedAddress['state_province'];
+        $this->postalCode = $matchedAddress['postal_code'];
+        $this->countryCode = $matchedAddress['country_code'];
+        $this->addressResidentialIndicator = $matchedAddress['address_residential_indicator'];
     }
 }
