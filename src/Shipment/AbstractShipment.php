@@ -78,10 +78,6 @@ abstract class AbstractShipment
         foreach ($packages as $package) {
             $this->addPackage($package);
         }
-
-        if ($this->getTotalInsuredValue() >= self::FEDEX_DIRECT_SIGNATURE_INSURANCE_THRESHOLD) {
-            $this->deliveryConfirmation = DeliveryConfirmation::directSignature();
-        }
     }
 
     /**
