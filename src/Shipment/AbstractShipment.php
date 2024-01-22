@@ -12,11 +12,14 @@
 namespace jsamhall\ShipEngine\Shipment;
 
 use jsamhall\ShipEngine;
+use jsamhall\ShipEngine\Carriers\DeliveryConfirmation;
+use jsamhall\ShipEngine\Exception;
 use jsamhall\ShipEngine\Labels\InsuranceProvider;
-use jsamhall\ShipEngine\Labels\Shipment;
 
 abstract class AbstractShipment
 {
+    private const FEDEX_DIRECT_SIGNATURE_INSURANCE_THRESHOLD = 500;
+
     /**
      * The destination address of the Shipment
      *
@@ -43,27 +46,41 @@ abstract class AbstractShipment
      */
     protected $advancedOptions = [];
 
+    /**
+     * @var InsuranceProvider|null
+     */
     protected ?InsuranceProvider $insuranceProvider = null;
+
+    /**
+     * @var DeliveryConfirmation|null
+     */
+    protected ?DeliveryConfirmation $deliveryConfirmation = null;
 
     /**
      * AbstractShipment constructor.
      *
      * @param ShipEngine\Address\Address $shipTo
      * @param ShipEngine\Address\Address $shipFrom
-     * @param Package[]                  $packages
+     * @param Package[] $packages
      */
     public function __construct(
         ShipEngine\Address\Address $shipTo,
         ShipEngine\Address\Address $shipFrom,
         array $packages = [],
-        ?InsuranceProvider $insuranceProvider = null
+        ?InsuranceProvider $insuranceProvider = null,
+        ?DeliveryConfirmation $deliveryConfirmation = null
     ) {
         $this->shipTo = $shipTo;
         $this->shipFrom = $shipFrom;
         $this->insuranceProvider = $insuranceProvider;
+        $this->deliveryConfirmation = $deliveryConfirmation;
 
         foreach ($packages as $package) {
             $this->addPackage($package);
+        }
+
+        if ($this->getTotalInsuredValue() >= self::FEDEX_DIRECT_SIGNATURE_INSURANCE_THRESHOLD) {
+            $this->deliveryConfirmation = DeliveryConfirmation::directSignature();
         }
     }
 
@@ -123,6 +140,7 @@ abstract class AbstractShipment
                 'unit'  => $totalWeight->getUnit()
             ],
             'advanced_options'   => count($advancedOptions) ? $advancedOptions : null,
+            'confirmation'       => $this->deliveryConfirmation ? $this->deliveryConfirmation->__toString() : null,
             'packages'           => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
@@ -165,5 +183,44 @@ abstract class AbstractShipment
         }
 
         return new ShipEngine\Shipment\Package\Weight($total);
+    }
+
+    private function getTotalInsuredValue(): float
+    {
+        $grossValue = 0;
+        foreach ($this->packages as $package) {
+            if (!$package->hasInsuredValue()) {
+                continue;
+            }
+
+            $grossValue += $package->getInsuredValue()->getAmount();
+        }
+
+        return $grossValue;
+    }
+
+    public function hasDeliveryConfirmation(): bool
+    {
+        return !is_null($this->deliveryConfirmation);
+    }
+
+    /**
+     * Add Delivery Confirmation to the Shipment
+     *
+     * @link https://docs.shipengine.com/docs/request-delivery-confirmation
+     *
+     * @param DeliveryConfirmation $deliveryConfirmation
+     * @return static $this
+     * @throws Exception if Delivery Confirmation has already been assigned to the shipment; use hasDeliveryConfirmation
+     */
+    public function setDeliveryConfirmation(DeliveryConfirmation $deliveryConfirmation)
+    {
+        if (!is_null($this->deliveryConfirmation)) {
+            throw new ShipEngine\Exception('Delivery Confirmation has already been defined for this Shipment. Before assigning Delivery Confirmation, check if it has already been assigned using hasDeliveryConfirmation()');
+        }
+
+        $this->deliveryConfirmation = $deliveryConfirmation;
+
+        return $this;
     }
 }

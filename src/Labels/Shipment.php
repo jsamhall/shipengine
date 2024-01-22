@@ -31,10 +31,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
      */
     protected $serviceCode;
 
-    /**
-     * @var ShipEngine\Carriers\DeliveryConfirmation|null
-     */
-    protected $deliveryConfirmation = null;
 
 
     public function __construct(
@@ -67,20 +63,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
 
         return $this;
     }
-    /**
-     * Add Delivery Confirmation to the Label Shipment
-     *
-     * @link https://docs.shipengine.com/docs/request-delivery-confirmation
-     *
-     * @param ShipEngine\Carriers\DeliveryConfirmation $deliveryConfirmation
-     * @return static $this
-     */
-    public function setDeliveryConfirmation(ShipEngine\Carriers\DeliveryConfirmation $deliveryConfirmation)
-    {
-        $this->deliveryConfirmation = $deliveryConfirmation;
-
-        return $this;
-    }
 
     /**
      * Prepare the Shipment Data for transport as an array
@@ -92,10 +74,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         $data = array_merge(parent::toArray(), [
             'service_code' => $this->serviceCode->__toString()
         ]);
-
-        if (!is_null($this->deliveryConfirmation)) {
-            $data['confirmation'] = $this->deliveryConfirmation->__toString();
-        }
 
         if (!is_null($this->carrierId)) {
             $data['carrier_id'] = $this->carrierId->__toString();
