@@ -203,8 +203,8 @@ class RequestFactory
      */
     public function createLabelWithCustomImage(
         ShipEngine\Labels\Shipment $shipment,
-        string                     $labelImageId,
-                                   $testMode = false
+        string $labelImageId,
+        $testMode = false
     ) {
         $url = $this->buildUrl('labels');
 
@@ -230,14 +230,14 @@ class RequestFactory
 
     public function createLabelFromRateWithCustomImage(
         ShipEngine\Rating\Rate $rate,
-        string                 $labelImageId
+        string $labelImageId
 
     ) {
         $endpoint = sprintf('labels/rates/%s', $rate->getId());
         $url = $this->buildUrl($endpoint);
 
         return $this->initRequest($url, [
-            CURLOPT_POST => true,
+            CURLOPT_POST       => true,
             CURLOPT_POSTFIELDS => json_encode([
                 'label_image_id' => $labelImageId
             ])
@@ -263,16 +263,28 @@ class RequestFactory
      */
     private function initRequest(string $url, array $params = [])
     {
+        $httpHeader = [
+            "Content-Type: application/json",
+            "api-key: " . $this->apiKey
+        ];
+
         $params = $params + [
                 CURLOPT_URL            => $url,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HTTPHEADER     => [
-                    "Content-Type: application/json",
-                    "api-key: " . $this->apiKey
-                ]
             ];
 
+        if($params[CURLOPT_POST] === true){
+            $contentLength = strlen($params[CURLOPT_POSTFIELDS] ?? '');
+            $httpHeader[] = sprintf('Content-Length: %d', $contentLength);
+        }
+
+        $params[CURLOPT_HTTPHEADER] = $httpHeader;
+
         return new Request($params);
+    }
+
+    private function calculateContentLength(){
+
     }
 
     /**
