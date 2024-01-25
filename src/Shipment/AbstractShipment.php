@@ -201,20 +201,16 @@ abstract class AbstractShipment
     }
 
     /**
-     * Add Delivery Confirmation to the Shipment
+     * Set Delivery Confirmation to the Shipment
+     * If Delivery Confirmation was previously set, it is overwritten by the provided value
      *
      * @link https://docs.shipengine.com/docs/request-delivery-confirmation
      *
      * @param DeliveryConfirmation $deliveryConfirmation
      * @return static $this
-     * @throws Exception if Delivery Confirmation has already been assigned to the shipment; use hasDeliveryConfirmation
      */
-    public function setDeliveryConfirmation(DeliveryConfirmation $deliveryConfirmation)
+    public function setDeliveryConfirmation(?DeliveryConfirmation $deliveryConfirmation = null)
     {
-        if (!is_null($this->deliveryConfirmation)) {
-            throw new ShipEngine\Exception('Delivery Confirmation has already been defined for this Shipment. Before assigning Delivery Confirmation, check if it has already been assigned using hasDeliveryConfirmation()');
-        }
-
         $this->deliveryConfirmation = $deliveryConfirmation;
 
         return $this;
