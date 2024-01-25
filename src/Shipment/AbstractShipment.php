@@ -127,7 +127,7 @@ abstract class AbstractShipment
         }
 
         $totalWeight = $this->getTotalWeight();
-        return [
+        $payload = [
             'ship_to'            => $this->shipTo->toArray(),
             'ship_from'          => $this->shipFrom->toArray(),
             'insurance_provider' => $this->insuranceProvider ? $this->insuranceProvider->__toString() : 'none',
@@ -136,7 +136,6 @@ abstract class AbstractShipment
                 'unit'  => $totalWeight->getUnit()
             ],
             'advanced_options'   => count($advancedOptions) ? $advancedOptions : null,
-            'confirmation'       => $this->deliveryConfirmation ? $this->deliveryConfirmation->__toString() : null,
             'packages'           => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
                 $weight = $package->getWeight();
@@ -169,6 +168,12 @@ abstract class AbstractShipment
                 return $data;
             }, $this->packages)
         ];
+
+        if (!is_null($this->deliveryConfirmation)) {
+            $payload['confirmation'] = $this->deliveryConfirmation->__toString();
+        }
+
+        return $payload;
     }
 
     private function getTotalWeight(): ShipEngine\Shipment\Package\Weight
