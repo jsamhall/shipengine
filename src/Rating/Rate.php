@@ -257,6 +257,14 @@ class Rate
         return $this->carrierFriendlyName;
     }
 
+    public function getGrossAmount()
+    {
+        return $this->getShippingAmount()->getAmount()
+            + $this->getInsuranceAmount()->getAmount()
+            + $this->getConfirmationAmount()->getAmount()
+            + $this->getOtherAmount()->getAmount();
+    }
+
     /**
      * @return ShipEngine\ValueObject\Amount
      */
