@@ -37,7 +37,8 @@ class Options
         array $carrierIds = [],
         array $serviceCodes = [],
         array $packageTypes = []
-    ) {
+    )
+    {
         array_map([$this, 'addCarrierId'], $carrierIds);
         array_map([$this, 'addServiceCode'], $serviceCodes);
         array_map([$this, 'addPackageType'], $packageTypes);
@@ -83,10 +84,12 @@ class Options
      */
     public function toArray()
     {
-        return [
+        return array_filter([
             'carrier_ids'   => array_values($this->carriers),
             'service_codes' => array_values($this->services),
             'package_types' => array_values($this->packageTypes)
-        ];
+        ], function ($key, $value) {
+            return is_array($value) && count($value) > 0;
+        });
     }
 }

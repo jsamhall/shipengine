@@ -11,6 +11,8 @@
 
 namespace jsamhall\ShipEngine\Rating;
 
+use DateTime;
+use Exception;
 use jsamhall\ShipEngine;
 
 class Rate
@@ -104,7 +106,7 @@ class Rate
     protected $guaranteedService;
 
     /**
-     * @var \DateTime
+     * @var string
      */
     protected $estimatedDeliveryDate;
 
@@ -188,14 +190,14 @@ class Rate
             'carrier_delivery_days'   => 'carrierDeliveryDays',
             'ship_date'               => 'shipDate',
             'negotiated_rate'         => 'negotiatedRatesApplied',
-            'service_type'            => 'service_name',
+            'service_type'            => 'serviceName',
             'trackable'               => 'trackable',
             'warning_messages'        => 'warningMessages',
             'error_messages'          => 'errorMessages'
         ];
 
         foreach ($map as $key => $property) {
-            if (! isset($rateData[$key])) {
+            if (!isset($rateData[$key])) {
                 continue;
             }
 
@@ -289,6 +291,14 @@ class Rate
         return $this->otherAmount;
     }
 
+    public function getGrossAmount()
+    {
+        return $this->shippingAmount->getAmount()
+            + $this->confirmationAmount->getAmount()
+            + $this->insuranceAmount->getAmount()
+            + $this->otherAmount->getAmount();
+    }
+
     /**
      * @return string
      */
@@ -322,11 +332,13 @@ class Rate
     }
 
     /**
-     * @return \DateTime
+     * @param bool $asDateTime
+     * @return DateTime|string
+     * @throws Exception If returning a datetime object and date string is malformed
      */
-    public function getEstimatedDeliveryDate()
+    public function getEstimatedDeliveryDate(bool $asDateTime = false)
     {
-        return $this->estimatedDeliveryDate;
+        return $asDateTime ? new DateTime($this->estimatedDeliveryDate) : $this->estimatedDeliveryDate;
     }
 
     /**
