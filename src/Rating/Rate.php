@@ -299,14 +299,6 @@ class Rate
         return $this->otherAmount;
     }
 
-    public function getGrossAmount()
-    {
-        return $this->shippingAmount->getAmount()
-            + $this->confirmationAmount->getAmount()
-            + $this->insuranceAmount->getAmount()
-            + $this->otherAmount->getAmount();
-    }
-
     /**
      * @return string
      */
