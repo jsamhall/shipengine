@@ -176,7 +176,7 @@ abstract class AbstractShipment
         return $payload;
     }
 
-    private function getTotalWeight(): ShipEngine\Shipment\Package\Weight
+    public function getTotalWeight(): ShipEngine\Shipment\Package\Weight
     {
         $total = 0;
         foreach ($this->packages as $package) {
