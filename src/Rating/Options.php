@@ -88,7 +88,7 @@ class Options
             'carrier_ids'   => array_values($this->carriers),
             'service_codes' => array_values($this->services),
             'package_types' => array_values($this->packageTypes)
-        ], function ($key, $value) {
+        ], function ($value) {
             return is_array($value) && count($value) > 0;
         });
     }
