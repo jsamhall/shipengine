@@ -255,6 +255,29 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to the Tracking "GetTrackingInformation" endpoint
+     *
+     * @link https://www.shipengine.com/docs/tracking/
+     *
+     * @param string $carrierCode   e.g. "usps", "fedex", "ups"
+     * @param string $trackingNumber
+     * @return Request
+     */
+    public function getTrackingInformation(string $carrierCode, string $trackingNumber)
+    {
+        $query = http_build_query([
+            'carrier_code'    => $carrierCode,
+            'tracking_number' => $trackingNumber,
+        ]);
+
+        $url = $this->buildUrl('tracking') . '?' . $query;
+
+        return $this->initRequest($url, [
+            CURLOPT_HTTPGET => true,
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url Request URL or endpoint (e.g., /addresses/validate)
@@ -273,7 +296,7 @@ class RequestFactory
                 CURLOPT_RETURNTRANSFER => true,
             ];
 
-        if($params[CURLOPT_POST] === true){
+        if(($params[CURLOPT_POST] ?? false) === true){
             $contentLength = strlen($params[CURLOPT_POSTFIELDS] ?? '');
             $httpHeader[] = sprintf('Content-Length: %d', $contentLength);
         }

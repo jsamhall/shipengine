@@ -74,6 +74,37 @@ $shipEngineAddress = $shipEngine->formatAddress($domainAddress);
 // now $shipEngineAddress can be used for building e.g. an instance of Labels\Shipment
 ```
 
+## Tracking
+Retrieve tracking information for a package using its carrier code and tracking number.
+This requires the ShipEngine **Advanced plan or higher**, and the carrier must be connected
+to your ShipEngine account.
+
+```php
+use jsamhall\ShipEngine\ShipEngine;
+use jsamhall\ShipEngine\Address\ArrayFormatter;
+
+$shipEngine = new ShipEngine('your_shipengine_api_key', new ArrayFormatter());
+
+$tracking = $shipEngine->trackPackage('usps', '9405511899223197428490');
+
+$tracking->getStatusCode();          // e.g. "DE"  (see Tracking\StatusCode constants)
+$tracking->getStatusDescription();   // e.g. "Delivered"
+$tracking->isDelivered();            // bool
+$tracking->getActualDeliveryDate();  // ?\DateTime
+
+foreach ($tracking->getEvents() as $event) {
+    printf("%s — %s (%s)\n",
+        $event->getOccurredAt() ? $event->getOccurredAt()->format('c') : 'n/a',
+        $event->getDescription(),
+        $event->getCityLocality()
+    );
+}
+```
+
+The first argument accepts either a carrier code string (`"usps"`, `"fedex"`, `"ups"`) or a
+`Carriers\CarrierCode` value object. If the carrier is not connected to your account the call
+throws `Exception\ApiErrorResponse`.
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 

@@ -231,4 +231,26 @@ class ShipEngine
 
         return new Labels\Void\Response($response->getData());
     }
+
+    /**
+     * Get tracking information for a package by carrier code and tracking number
+     *
+     * @link https://www.shipengine.com/docs/tracking/
+     *
+     * @param string|Carriers\CarrierCode $carrierCode    e.g. "usps", "fedex", "ups"
+     * @param string $trackingNumber
+     * @return Tracking\TrackingInformation
+     * @throws Exception\ApiErrorResponse  if the carrier is not connected or the request is rejected
+     * @throws Exception\ApiRequestFailed  on transport failure
+     */
+    public function trackPackage($carrierCode, string $trackingNumber): Tracking\TrackingInformation
+    {
+        $carrierCode = (string) $carrierCode;
+
+        $response = $this->requestFactory
+            ->getTrackingInformation($carrierCode, $trackingNumber)
+            ->send();
+
+        return new Tracking\TrackingInformation($response->getData());
+    }
 }
