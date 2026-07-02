@@ -17,6 +17,13 @@ Introduce `ShipEngine::trackPackage($carrierCode, $trackingNumber)` which return
 # Version 2.0.0
 **Breaking release.** Requires **PHP 8.1+** and modernizes the library around enums and strict typing.
 
+### New features
+- LTL (Less Than Truckload) tracking via `ShipEngine::trackLtlShipment($carrierCode, $proNumber)`,
+  returning a `Tracking\Ltl\TrackingInformation` (pro number, ship-from/to postal codes, pickup and
+  estimated/actual delivery dates, signature name, and `Tracking\Ltl\Event` scans). Uses ShipEngine's
+  beta `v-beta/ltl/tracking` endpoint.
+  See <https://www.shipengine.com/docs/ltl/tracking/>.
+
 ### Requirements
 - Now requires `php: ^8.1` (previously unconstrained).
 - Dev dependency updated to `phpunit/phpunit: ^10.5`; a characterization test suite was added.

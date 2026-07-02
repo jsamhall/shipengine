@@ -19,9 +19,10 @@ use jsamhall\ShipEngine;
 class RequestFactory
 {
     /**
-     * The base URL for the ShipEngine API
+     * The base host for the ShipEngine API. Endpoints are namespaced by version (e.g. "v1",
+     * "v-beta") via {@see self::buildUrl()}.
      */
-    private const API_URL = "https://api.shipengine.com/v1/";
+    private const BASE_URL = "https://api.shipengine.com/";
 
     public function __construct(protected readonly string $apiKey)
     {
@@ -215,6 +216,28 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to the LTL (Less Than Truckload) "Tracking" endpoint
+     *
+     * @link https://www.shipengine.com/docs/ltl/tracking/
+     *
+     * @param string $carrierCode The LTL carrier code (e.g. "FXFE")
+     * @param string $proNumber   The shipment's PRO number (essentially a tracking number)
+     */
+    public function getLtlTrackingInformation(string $carrierCode, string $proNumber): Request
+    {
+        $query = http_build_query([
+            'carrier_code' => $carrierCode,
+            'pro_number'   => $proNumber,
+        ]);
+
+        $url = $this->buildUrl('ltl/tracking', 'v-beta') . '?' . $query;
+
+        return $this->initRequest($url, [
+            CURLOPT_HTTPGET => true,
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url Request URL or endpoint (e.g., /addresses/validate)
@@ -243,10 +266,10 @@ class RequestFactory
     }
 
     /**
-     * Builds a URL to the provided ShipEngine API endpoint
+     * Builds a URL to the provided ShipEngine API endpoint for the given API version.
      */
-    private function buildUrl(string $endpoint): string
+    private function buildUrl(string $endpoint, string $version = 'v1'): string
     {
-        return self::API_URL . $endpoint;
+        return self::BASE_URL . $version . '/' . $endpoint;
     }
 }

@@ -219,4 +219,25 @@ class ShipEngine
 
         return new Tracking\TrackingInformation($response->getData());
     }
+
+    /**
+     * Get tracking information for an LTL (Less Than Truckload) shipment by carrier code and PRO number
+     *
+     * @link https://www.shipengine.com/docs/ltl/tracking/
+     *
+     * @param string|Carriers\CarrierCode $carrierCode The LTL carrier code (e.g. "FXFE")
+     * @param string $proNumber The shipment's PRO number (essentially a tracking number)
+     * @throws Exception\ApiErrorResponse  if the carrier is not connected or the request is rejected
+     * @throws Exception\ApiRequestFailed  on transport failure
+     */
+    public function trackLtlShipment(string|Carriers\CarrierCode $carrierCode, string $proNumber): Tracking\Ltl\TrackingInformation
+    {
+        $carrierCode = (string) $carrierCode;
+
+        $response = $this->requestFactory
+            ->getLtlTrackingInformation($carrierCode, $proNumber)
+            ->send();
+
+        return new Tracking\Ltl\TrackingInformation($response->getData());
+    }
 }

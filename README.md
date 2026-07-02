@@ -112,6 +112,36 @@ The first argument accepts either a carrier code string (`"usps"`, `"fedex"`, `"
 `Carriers\CarrierCode` value object. If the carrier is not connected to your account the call
 throws `Exception\ApiErrorResponse`.
 
+## LTL Tracking
+Track a Less Than Truckload (LTL) freight shipment by carrier code and PRO number. This uses
+ShipEngine's beta LTL tracking endpoint (`v-beta/ltl/tracking`).
+
+```php
+use jsamhall\ShipEngine\ShipEngine;
+use jsamhall\ShipEngine\Address\ArrayFormatter;
+
+$shipEngine = new ShipEngine('your_shipengine_api_key', new ArrayFormatter());
+
+$tracking = $shipEngine->trackLtlShipment('FXFE', '123456789');
+
+$tracking->getProNumber();             // "123456789"
+$tracking->isDelivered();              // bool
+$tracking->getSignatureName();         // ?string, e.g. "MARK PITTS"
+$tracking->getEstimatedDeliveryDate(); // ?\DateTime
+$tracking->getActualDeliveryDate();    // ?\DateTime
+
+foreach ($tracking->getEvents() as $event) {
+    printf("%s — %s (%s, %s)\n",
+        $event->getOccurredAt()?->format('c') ?? 'n/a',
+        $event->getStatus(),
+        $event->getCityLocality(),
+        $event->getStateProvince()
+    );
+}
+```
+
+As with parcel tracking, the first argument accepts a carrier code string or a `Carriers\CarrierCode`.
+
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.
 
