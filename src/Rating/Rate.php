@@ -185,7 +185,7 @@ class Rate
             'zone'                    => 'zone',
             'package_type'            => 'packageType',
             'delivery_days'           => 'deliveryDays',
-            'guaranteed_service'      => 'guaranteed_service',
+            'guaranteed_service'      => 'guaranteedService',
             'estimated_delivery_date' => 'estimatedDeliveryDate',
             'carrier_delivery_days'   => 'carrierDeliveryDays',
             'ship_date'               => 'shipDate',
@@ -203,7 +203,7 @@ class Rate
 
             $value = $rateData[$key];
 
-            if (strpos($key, '_amount')) {
+            if (str_contains($key, '_amount')) {
                 $value = new ShipEngine\ValueObject\Amount($value['amount'], $value['currency']);
             }
 

@@ -250,7 +250,7 @@ class RequestFactory
         $url = $this->buildUrl($endpoint);
 
         return $this->initRequest($url, [
-            CURLOPT_PUT => true
+            CURLOPT_CUSTOMREQUEST => 'PUT'
         ]);
     }
 
@@ -304,10 +304,6 @@ class RequestFactory
         $params[CURLOPT_HTTPHEADER] = $httpHeader;
 
         return new Request($params);
-    }
-
-    private function calculateContentLength(){
-
     }
 
     /**

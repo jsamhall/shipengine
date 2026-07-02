@@ -43,7 +43,7 @@ class Response
      */
     public function getData($key = null)
     {
-        return $key == null
+        return $key === null
             ? $this->data
             : $this->data[$key];
     }

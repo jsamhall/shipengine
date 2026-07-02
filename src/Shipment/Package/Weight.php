@@ -19,7 +19,7 @@ class Weight
     {
         $validUnits = [self::UNIT_OUNCE, self::UNIT_POUND];
         if (!in_array($unit, $validUnits)) {
-            throw new \InvalidArgumentException("Unit must be one of: %s", implode(',', $validUnits));
+            throw new \InvalidArgumentException(sprintf("Unit must be one of: %s", implode(', ', $validUnits)));
         }
 
         $this->value = $value;
