@@ -278,6 +278,30 @@ class RequestFactory
     }
 
     /**
+     * Build a Request to the LTL (Less Than Truckload) "Tracking" endpoint
+     *
+     * @link https://www.shipengine.com/docs/ltl/tracking/
+     *
+     * @param string $carrierCode The LTL carrier code (e.g. "FXFE")
+     * @param string $proNumber   The shipment's PRO number (essentially a tracking number)
+     * @return Request
+     */
+    public function getLtlTrackingInformation(string $carrierCode, string $proNumber)
+    {
+        $query = http_build_query([
+            'carrier_code' => $carrierCode,
+            'pro_number'   => $proNumber,
+        ]);
+
+        // LTL tracking lives on the beta API version rather than v1
+        $url = str_replace('/v1/', '/v-beta/', $this->apiUrl) . 'ltl/tracking?' . $query;
+
+        return $this->initRequest($url, [
+            CURLOPT_HTTPGET => true,
+        ]);
+    }
+
+    /**
      * Initializes a cURL handle for a request to the ShipEngine API
      *
      * @param string $url Request URL or endpoint (e.g., /addresses/validate)
