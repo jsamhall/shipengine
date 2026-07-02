@@ -6,20 +6,13 @@ namespace jsamhall\ShipEngine\Shipment\Package;
 
 class Weight
 {
-    private $value;
-
-    private WeightUnit $unit;
-
-    public function __construct($value, WeightUnit $unit = WeightUnit::Ounce)
-    {
-        $this->value = $value;
-        $this->unit = $unit;
+    public function __construct(
+        private readonly int|float $value,
+        private readonly WeightUnit $unit = WeightUnit::Ounce
+    ) {
     }
 
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): int|float
     {
         return $this->value;
     }
@@ -31,10 +24,8 @@ class Weight
 
     /**
      * Get package weight in ounces
-     *
-     * @return float|int|mixed
      */
-    public function inOunces()
+    public function inOunces(): int|float
     {
         return $this->unit === WeightUnit::Ounce
             ? $this->value

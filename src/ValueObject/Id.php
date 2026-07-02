@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,31 +14,19 @@
 
 namespace jsamhall\ShipEngine\ValueObject;
 
-
 class Id
 {
-    /**
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * Id constructor.
-     *
-     * @param string $id
-     */
-    public function __construct($id)
+    public function __construct(protected readonly string $id)
     {
-        $this->id = $id;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->id;
     }
 
-    public function equals(Id $id)
+    public function equals(Id $id): bool
     {
-        return $id->__toString() === $this->__toString();
+        return (string) $id === (string) $this;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -17,37 +20,19 @@ class RequestFactory
 {
     /**
      * The base URL for the ShipEngine API
-     *
-     * @var string
      */
-    private $apiUrl = "https://api.shipengine.com/v1/";
+    private const API_URL = "https://api.shipengine.com/v1/";
 
-    /**
-     * ShipEngine API Key
-     *
-     * @var string
-     */
-    protected $apiKey;
-
-    /**
-     * RequestFactory constructor.
-     *
-     * @param string $apiKey
-     */
-    public function __construct($apiKey)
+    public function __construct(protected readonly string $apiKey)
     {
-        $this->apiKey = $apiKey;
     }
 
     /**
      * Build a Request to the validateAddress API endpoint
      *
-     * @link https://shipengine-docs.readme.io/reference#AddressValidation_ValidateAddresses
-     *
      * @param array $addresses Array of addresses to validate
-     * @return Request
      */
-    public function validateAddresses(array $addresses)
+    public function validateAddresses(array $addresses): Request
     {
         $url = $this->buildUrl("addresses/validate");
 
@@ -59,12 +44,8 @@ class RequestFactory
 
     /**
      * Build a Request to the listCarriers API endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Carriers_List
-     *
-     * @return Request
      */
-    public function listCarriers()
+    public function listCarriers(): Request
     {
         $url = $this->buildUrl("carriers");
 
@@ -76,12 +57,9 @@ class RequestFactory
     /**
      * Build a Request to the getCarrier API endpoint
      *
-     * @link https://shipengine-docs.readme.io/reference#Carriers_Get
-     *
      * @param string $carrierId The CarrierId as found in the ShipEngine Account
-     * @return Request
      */
-    public function getCarrier(string $carrierId)
+    public function getCarrier(string $carrierId): Request
     {
         $endpoint = sprintf("carriers/%s", $carrierId);
         $url = $this->buildUrl($endpoint);
@@ -93,13 +71,8 @@ class RequestFactory
 
     /**
      * Build a Request to the Carriers "ListServices" API endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Carriers_ListServices
-     *
-     * @param string $carrierId
-     * @return Request
      */
-    public function listCarrierServices(string $carrierId)
+    public function listCarrierServices(string $carrierId): Request
     {
         $endpoint = sprintf("carriers/%s/services", $carrierId);
         $url = $this->buildUrl($endpoint);
@@ -111,13 +84,8 @@ class RequestFactory
 
     /**
      * Build a Request to the Carriers "ListPackages" API endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Carriers_ListPackages
-     *
-     * @param string $carrierId
-     * @return Request
      */
-    public function listCarrierPackageTypes(string $carrierId)
+    public function listCarrierPackageTypes(string $carrierId): Request
     {
         $endpoint = sprintf("carriers/%s/packages", $carrierId);
         $url = $this->buildUrl($endpoint);
@@ -129,13 +97,8 @@ class RequestFactory
 
     /**
      * Build a Request to the Carriers "GetOptions" API endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Carriers_GetOptions
-     *
-     * @param string $carrierId
-     * @return Request
      */
-    public function getCarrierOptions(string $carrierId)
+    public function getCarrierOptions(string $carrierId): Request
     {
         $endpoint = sprintf("carriers/%s/options", $carrierId);
         $url = $this->buildUrl($endpoint);
@@ -145,17 +108,10 @@ class RequestFactory
         ]);
     }
 
-
     /**
      * Build a Request to the Rating "RateShipment" API endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Rates_RateShipment
-     *
-     * @param ShipEngine\Rating\Shipment $shipment
-     * @param ShipEngine\Rating\Options $options
-     * @return Request
      */
-    public function getShipmentRates(ShipEngine\Rating\Shipment $shipment, ShipEngine\Rating\Options $options)
+    public function getShipmentRates(ShipEngine\Rating\Shipment $shipment, ShipEngine\Rating\Options $options): Request
     {
         $url = $this->buildUrl('rates');
 
@@ -170,14 +126,8 @@ class RequestFactory
 
     /**
      * Build a Request to the Labels "PurchaseLabel" Endpoint
-     *
-     * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
-     *
-     * @param ShipEngine\Labels\Shipment $shipment
-     * @param bool $testMode
-     * @return Request
      */
-    public function createLabel(ShipEngine\Labels\Shipment $shipment, $testMode = false)
+    public function createLabel(ShipEngine\Labels\Shipment $shipment, bool $testMode = false): Request
     {
         $url = $this->buildUrl('labels');
 
@@ -190,22 +140,16 @@ class RequestFactory
         ]);
     }
 
-
     /**
      * Build a Request to the Labels "PurchaseLabel" Endpoint using a Custom Image uploaded via ShipEngine back-office
      *
-     * @link https://shipengine-docs.readme.io/reference#Labels_PurchaseLabel
-     *
-     * @param ShipEngine\Labels\Shipment $shipment
      * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
-     * @param bool $testMode
-     * @return Request
      */
     public function createLabelWithCustomImage(
         ShipEngine\Labels\Shipment $shipment,
         string $labelImageId,
-        $testMode = false
-    ) {
+        bool $testMode = false
+    ): Request {
         $url = $this->buildUrl('labels');
 
         return $this->initRequest($url, [
@@ -218,7 +162,7 @@ class RequestFactory
         ]);
     }
 
-    public function createLabelFromRate(ShipEngine\Rating\Rate $rate)
+    public function createLabelFromRate(ShipEngine\Rating\Rate $rate): Request
     {
         $endpoint = sprintf('labels/rates/%s', $rate->getId());
         $url = $this->buildUrl($endpoint);
@@ -228,11 +172,8 @@ class RequestFactory
         ]);
     }
 
-    public function createLabelFromRateWithCustomImage(
-        ShipEngine\Rating\Rate $rate,
-        string $labelImageId
-
-    ) {
+    public function createLabelFromRateWithCustomImage(ShipEngine\Rating\Rate $rate, string $labelImageId): Request
+    {
         $endpoint = sprintf('labels/rates/%s', $rate->getId());
         $url = $this->buildUrl($endpoint);
 
@@ -244,7 +185,7 @@ class RequestFactory
         ]);
     }
 
-    public function voidLabel(string $labelId)
+    public function voidLabel(string $labelId): Request
     {
         $endpoint = sprintf("labels/%s/void", $labelId);
         $url = $this->buildUrl($endpoint);
@@ -257,13 +198,9 @@ class RequestFactory
     /**
      * Build a Request to the Tracking "GetTrackingInformation" endpoint
      *
-     * @link https://www.shipengine.com/docs/tracking/
-     *
      * @param string $carrierCode   e.g. "usps", "fedex", "ups"
-     * @param string $trackingNumber
-     * @return Request
      */
-    public function getTrackingInformation(string $carrierCode, string $trackingNumber)
+    public function getTrackingInformation(string $carrierCode, string $trackingNumber): Request
     {
         $query = http_build_query([
             'carrier_code'    => $carrierCode,
@@ -282,9 +219,8 @@ class RequestFactory
      *
      * @param string $url Request URL or endpoint (e.g., /addresses/validate)
      * @param array $params Request Parameters
-     * @return Request
      */
-    private function initRequest(string $url, array $params = [])
+    private function initRequest(string $url, array $params = []): Request
     {
         $httpHeader = [
             "Content-Type: application/json",
@@ -296,7 +232,7 @@ class RequestFactory
                 CURLOPT_RETURNTRANSFER => true,
             ];
 
-        if(($params[CURLOPT_POST] ?? false) === true){
+        if (($params[CURLOPT_POST] ?? false) === true) {
             $contentLength = strlen($params[CURLOPT_POSTFIELDS] ?? '');
             $httpHeader[] = sprintf('Content-Length: %d', $contentLength);
         }
@@ -308,12 +244,9 @@ class RequestFactory
 
     /**
      * Builds a URL to the provided ShipEngine API endpoint
-     *
-     * @param string $endpoint
-     * @return string The URL
      */
-    private function buildUrl(string $endpoint)
+    private function buildUrl(string $endpoint): string
     {
-        return $this->apiUrl . $endpoint;
+        return self::API_URL . $endpoint;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,11 +14,10 @@
 
 namespace jsamhall\ShipEngine\Address;
 
-
 class ArrayFormatter implements FormatterInterface
 {
     /** @inheritdoc */
-    public function format($address)
+    public function format($address): array
     {
         return [
             'name'           => $address['name'] ?? '',

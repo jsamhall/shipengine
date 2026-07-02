@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -15,24 +18,18 @@ class AddressMessage
 {
     /**
      * The reason why the Address failed verification
-     *
-     * @var string
      */
-    protected $reason;
+    protected string $reason;
 
     /**
      * The error message
-     *
-     * @var string
      */
-    protected $message;
+    protected string $message;
 
     /**
      * The error type
-     *
-     * @var string
      */
-    protected $type;
+    protected string $type;
 
     public function __construct(array $message)
     {
@@ -41,22 +38,22 @@ class AddressMessage
         $this->type = $message['type'];
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getReason()
+    public function getReason(): string
     {
         return $this->reason;
     }
 
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    private function translateErrorCode(string $code)
+    private function translateErrorCode(string $code): string
     {
         $map = [
             'a1001' => 'The country is not supported.',
@@ -69,11 +66,8 @@ class AddressMessage
         return array_key_exists($code, $map) ? $map[$code] : 'Unknown Failure';
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        /** @var string $message */
-        $message = sprintf("Error: %s. Message: %s", $this->getReason(), $this->getMessage());
-
-        return $message;
+        return sprintf("Error: %s. Message: %s", $this->getReason(), $this->getMessage());
     }
 }

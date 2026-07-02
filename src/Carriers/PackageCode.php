@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,32 +14,19 @@
 
 namespace jsamhall\ShipEngine\Carriers;
 
-use jsamhall\ShipEngine;
-
 class PackageCode
 {
-    /**
-     * @var string
-     */
-    protected $code;
-
-    /**
-     * PackageCode constructor.
-     *
-     * @param string $code
-     */
-    public function __construct(string $code)
+    public function __construct(private readonly string $code)
     {
-        $this->code = $code;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->code;
     }
 
-    public function equals(PackageCode $serviceCode)
+    public function equals(PackageCode $packageCode): bool
     {
-        return $serviceCode->__toString() === $this->__toString();
+        return (string) $packageCode === (string) $this;
     }
 }

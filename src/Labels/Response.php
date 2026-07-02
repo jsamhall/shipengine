@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Bag Riders Web Store
  *
@@ -18,79 +21,58 @@ class Response extends ShipEngine\Api\Response
 {
     /**
      * The ID of this Label within the ShipEngine application
-     * This should be used when making queries about this label
-     *
-     * @var LabelId
      */
-    protected $id;
+    protected LabelId $id;
 
     /**
      * The status of the Label
-     *
-     * @var string
      */
-    protected $status;
+    protected string $status;
 
     /**
      * The ID of the Shipment within ShipEngine that this Label is for
-     *
-     * @var ShipEngine\Shipment\ShipmentId
      */
-    protected $shipmentId;
+    protected ShipEngine\Shipment\ShipmentId $shipmentId;
 
     /**
      * The Date on which the Shipment is to be picked up by the Carrier
-     *
-     * @var \DateTime
      */
-    protected $shipDate;
+    protected \DateTime $shipDate;
 
     /**
      * The Date on which this Label was created
-     *
-     * @var \DateTime
      */
-    protected $createdAt;
+    protected \DateTime $createdAt;
 
     /**
      * The cost of the Shipment
-     *
-     * @var ShipEngine\ValueObject\Amount
      */
-    protected $shipmentCost;
+    protected ShipEngine\ValueObject\Amount $shipmentCost;
 
     /**
      * The cost of Insurance added to this Shipment
-     *
-     * @var ShipEngine\ValueObject\Amount
      */
-    protected $insuranceCost;
+    protected ShipEngine\ValueObject\Amount $insuranceCost;
 
     /**
      * The Tracking Number for this Label
-     *
-     * @var string
      */
-    protected $trackingNumber;
+    protected string $trackingNumber;
 
     /**
      * The URL from which this Label can be downloaded
-     *
-     * @var string
      */
-    protected $labelDownloadUrl;
+    protected string $labelDownloadUrl;
 
     /**
      * The Carrier Code for which this Label is handled (e.g., ups)
-     * @var string
      */
-    protected $carrierCode;
+    protected string $carrierCode;
 
     /**
      * The Carrier's Service Code for this Label (e.g., ups_ground)
-     * @var string
      */
-    protected $serviceCode;
+    protected string $serviceCode;
 
     public function __construct(array $labelResponse)
     {
@@ -121,90 +103,57 @@ class Response extends ShipEngine\Api\Response
         $this->labelDownloadUrl = $labelResponse['label_download']['href'];
     }
 
-    /**
-     * @return LabelId
-     */
-    public function getId()
+    public function getId(): LabelId
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @return ShipEngine\Shipment\ShipmentId
-     */
-    public function getShipmentId()
+    public function getShipmentId(): ShipEngine\Shipment\ShipmentId
     {
         return $this->shipmentId;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getShipDate()
+    public function getShipDate(): \DateTime
     {
         return $this->shipDate;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getShipmentCost()
+    public function getShipmentCost(): ShipEngine\ValueObject\Amount
     {
         return $this->shipmentCost;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getInsuranceCost()
+    public function getInsuranceCost(): ShipEngine\ValueObject\Amount
     {
         return $this->insuranceCost;
     }
 
-    /**
-     * @return string
-     */
-    public function getTrackingNumber()
+    public function getTrackingNumber(): string
     {
         return $this->trackingNumber;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabelDownloadUrl()
+    public function getLabelDownloadUrl(): string
     {
         return $this->labelDownloadUrl;
     }
 
-    /**
-     * @return string
-     */
-    public function getCarrierCode()
+    public function getCarrierCode(): string
     {
         return $this->carrierCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getServiceCode()
+    public function getServiceCode(): string
     {
         return $this->serviceCode;
     }

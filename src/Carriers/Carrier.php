@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -10,12 +13,10 @@
  */
 namespace jsamhall\ShipEngine\Carriers;
 
-use jsamhall\ShipEngine;
-
 /**
  * Class Carrier
  *
- * A Data Transfer Option wrapping Carrier data as provided by listCarriers API response
+ * A Data Transfer Object wrapping Carrier data as provided by listCarriers API response
  *
  * @package ShipEngine\Carriers
  */
@@ -24,171 +25,116 @@ class Carrier
     /**
      * The CarrierId used to reference this Carrier Account within ShipEngine
      * Used when multiple Accounts are established for the same Carrier
-     *
-     * @var CarrierId
      */
-    protected $id;
+    protected CarrierId $id;
 
     /**
      * The Code used to reference this Carrier Account within ShipEngine
      * Used when only one account has been established for the Carrier
-     *
-     * @var CarrierCode
      */
-    protected $code;
+    protected CarrierCode $code;
 
     /**
      * The customer's account number with the Carrier
-     *
-     * @var string
      */
-    protected $accountNumber;
+    protected ?string $accountNumber;
 
     /**
      * Indicates if this Carrier requires postage to be purchased prior to label creation
-     *
-     * @var bool
      */
-    protected $requiresFundedAmount;
+    protected bool $requiresFundedAmount;
 
     /**
      * The Customer's Balance with this carrier, if applicable
-     *
-     * @var float
      */
-    protected $accountBalance = 0.00;
+    protected float $accountBalance = 0.00;
 
     /**
      * The Nickname provided for this Carrier within ShipEngine
-     *
-     * @var string
      */
-    protected $nickname;
+    protected ?string $nickname;
 
     /**
      * The Display Name of this carrier within ShipEngine
-     *
-     * @var string
      */
-    protected $friendlyName;
+    protected ?string $friendlyName;
 
     /**
      * Indicates if this is the Primary Account for this Carrier
      * Used when multiple Accounts have been established for a given Carrier
-     *
-     * @var bool
      */
-    protected $primary;
+    protected bool $primary;
 
     /**
      * @var Service[]
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * @var PackageType[]
      */
-    protected $packageTypes = [];
+    protected array $packageTypes = [];
 
     /**
      * @var AvailableOption[]
      */
-    protected $options = [];
+    protected array $options = [];
 
     /**
-     * Carrier constructor.
-     *
      * @param array $carrierData Carrier Data provided by ShipEngine Carrier API
      */
     public function __construct(array $carrierData)
     {
-        $settableData = [
-            new CarrierId($carrierData['carrier_id']),
-            new CarrierCode($carrierData['carrier_code']),
-            $carrierData['account_number'],
-            $carrierData['requires_funded_amount'],
-            $carrierData['balance'],
-            $carrierData['nickname'],
-            $carrierData['friendly_name'],
-            $carrierData['primary']
-        ];
-
-        list(
-            $this->id,
-            $this->code,
-            $this->accountNumber,
-            $this->requiresFundedAmount,
-            $this->accountBalance,
-            $this->nickname,
-            $this->friendlyName,
-            $this->primary
-            ) = $settableData;
+        $this->id = new CarrierId($carrierData['carrier_id']);
+        $this->code = new CarrierCode($carrierData['carrier_code']);
+        $this->accountNumber = $carrierData['account_number'] ?? null;
+        $this->requiresFundedAmount = (bool) $carrierData['requires_funded_amount'];
+        $this->accountBalance = (float) $carrierData['balance'];
+        $this->nickname = $carrierData['nickname'] ?? null;
+        $this->friendlyName = $carrierData['friendly_name'] ?? null;
+        $this->primary = (bool) $carrierData['primary'];
 
         $this->setServices($carrierData['services'])
              ->setPackages($carrierData['packages'])
              ->setOptions($carrierData['options']);
     }
 
-    /**
-     * @return CarrierId
-     */
-    public function getId()
+    public function getId(): CarrierId
     {
         return $this->id;
     }
 
-    /**
-     * @return CarrierCode
-     */
-    public function getCode()
+    public function getCode(): CarrierCode
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
-    public function getAccountNumber()
+    public function getAccountNumber(): ?string
     {
         return $this->accountNumber;
     }
 
-    /**
-     * @return boolean
-     */
-    public function doesRequireFundedAmount()
+    public function doesRequireFundedAmount(): bool
     {
         return $this->requiresFundedAmount;
     }
 
-    /**
-     * @return float
-     */
-    public function getAccountBalance()
+    public function getAccountBalance(): float
     {
         return $this->accountBalance;
     }
 
-    /**
-     * @return string
-     */
-    public function getNickname()
+    public function getNickname(): ?string
     {
         return $this->nickname;
     }
 
-    /**
-     * @return string
-     */
-    public function getFriendlyName()
+    public function getFriendlyName(): ?string
     {
         return $this->friendlyName;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isPrimary()
+    public function isPrimary(): bool
     {
         return $this->primary;
     }
@@ -196,7 +142,7 @@ class Carrier
     /**
      * @return Service[]
      */
-    public function getServices()
+    public function getServices(): array
     {
         return $this->services;
     }
@@ -204,7 +150,7 @@ class Carrier
     /**
      * @return PackageType[]
      */
-    public function getPackageTypes()
+    public function getPackageTypes(): array
     {
         return $this->packageTypes;
     }
@@ -212,13 +158,12 @@ class Carrier
     /**
      * @return AvailableOption[]
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
 
-
-    private function setServices(array $services)
+    private function setServices(array $services): self
     {
         foreach ($services as $service) {
             $this->services[] = new Service($service);
@@ -227,7 +172,7 @@ class Carrier
         return $this;
     }
 
-    private function setPackages(array $packages)
+    private function setPackages(array $packages): self
     {
         foreach ($packages as $package) {
             $this->packageTypes[] = new PackageType($package);
@@ -236,7 +181,7 @@ class Carrier
         return $this;
     }
 
-    private function setOptions(array $options)
+    private function setOptions(array $options): self
     {
         foreach ($options as $option) {
             $this->options[] = new AvailableOption($option);

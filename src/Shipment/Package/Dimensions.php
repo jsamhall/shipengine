@@ -6,42 +6,25 @@ namespace jsamhall\ShipEngine\Shipment\Package;
 
 class Dimensions
 {
-    private $height;
-
-    private $width;
-
-    private $length;
-
-    private DimensionUnit $unit;
-
-    public function __construct($length, $width, $height, DimensionUnit $unit = DimensionUnit::Inch)
-    {
-        $this->length = $length;
-        $this->width = $width;
-        $this->height = $height;
-        $this->unit = $unit;
+    public function __construct(
+        private readonly int|float $length,
+        private readonly int|float $width,
+        private readonly int|float $height,
+        private readonly DimensionUnit $unit = DimensionUnit::Inch
+    ) {
     }
 
-    /**
-     * @return mixed
-     */
-    public function getHeight()
+    public function getHeight(): int|float
     {
         return $this->height;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getWidth()
+    public function getWidth(): int|float
     {
         return $this->width;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLength()
+    public function getLength(): int|float
     {
         return $this->length;
     }

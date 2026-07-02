@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -11,23 +14,10 @@
 
 namespace jsamhall\ShipEngine\Address;
 
-use jsamhall\ShipEngine\Exception;
-
 class Factory
 {
-    /**
-     * @var FormatterInterface
-     */
-    protected $formatter;
-
-    /**
-     * Factory constructor.
-     *
-     * @param FormatterInterface $addressFormatter
-     */
-    public function __construct(FormatterInterface $addressFormatter)
+    public function __construct(protected readonly FormatterInterface $formatter)
     {
-        $this->formatter = $addressFormatter;
     }
 
     /**
@@ -36,7 +26,7 @@ class Factory
      * @param mixed $address Address as expected by the Formatter implementation
      * @return Address ShipEngine Address DTO
      */
-    public function factory($address)
+    public function factory($address): Address
     {
         $formatted = $this->formatter->format($address);
 

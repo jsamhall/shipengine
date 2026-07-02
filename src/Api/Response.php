@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -20,28 +23,16 @@ namespace jsamhall\ShipEngine\Api;
  */
 class Response
 {
-    /**
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Response constructor.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
+    public function __construct(protected array $data)
     {
-        $this->data = $data;
     }
 
     /**
      * Get responseData from response
      *
-     * @param null $key
      * @return array|mixed
      */
-    public function getData($key = null)
+    public function getData(?string $key = null): mixed
     {
         return $key === null
             ? $this->data
