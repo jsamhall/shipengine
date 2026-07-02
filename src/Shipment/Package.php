@@ -19,6 +19,7 @@ use jsamhall\ShipEngine\Shipment\Package\Dimensions;
 use jsamhall\ShipEngine\Shipment\Package\InsuredValue;
 use jsamhall\ShipEngine\Shipment\Package\LabelMessage;
 use jsamhall\ShipEngine\Shipment\Package\Weight;
+use jsamhall\ShipEngine\Shipment\Package\WeightUnit;
 
 class Package
 {
@@ -112,10 +113,7 @@ class Package
         return $this->weight->getValue();
     }
 
-    /**
-     * @return string
-     */
-    public function getWeightUnit()
+    public function getWeightUnit(): WeightUnit
     {
         return $this->weight->getUnit();
     }

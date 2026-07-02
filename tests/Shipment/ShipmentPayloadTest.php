@@ -12,6 +12,7 @@ use jsamhall\ShipEngine\Rating;
 use jsamhall\ShipEngine\Shipment\Package;
 use jsamhall\ShipEngine\Shipment\Package\Dimensions;
 use jsamhall\ShipEngine\Shipment\Package\Weight;
+use jsamhall\ShipEngine\Shipment\Package\WeightUnit;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,7 +37,7 @@ class ShipmentPayloadTest extends TestCase
 
     private function package(): Package
     {
-        return new Package(new Weight(16, Weight::UNIT_OUNCE), new Dimensions(12, 8, 4));
+        return new Package(new Weight(16, WeightUnit::Ounce), new Dimensions(12, 8, 4));
     }
 
     public function testRatingShipmentPayloadShape(): void
@@ -51,6 +52,7 @@ class ShipmentPayloadTest extends TestCase
 
         self::assertSame('Ship To', $payload['ship_to']['name']);
         self::assertSame('Ship From', $payload['ship_from']['name']);
+        self::assertSame('yes', $payload['ship_to']['address_residential_indicator']);
         self::assertSame('none', $payload['insurance_provider']);
         self::assertSame(['value' => 16, 'unit' => 'ounce'], $payload['total_weight']);
         self::assertNull($payload['advanced_options']);
@@ -74,7 +76,7 @@ class ShipmentPayloadTest extends TestCase
             $this->address('Ship From'),
             [$this->package()],
             null,
-            DeliveryConfirmation::signature()
+            DeliveryConfirmation::Signature
         );
         $shipment->addAdvancedOption(UPS\AdvancedOption::saturdayDelivery());
 

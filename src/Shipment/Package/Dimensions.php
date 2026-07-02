@@ -1,34 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace jsamhall\ShipEngine\Shipment\Package;
 
 class Dimensions
 {
-    const UNIT_INCH = 'inch';
-    const UNIT_CENTIMETER = 'centimeter';
-
     private $height;
 
     private $width;
 
     private $length;
 
-    private $unit;
+    private DimensionUnit $unit;
 
-    /**
-     * @param $height
-     * @param $width
-     * @param $length
-     * @param $unit
-     */
-    public function __construct($length, $width, $height, $unit = self:: UNIT_INCH)
+    public function __construct($length, $width, $height, DimensionUnit $unit = DimensionUnit::Inch)
     {
-        $validUnits = [self::UNIT_INCH, self::UNIT_CENTIMETER];
-        if (!in_array($unit, $validUnits)) {
-            $msg = sprintf("Unit must be one of: %s", implode(',', $validUnits));
-            throw new \InvalidArgumentException($msg);
-        }
-
         $this->length = $length;
         $this->width = $width;
         $this->height = $height;
@@ -59,10 +46,7 @@ class Dimensions
         return $this->length;
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getUnit()
+    public function getUnit(): DimensionUnit
     {
         return $this->unit;
     }

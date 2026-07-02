@@ -40,7 +40,7 @@ class Factory
     {
         $formatted = $this->formatter->format($address);
 
-        return (new Address)
+        $shipEngineAddress = (new Address)
             ->setName($formatted['name'] ?? '')
             ->setPhone($formatted['phone'] ?? '')
             ->setCompanyName($formatted['company_name'] ?? '')
@@ -51,5 +51,13 @@ class Factory
             ->setStateProvince($formatted['state_province'] ?? '')
             ->setPostalCode($formatted['postal_code'] ?? '')
             ->setCountryCode($formatted['country_code'] ?? '');
+
+        // Only override the default (residential) when the formatter explicitly provides a value.
+        $indicator = ResidentialIndicator::tryFrom((string) ($formatted['address_residential_indicator'] ?? ''));
+        if ($indicator !== null) {
+            $shipEngineAddress->setAddressResidentialIndicator($indicator);
+        }
+
+        return $shipEngineAddress;
     }
 }

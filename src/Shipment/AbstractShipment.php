@@ -130,10 +130,10 @@ abstract class AbstractShipment
         $payload = [
             'ship_to'            => $this->shipTo->toArray(),
             'ship_from'          => $this->shipFrom->toArray(),
-            'insurance_provider' => $this->insuranceProvider ? $this->insuranceProvider->__toString() : 'none',
+            'insurance_provider' => ($this->insuranceProvider ?? InsuranceProvider::None)->value,
             'total_weight'       => [
                 'value' => $totalWeight->getValue(),
-                'unit'  => $totalWeight->getUnit()
+                'unit'  => $totalWeight->getUnit()->value
             ],
             'advanced_options'   => count($advancedOptions) ? $advancedOptions : null,
             'packages'           => array_map(function ($package) {
@@ -144,10 +144,10 @@ abstract class AbstractShipment
                 $data = [
                     'weight'     => [
                         'value' => $weight->getValue(),
-                        'unit'  => $weight->getUnit()
+                        'unit'  => $weight->getUnit()->value
                     ],
                     'dimensions' => [
-                        'unit'   => $dimensions->getUnit(),
+                        'unit'   => $dimensions->getUnit()->value,
                         'length' => $dimensions->getLength(),
                         'width'  => $dimensions->getWidth(),
                         'height' => $dimensions->getHeight()
@@ -170,7 +170,7 @@ abstract class AbstractShipment
         ];
 
         if (!is_null($this->deliveryConfirmation)) {
-            $payload['confirmation'] = $this->deliveryConfirmation->__toString();
+            $payload['confirmation'] = $this->deliveryConfirmation->value;
         }
 
         return $payload;

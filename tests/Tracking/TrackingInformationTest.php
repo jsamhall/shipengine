@@ -19,7 +19,7 @@ class TrackingInformationTest extends TestCase
         return [
             'tracking_number'   => '1Z999',
             'tracking_url'      => 'https://example.test/track/1Z999',
-            'status_code'       => StatusCode::DELIVERED,
+            'status_code'       => StatusCode::Delivered->value,
             'status_description'=> 'Delivered',
             'carrier_code'      => 'ups',
             'carrier_id'        => 'se-carrier-1',
@@ -40,6 +40,7 @@ class TrackingInformationTest extends TestCase
         self::assertSame('1Z999', $tracking->getTrackingNumber());
         self::assertSame('https://example.test/track/1Z999', $tracking->getTrackingUrl());
         self::assertSame('DE', $tracking->getStatusCode());
+        self::assertSame(StatusCode::Delivered, $tracking->getStatus());
         self::assertSame('ups', (string) $tracking->getCarrierCode());
         self::assertSame('se-carrier-1', (string) $tracking->getCarrierId());
         self::assertInstanceOf(\DateTime::class, $tracking->getActualDeliveryDate());
@@ -71,7 +72,7 @@ class TrackingInformationTest extends TestCase
     {
         $tracking = new TrackingInformation([
             'tracking_number' => '1Z000',
-            'status_code'     => StatusCode::IN_TRANSIT,
+            'status_code'     => StatusCode::InTransit->value,
             'carrier_code'    => 'ups',
         ]);
 

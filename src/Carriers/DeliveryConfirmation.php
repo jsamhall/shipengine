@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,41 +14,15 @@
 
 namespace jsamhall\ShipEngine\Carriers;
 
-
-class DeliveryConfirmation
+/**
+ * Delivery confirmation options for a shipment.
+ *
+ * @link https://docs.shipengine.com/docs/request-delivery-confirmation
+ */
+enum DeliveryConfirmation: string
 {
-    /**
-     * @var string
-     */
-    protected $confirmationType;
-
-    protected function __construct($confirmationType)
-    {
-        $this->confirmationType = $confirmationType;
-    }
-
-    public static function delivery()
-    {
-        return new static("delivery");
-    }
-
-    public static function signature()
-    {
-        return new static("signature");
-    }
-
-    public static function adultSignature()
-    {
-        return new static("adult_signature");
-    }
-
-    public static function directSignature()
-    {
-        return new static("direct_signature");
-    }
-
-    function __toString()
-    {
-        return $this->confirmationType;
-    }
+    case Delivery = 'delivery';
+    case Signature = 'signature';
+    case AdultSignature = 'adult_signature';
+    case DirectSignature = 'direct_signature';
 }

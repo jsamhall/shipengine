@@ -92,32 +92,32 @@ class WireValueTest extends TestCase
 
     public function testDeliveryConfirmationValues(): void
     {
-        self::assertSame('delivery', (string) DeliveryConfirmation::delivery());
-        self::assertSame('signature', (string) DeliveryConfirmation::signature());
-        self::assertSame('adult_signature', (string) DeliveryConfirmation::adultSignature());
-        self::assertSame('direct_signature', (string) DeliveryConfirmation::directSignature());
+        self::assertSame('delivery', DeliveryConfirmation::Delivery->value);
+        self::assertSame('signature', DeliveryConfirmation::Signature->value);
+        self::assertSame('adult_signature', DeliveryConfirmation::AdultSignature->value);
+        self::assertSame('direct_signature', DeliveryConfirmation::DirectSignature->value);
     }
 
     public function testInsuranceProviderValues(): void
     {
-        self::assertSame('none', (string) InsuranceProvider::none());
-        self::assertSame('shipsurance', (string) InsuranceProvider::shipsurance());
-        self::assertSame('carrier', (string) InsuranceProvider::carrier());
-        self::assertSame('third_party', (string) InsuranceProvider::thirdParty());
+        self::assertSame('none', InsuranceProvider::None->value);
+        self::assertSame('shipsurance', InsuranceProvider::Shipsurance->value);
+        self::assertSame('carrier', InsuranceProvider::Carrier->value);
+        self::assertSame('third_party', InsuranceProvider::ThirdParty->value);
     }
 
     public function testTrackingStatusCodeValues(): void
     {
-        self::assertSame('AC', StatusCode::ACCEPTED);
-        self::assertSame('IT', StatusCode::IN_TRANSIT);
-        self::assertSame('DE', StatusCode::DELIVERED);
-        self::assertSame('EX', StatusCode::EXCEPTION);
-        self::assertSame('UN', StatusCode::UNKNOWN);
-        self::assertSame('AT', StatusCode::ATTEMPTED_DELIVERY);
-        self::assertSame('NY', StatusCode::NOT_YET_IN_SYSTEM);
-        self::assertSame('SP', StatusCode::DELIVERED_TO_COLLECTION_LOCATION);
+        self::assertSame('AC', StatusCode::Accepted->value);
+        self::assertSame('IT', StatusCode::InTransit->value);
+        self::assertSame('DE', StatusCode::Delivered->value);
+        self::assertSame('EX', StatusCode::Exception->value);
+        self::assertSame('UN', StatusCode::Unknown->value);
+        self::assertSame('AT', StatusCode::AttemptedDelivery->value);
+        self::assertSame('NY', StatusCode::NotYetInSystem->value);
+        self::assertSame('SP', StatusCode::DeliveredToCollectionLocation->value);
 
-        self::assertSame('Delivered', StatusCode::describe(StatusCode::DELIVERED));
+        self::assertSame('Delivered', StatusCode::describe('DE'));
         self::assertSame('Unknown', StatusCode::describe('not-a-real-code'));
     }
 }

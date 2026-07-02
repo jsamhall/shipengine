@@ -69,9 +69,10 @@ class Address
     protected $countryCode;
 
     /**
-     * @var string
+     * Whether the address is residential. Defaults to residential; callers must explicitly declare
+     * an address non-residential.
      */
-    protected $addressResidentialIndicator;
+    protected ResidentialIndicator $addressResidentialIndicator = ResidentialIndicator::Yes;
 
     /**
      * @param string $name
@@ -174,10 +175,9 @@ class Address
     }
 
     /**
-     * @param string $addressResidentialIndicator
      * @return Address
      */
-    public function setAddressResidentialIndicator($addressResidentialIndicator)
+    public function setAddressResidentialIndicator(ResidentialIndicator $addressResidentialIndicator)
     {
         $this->addressResidentialIndicator = $addressResidentialIndicator;
         return $this;
@@ -263,10 +263,7 @@ class Address
         return $this->countryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddressResidentialIndicator()
+    public function getAddressResidentialIndicator(): ResidentialIndicator
     {
         return $this->addressResidentialIndicator;
     }
@@ -286,7 +283,8 @@ class Address
             'city_locality'  => $this->getCityLocality(),
             'state_province' => $this->getStateProvince(),
             'postal_code'    => $this->getPostalCode(),
-            'country_code'   => $this->getCountryCode()
+            'country_code'   => $this->getCountryCode(),
+            'address_residential_indicator' => $this->getAddressResidentialIndicator()->value
         ];
     }
 }

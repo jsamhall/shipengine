@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -12,49 +15,44 @@
 namespace jsamhall\ShipEngine\Tracking;
 
 /**
- * Class StatusCode
- *
- * Standardized ShipEngine tracking status codes
+ * Standardized ShipEngine tracking status codes.
  *
  * @link https://www.shipengine.com/docs/tracking/
- *
- * @package jsamhall\ShipEngine\Tracking
  */
-class StatusCode
+enum StatusCode: string
 {
-    const ACCEPTED = 'AC';
-    const IN_TRANSIT = 'IT';
-    const DELIVERED = 'DE';
-    const EXCEPTION = 'EX';
-    const UNKNOWN = 'UN';
-    const ATTEMPTED_DELIVERY = 'AT';
-    const NOT_YET_IN_SYSTEM = 'NY';
-    const DELIVERED_TO_COLLECTION_LOCATION = 'SP';
+    case Accepted = 'AC';
+    case InTransit = 'IT';
+    case Delivered = 'DE';
+    case Exception = 'EX';
+    case Unknown = 'UN';
+    case AttemptedDelivery = 'AT';
+    case NotYetInSystem = 'NY';
+    case DeliveredToCollectionLocation = 'SP';
 
     /**
-     * Map of status codes to human readable labels
-     *
-     * @var array
+     * A human readable label for this status code.
      */
-    private static $descriptions = [
-        self::ACCEPTED                         => 'Accepted',
-        self::IN_TRANSIT                       => 'In Transit',
-        self::DELIVERED                        => 'Delivered',
-        self::EXCEPTION                        => 'Exception',
-        self::UNKNOWN                          => 'Unknown',
-        self::ATTEMPTED_DELIVERY               => 'Attempted Delivery',
-        self::NOT_YET_IN_SYSTEM                => 'Not Yet In System',
-        self::DELIVERED_TO_COLLECTION_LOCATION => 'Delivered to Collection Location',
-    ];
+    public function label(): string
+    {
+        return match ($this) {
+            self::Accepted                      => 'Accepted',
+            self::InTransit                     => 'In Transit',
+            self::Delivered                     => 'Delivered',
+            self::Exception                     => 'Exception',
+            self::Unknown                       => 'Unknown',
+            self::AttemptedDelivery             => 'Attempted Delivery',
+            self::NotYetInSystem                => 'Not Yet In System',
+            self::DeliveredToCollectionLocation => 'Delivered to Collection Location',
+        };
+    }
 
     /**
-     * Get a human readable label for the given status code
-     *
-     * @param string $code
-     * @return string
+     * Get a human readable label for the given raw status code, falling back to "Unknown" for any
+     * code that is not recognized.
      */
     public static function describe(string $code): string
     {
-        return self::$descriptions[$code] ?? 'Unknown';
+        return (self::tryFrom($code) ?? self::Unknown)->label();
     }
 }

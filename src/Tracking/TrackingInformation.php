@@ -153,11 +153,20 @@ class TrackingInformation extends ShipEngine\Api\Response
     }
 
     /**
-     * @return string
+     * The raw ShipEngine status code (e.g. "DE").
      */
     public function getStatusCode(): string
     {
         return $this->statusCode;
+    }
+
+    /**
+     * The status as a {@see StatusCode} enum, or null if ShipEngine returned a code this library
+     * does not yet recognize.
+     */
+    public function getStatus(): ?StatusCode
+    {
+        return StatusCode::tryFrom($this->statusCode);
     }
 
     /**
@@ -253,7 +262,7 @@ class TrackingInformation extends ShipEngine\Api\Response
      */
     public function isDelivered(): bool
     {
-        return $this->statusCode === StatusCode::DELIVERED;
+        return $this->statusCode === StatusCode::Delivered->value;
     }
 
     /**
@@ -261,7 +270,7 @@ class TrackingInformation extends ShipEngine\Api\Response
      */
     public function hasException(): bool
     {
-        return $this->statusCode === StatusCode::EXCEPTION;
+        return $this->statusCode === StatusCode::Exception->value;
     }
 
     /**
@@ -269,7 +278,7 @@ class TrackingInformation extends ShipEngine\Api\Response
      */
     public function isInTransit(): bool
     {
-        return $this->statusCode === StatusCode::IN_TRANSIT;
+        return $this->statusCode === StatusCode::InTransit->value;
     }
 
     /**
