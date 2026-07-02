@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace jsamhall\ShipEngine\Tests\Carriers;
 
+use jsamhall\ShipEngine\Carriers\CustomServiceCode;
 use jsamhall\ShipEngine\Carriers\DeliveryConfirmation;
 use jsamhall\ShipEngine\Carriers\FedEx;
 use jsamhall\ShipEngine\Carriers\UPS;
@@ -14,80 +15,93 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Characterization test: pins the exact string "wire values" that are sent to / received from the
- * ShipEngine API. These MUST be preserved when the corresponding classes are converted to backed
- * enums in v2.0 (the enum `case` values have to equal these strings).
+ * ShipEngine API. Asserting against a full [caseName => value] map also fails if a case is added,
+ * removed, or renamed without updating the expectations.
  */
 class WireValueTest extends TestCase
 {
+    /**
+     * @param \BackedEnum[] $cases
+     * @return array<string, string>
+     */
+    private function casesMap(array $cases): array
+    {
+        $map = [];
+        foreach ($cases as $case) {
+            $map[$case->name] = $case->value;
+        }
+
+        return $map;
+    }
+
     public function testFedExServiceCodeValues(): void
     {
-        $expected = [
-            'ground'                      => 'fedex_ground',
-            'homeDelivery'                => 'fedex_home_delivery',
-            'twoDay'                      => 'fedex_2day',
-            'twoDayAm'                    => 'fedex_2day_am',
-            'expressSaver'                => 'fedex_express_saver',
-            'standardOvernight'           => 'fedex_standard_overnight',
-            'priorityOvernight'           => 'fedex_priority_overnight',
-            'firstOvernight'              => 'fedex_first_overnight',
-            'internationalGround'         => 'fedex_ground_international',
-            'internationalEconomy'        => 'fedex_international_economy',
-            'internationalPriority'       => 'fedex_international_priority',
-            'internationalFirst'          => 'fedex_international_first',
-            'freightOneDay'               => 'fedex_1_day_freight',
-            'freightTwoDay'               => 'fedex_2_day_freight',
-            'freightThreeDay'             => 'fedex_3_day_freight',
-            'freightFirstOvernight'       => 'fedex_first_overnight_freight',
-            'freightInternationalEconomy' => 'fedex_international_economy_freight',
-            'freightInternationalPriority'=> 'fedex_international_priority_freight',
-        ];
-
-        foreach ($expected as $factory => $wireValue) {
-            self::assertSame($wireValue, (string) FedEx\ServiceCode::$factory());
-        }
+        self::assertSame([
+            'Ground'                       => 'fedex_ground',
+            'HomeDelivery'                 => 'fedex_home_delivery',
+            'TwoDay'                       => 'fedex_2day',
+            'TwoDayAm'                     => 'fedex_2day_am',
+            'ExpressSaver'                 => 'fedex_express_saver',
+            'StandardOvernight'            => 'fedex_standard_overnight',
+            'PriorityOvernight'            => 'fedex_priority_overnight',
+            'FirstOvernight'               => 'fedex_first_overnight',
+            'InternationalGround'          => 'fedex_ground_international',
+            'InternationalEconomy'         => 'fedex_international_economy',
+            'InternationalPriority'        => 'fedex_international_priority',
+            'InternationalFirst'           => 'fedex_international_first',
+            'FreightOneDay'                => 'fedex_1_day_freight',
+            'FreightTwoDay'                => 'fedex_2_day_freight',
+            'FreightThreeDay'              => 'fedex_3_day_freight',
+            'FreightFirstOvernight'        => 'fedex_first_overnight_freight',
+            'FreightInternationalEconomy'  => 'fedex_international_economy_freight',
+            'FreightInternationalPriority' => 'fedex_international_priority_freight',
+        ], $this->casesMap(FedEx\ServiceCode::cases()));
     }
 
     public function testUpsServiceCodeValues(): void
     {
-        $expected = [
-            'ground'                     => 'ups_ground',
-            'groundInternational'        => 'ups_ground_international',
-            'standardInternational'      => 'ups_standard_international',
-            'worldwideExpress'           => 'ups_worldwide_express',
-            'worldwideExpressPlus'       => 'ups_worldwide_express_plus',
-            'worldwideExpedited'         => 'ups_worldwide_expedited',
-            'worldwideSaver'             => 'ups_worldwide_saver',
-            'nextDayAir'                 => 'ups_next_day_air',
-            'nextDayAirEarlyAm'          => 'ups_next_day_air_early_am',
-            'nextDayAirSaver'            => 'ups_next_day_air_saver',
-            'nextDayAirInternational'    => 'ups_next_day_air_international',
-            'secondDayAir'               => 'ups_2nd_day_air',
-            'secondDayAirAm'             => 'ups_2nd_day_air_am',
-            'secondDayAirInternational'  => 'ups_2nd_day_air_international',
-            'threeDaySelect'             => 'ups_3_day_select',
-        ];
-
-        foreach ($expected as $factory => $wireValue) {
-            self::assertSame($wireValue, (string) UPS\ServiceCode::$factory());
-        }
+        self::assertSame([
+            'Ground'                    => 'ups_ground',
+            'GroundInternational'       => 'ups_ground_international',
+            'StandardInternational'     => 'ups_standard_international',
+            'WorldwideExpress'          => 'ups_worldwide_express',
+            'WorldwideExpressPlus'      => 'ups_worldwide_express_plus',
+            'WorldwideExpedited'        => 'ups_worldwide_expedited',
+            'WorldwideSaver'            => 'ups_worldwide_saver',
+            'NextDayAir'                => 'ups_next_day_air',
+            'NextDayAirEarlyAm'         => 'ups_next_day_air_early_am',
+            'NextDayAirSaver'           => 'ups_next_day_air_saver',
+            'NextDayAirInternational'   => 'ups_next_day_air_international',
+            'SecondDayAir'              => 'ups_2nd_day_air',
+            'SecondDayAirAm'            => 'ups_2nd_day_air_am',
+            'SecondDayAirInternational' => 'ups_2nd_day_air_international',
+            'ThreeDaySelect'            => 'ups_3_day_select',
+        ], $this->casesMap(UPS\ServiceCode::cases()));
     }
 
     public function testUspsServiceCodeValues(): void
     {
-        $expected = [
-            'mediaMail'                        => 'usps_media_mail',
-            'parcelSelect'                     => 'usps_parcel_select',
-            'firstClassMail'                   => 'usps_first_class_mail',
-            'firstClassMailInternational'      => 'usps_first_class_mail_international',
-            'priorityMail'                     => 'usps_priority_mail',
-            'priorityMailInternational'        => 'usps_priority_mail_international',
-            'priorityMailExpress'              => 'usps_priority_mail_express',
-            'priorityMailExpressInternational' => 'usps_priority_mail_express_international',
-        ];
+        self::assertSame([
+            'MediaMail'                        => 'usps_media_mail',
+            'ParcelSelect'                     => 'usps_parcel_select',
+            'FirstClassMail'                   => 'usps_first_class_mail',
+            'FirstClassMailInternational'      => 'usps_first_class_mail_international',
+            'PriorityMail'                     => 'usps_priority_mail',
+            'PriorityMailInternational'        => 'usps_priority_mail_international',
+            'PriorityMailExpress'              => 'usps_priority_mail_express',
+            'PriorityMailExpressInternational' => 'usps_priority_mail_express_international',
+        ], $this->casesMap(USPS\ServiceCode::cases()));
+    }
 
-        foreach ($expected as $factory => $wireValue) {
-            self::assertSame($wireValue, (string) USPS\ServiceCode::$factory());
-        }
+    public function testServiceCodeInterfaceIsSharedAcrossEnumAndCustom(): void
+    {
+        self::assertSame('ups_ground', UPS\ServiceCode::Ground->code());
+
+        // An enum case and a CustomServiceCode with the same wire value compare equal, both ways.
+        $custom = new CustomServiceCode('ups_ground');
+        self::assertTrue(UPS\ServiceCode::Ground->equals($custom));
+        self::assertTrue($custom->equals(UPS\ServiceCode::Ground));
+        self::assertFalse(UPS\ServiceCode::Ground->equals(FedEx\ServiceCode::Ground));
     }
 
     public function testDeliveryConfirmationValues(): void

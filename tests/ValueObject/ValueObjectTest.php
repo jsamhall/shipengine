@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace jsamhall\ShipEngine\Tests\ValueObject;
 
 use jsamhall\ShipEngine\Carriers\CarrierCode;
+use jsamhall\ShipEngine\Carriers\CustomServiceCode;
 use jsamhall\ShipEngine\Carriers\PackageCode;
-use jsamhall\ShipEngine\Carriers\ServiceCode;
 use jsamhall\ShipEngine\ValueObject\Amount;
 use jsamhall\ShipEngine\ValueObject\Id;
 use PHPUnit\Framework\TestCase;
@@ -28,13 +28,13 @@ class ValueObjectTest extends TestCase
         self::assertFalse($a->equals($c));
     }
 
-    public function testServiceCodeEquals(): void
+    public function testCustomServiceCodeEquals(): void
     {
-        $a = new ServiceCode('ups_ground');
-        $b = new ServiceCode('ups_ground');
-        $c = new ServiceCode('fedex_ground');
+        $a = new CustomServiceCode('ups_ground');
+        $b = new CustomServiceCode('ups_ground');
+        $c = new CustomServiceCode('fedex_ground');
 
-        self::assertSame('ups_ground', (string) $a);
+        self::assertSame('ups_ground', $a->code());
         self::assertTrue($a->equals($b));
         self::assertFalse($a->equals($c));
     }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,125 +14,37 @@
 
 namespace jsamhall\ShipEngine\Carriers\FedEx;
 
-use jsamhall\ShipEngine\Carriers;
+use jsamhall\ShipEngine\Carriers\ServiceCode as ServiceCodeInterface;
+use jsamhall\ShipEngine\Carriers\ServiceCodeComparison;
 
 /**
- * Class ServiceCode
- *
- * Named constructors for FedEx service codes in ShipEngine
- *
- * @package jsamhall\ShipEngine\Carriers\FedEx
+ * FedEx service codes in ShipEngine.
  */
-class ServiceCode extends Carriers\ServiceCode
+enum ServiceCode: string implements ServiceCodeInterface
 {
-    private static $GROUND = 'fedex_ground';
-    private static $HOME_DELIVERY = 'fedex_home_delivery';
-    private static $TWO_DAY = 'fedex_2day';
-    private static $TWO_DAY_AM = 'fedex_2day_am';
-    private static $EXPRESS_SAVER = 'fedex_express_saver';
-    private static $STANDARD_OVERNIGHT = 'fedex_standard_overnight';
-    private static $PRIORITY_OVERNIGHT = 'fedex_priority_overnight';
-    private static $FIRST_OVERNIGHT = 'fedex_first_overnight';
+    use ServiceCodeComparison;
 
-    private static $INTERNATIONAL_GROUND = 'fedex_ground_international';
-    private static $INTERNATIONAL_ECONOMY = 'fedex_international_economy';
-    private static $INTERNATIONAL_PRIORITY = 'fedex_international_priority';
-    private static $INTERNATIONAL_FIRST = 'fedex_international_first';
+    case Ground = 'fedex_ground';
+    case HomeDelivery = 'fedex_home_delivery';
+    case TwoDay = 'fedex_2day';
+    case TwoDayAm = 'fedex_2day_am';
+    case ExpressSaver = 'fedex_express_saver';
+    case StandardOvernight = 'fedex_standard_overnight';
+    case PriorityOvernight = 'fedex_priority_overnight';
+    case FirstOvernight = 'fedex_first_overnight';
+    case InternationalGround = 'fedex_ground_international';
+    case InternationalEconomy = 'fedex_international_economy';
+    case InternationalPriority = 'fedex_international_priority';
+    case InternationalFirst = 'fedex_international_first';
+    case FreightOneDay = 'fedex_1_day_freight';
+    case FreightTwoDay = 'fedex_2_day_freight';
+    case FreightThreeDay = 'fedex_3_day_freight';
+    case FreightFirstOvernight = 'fedex_first_overnight_freight';
+    case FreightInternationalEconomy = 'fedex_international_economy_freight';
+    case FreightInternationalPriority = 'fedex_international_priority_freight';
 
-    private static $FREIGHT_ONE_DAY = 'fedex_1_day_freight';
-    private static $FREIGHT_TWO_DAY = 'fedex_2_day_freight';
-    private static $FREIGHT_THREE_DAY = 'fedex_3_day_freight';
-    private static $FREIGHT_FIRST_OVERNIGHT = 'fedex_first_overnight_freight';
-    private static $FREIGHT_INTERNATIONAL_ECONOMY = 'fedex_international_economy_freight';
-    private static $FREIGHT_INTERNATIONAL_PRIORITY = 'fedex_international_priority_freight';
-
-    public static function ground()
+    public function code(): string
     {
-        return new static(self::$GROUND);
-    }
-
-    public static function homeDelivery()
-    {
-        return new static(self::$HOME_DELIVERY);
-    }
-
-    public static function twoDay()
-    {
-        return new static(self::$TWO_DAY);
-    }
-
-    public static function twoDayAm()
-    {
-        return new static(self::$TWO_DAY_AM);
-    }
-
-    public static function expressSaver()
-    {
-        return new static(self::$EXPRESS_SAVER);
-    }
-
-    public static function standardOvernight()
-    {
-        return new static(self::$STANDARD_OVERNIGHT);
-    }
-
-    public static function priorityOvernight()
-    {
-        return new static(self::$PRIORITY_OVERNIGHT);
-    }
-
-    public static function firstOvernight()
-    {
-        return new static(self::$FIRST_OVERNIGHT);
-    }
-
-    public static function internationalGround()
-    {
-        return new static(self::$INTERNATIONAL_GROUND);
-    }
-
-    public static function internationalEconomy()
-    {
-        return new static(self::$INTERNATIONAL_ECONOMY);
-    }
-
-    public static function internationalPriority()
-    {
-        return new static(self::$INTERNATIONAL_PRIORITY);
-    }
-
-    public static function internationalFirst()
-    {
-        return new static(self::$INTERNATIONAL_FIRST);
-    }
-
-    public static function freightOneDay()
-    {
-        return new static(self::$FREIGHT_ONE_DAY);
-    }
-
-    public static function freightTwoDay()
-    {
-        return new static(self::$FREIGHT_TWO_DAY);
-    }
-
-    public static function freightThreeDay()
-    {
-        return new static(self::$FREIGHT_THREE_DAY);
-    }
-
-    public static function freightFirstOvernight()
-    {
-        return new static(self::$FREIGHT_FIRST_OVERNIGHT);
-    }
-
-    public static function freightInternationalEconomy()
-    {
-        return new static(self::$FREIGHT_INTERNATIONAL_ECONOMY);
-    }
-
-    public static function freightInternationalPriority()
-    {
-        return new static(self::$FREIGHT_INTERNATIONAL_PRIORITY);
+        return $this->value;
     }
 }

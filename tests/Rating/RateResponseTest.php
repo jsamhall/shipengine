@@ -74,7 +74,7 @@ class RateResponseTest extends TestCase
         $rate = $response->getRateById('se-rate-1');
 
         self::assertInstanceOf(Rate::class, $rate);
-        self::assertSame('ups_ground', (string) $rate->getServiceCode());
+        self::assertSame('ups_ground', $rate->getServiceCode()->code());
         self::assertSame('ups', (string) $rate->getCarrierCode());
         self::assertSame('UPS Ground', $rate->getServiceName());
         self::assertSame(10.50, $rate->getShippingAmount()->getAmount());

@@ -172,7 +172,7 @@ class Rate
         $this->id = new RateId($rateData['rate_id']);
         $this->carrierId = new ShipEngine\Carriers\CarrierId($rateData['carrier_id']);
         $this->carrierCode = new ShipEngine\Carriers\CarrierCode($rateData['carrier_code']);
-        $this->serviceCode = new ShipEngine\Carriers\ServiceCode($rateData['service_code']);
+        $this->serviceCode = new ShipEngine\Carriers\CustomServiceCode($rateData['service_code']);
 
         $map = [
             'rate_type'               => 'type',

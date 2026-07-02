@@ -72,7 +72,7 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
     public function toArray()
     {
         $data = array_merge(parent::toArray(), [
-            'service_code' => $this->serviceCode->__toString()
+            'service_code' => $this->serviceCode->code()
         ]);
 
         if (!is_null($this->carrierId)) {

@@ -53,7 +53,7 @@ class Service
     public function __construct(array $serviceData)
     {
         list($this->code, $this->name, $this->domestic, $this->international) = [
-            new ServiceCode($serviceData['service_code']),
+            new CustomServiceCode($serviceData['service_code']),
             $serviceData['name'],
             boolval($serviceData['domestic']),
             boolval($serviceData['international'])

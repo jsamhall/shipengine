@@ -74,7 +74,7 @@ class RateResponse
     public function getRateByServiceCode($serviceCode)
     {
         if (! $serviceCode instanceof ShipEngine\Carriers\ServiceCode) {
-            $serviceCode = new ShipEngine\Carriers\ServiceCode($serviceCode);
+            $serviceCode = new ShipEngine\Carriers\CustomServiceCode($serviceCode);
         }
 
         foreach ($this->rates as $rate) {

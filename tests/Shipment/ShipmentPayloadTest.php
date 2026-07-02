@@ -89,7 +89,7 @@ class ShipmentPayloadTest extends TestCase
     public function testLabelsShipmentAddsServiceCodeAndCarrierId(): void
     {
         $shipment = new Labels\Shipment(
-            UPS\ServiceCode::ground(),
+            UPS\ServiceCode::Ground,
             $this->address('Ship To'),
             $this->address('Ship From'),
             [$this->package()]
