@@ -26,7 +26,7 @@ class PackageType
      *
      * @link https://docs.shipengine.com/docs/custom-packages
      */
-    protected PackageId $packageId;
+    protected ?PackageId $packageId;
 
     /**
      * The code used to identify this Package Type with the Carrier
@@ -49,17 +49,20 @@ class PackageType
      */
     public function __construct(array $packageData)
     {
-        $this->packageId = new PackageId($packageData['package_id']);
+        $this->packageId = isset($packageData['package_id'])
+            ? new PackageId($packageData['package_id'])
+            : null;
+
         $this->packageCode = new PackageCode($packageData['package_code']);
         $this->name = $packageData['name'];
         $this->description = $packageData['description'] ?? null;
     }
 
-    public function getPackageId(): PackageId
+    public function getPackageId(): ?PackageId
     {
         return $this->packageId;
     }
-
+    
     public function getPackageCode(): PackageCode
     {
         return $this->packageCode;
