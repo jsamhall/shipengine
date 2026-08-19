@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -16,17 +19,10 @@ use jsamhall\ShipEngine\Exception;
 class Request
 {
     /**
-     * The cURL resource
-     *
-     * @var resource
+     * The cURL handle
      */
-    protected $curlHandle;
+    protected \CurlHandle $curlHandle;
 
-    /**
-     * Request constructor.
-     *
-     * @param array $params
-     */
     public function __construct(array $params)
     {
         $curlHandle = curl_init();
@@ -38,16 +34,14 @@ class Request
     /**
      * Perform the request
      *
-     * @return Response
      * @throws Exception\ApiErrorResponse
      * @throws Exception\ApiRequestFailed
      */
-    public function send()
+    public function send(): Response
     {
         $response = curl_exec($this->curlHandle);
         if ($response === false) {
-            $message = curl_error($this->curlHandle) ?? null;
-            throw Exception::apiRequestFailed($message);
+            throw Exception::apiRequestFailed(curl_error($this->curlHandle));
         }
 
         $data = json_decode($response, true);

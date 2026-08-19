@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -16,22 +18,15 @@ use jsamhall\ShipEngine;
 
 class Shipment extends ShipEngine\Shipment\AbstractShipment
 {
-
     /**
      * Optional carrierId
-     *
-     * @var ShipEngine\Carriers\CarrierId|null
      */
-    protected $carrierId = null;
+    protected ?ShipEngine\Carriers\CarrierId $carrierId = null;
 
     /**
      * The service code to request a Label for
-     *
-     * @var ShipEngine\Carriers\ServiceCode
      */
-    protected $serviceCode;
-
-
+    protected ShipEngine\Carriers\ServiceCode $serviceCode;
 
     public function __construct(
         ShipEngine\Carriers\ServiceCode $service,
@@ -49,15 +44,11 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         return $this->serviceCode;
     }
 
-
     /**
      * Specify a specific carrierId for which this Shipment applies
      * Only necessary when multiple Accounts for the same Carrier have been established
-     *
-     * @param ShipEngine\Carriers\CarrierId $carrierId
-     * @return $this
      */
-    public function specifyCarrierId(ShipEngine\Carriers\CarrierId $carrierId)
+    public function specifyCarrierId(ShipEngine\Carriers\CarrierId $carrierId): static
     {
         $this->carrierId = $carrierId;
 
@@ -66,16 +57,14 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
 
     /**
      * Prepare the Shipment Data for transport as an array
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $data = array_merge(parent::toArray(), [
-            'service_code' => $this->serviceCode->__toString()
+            'service_code' => $this->serviceCode->code()
         ]);
 
-        if (!is_null($this->carrierId)) {
+        if (! is_null($this->carrierId)) {
             $data['carrier_id'] = $this->carrierId->__toString();
         }
 

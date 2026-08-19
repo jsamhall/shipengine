@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -6,275 +9,163 @@
  * file 'LICENSE.txt', which is found in the root folder of
  * this source code package.
  *
+ * @package jsamhall\ShipEngine\Address
+ *
  * @author    John Hall
  */
 
 namespace jsamhall\ShipEngine\Address;
 
-/**
- * Class 
- *
- * @package jsamhall\ShipEngine\Address
- */
 class Address
 {
-    /**
-     * @var string
-     */
-    protected $name;
+    protected ?string $name = null;
+
+    protected ?string $phone = null;
+
+    protected ?string $companyName = null;
+
+    protected ?string $addressLine1 = null;
+
+    protected ?string $addressLine2 = null;
+
+    protected ?string $addressLine3 = null;
+
+    protected ?string $cityLocality = null;
+
+    protected ?string $stateProvince = null;
+
+    protected ?string $postalCode = null;
+
+    protected ?string $countryCode = null;
 
     /**
-     * @var string|null
+     * Whether the address is residential. Defaults to residential; callers must explicitly declare
+     * an address non-residential.
      */
-    protected $phone;
+    protected ResidentialIndicator $addressResidentialIndicator = ResidentialIndicator::Yes;
 
-    /**
-     * @var string|null
-     */
-    protected $companyName;
-
-    /**
-     * @var string
-     */
-    protected $addressLine1;
-
-    /**
-     * @var string|null
-     */
-    protected $addressLine2 = null;
-
-    /**
-     * @var string|null
-     */
-    protected $addressLine3 = null;
-
-    /**
-     * @var string
-     */
-    protected $cityLocality;
-
-    /**
-     * @var string
-     */
-    protected $stateProvince;
-
-    /**
-     * @var string
-     */
-    protected $postalCode;
-
-    /**
-     * @var string
-     */
-    protected $countryCode;
-
-    /**
-     * @var string
-     */
-    protected $addressResidentialIndicator;
-
-    /**
-     * @param string $name
-     * @return Address
-     */
-    public function setName($name)
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @param null|string $phone
-     * @return Address
-     */
-    public function setPhone($phone)
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
         return $this;
     }
 
-    /**
-     * @param null|string $companyName
-     * @return Address
-     */
-    public function setCompanyName($companyName)
+    public function setCompanyName(?string $companyName): self
     {
         $this->companyName = $companyName;
         return $this;
     }
 
-    /**
-     * @param string $addressLine1
-     * @return Address
-     */
-    public function setAddressLine1($addressLine1)
+    public function setAddressLine1(?string $addressLine1): self
     {
         $this->addressLine1 = $addressLine1;
         return $this;
     }
 
-    /**
-     * @param null|string $addressLine2
-     * @return Address
-     */
-    public function setAddressLine2($addressLine2)
+    public function setAddressLine2(?string $addressLine2): self
     {
         $this->addressLine2 = $addressLine2;
         return $this;
     }
 
-    /**
-     * @param null|string $addressLine3
-     * @return Address
-     */
-    public function setAddressLine3($addressLine3)
+    public function setAddressLine3(?string $addressLine3): self
     {
         $this->addressLine3 = $addressLine3;
         return $this;
     }
 
-    /**
-     * @param string $cityLocality
-     * @return Address
-     */
-    public function setCityLocality($cityLocality)
+    public function setCityLocality(?string $cityLocality): self
     {
         $this->cityLocality = $cityLocality;
         return $this;
     }
 
-    /**
-     * @param string $stateProvince
-     * @return Address
-     */
-    public function setStateProvince($stateProvince)
+    public function setStateProvince(?string $stateProvince): self
     {
         $this->stateProvince = $stateProvince;
         return $this;
     }
 
-    /**
-     * @param string $postalCode
-     * @return Address
-     */
-    public function setPostalCode($postalCode)
+    public function setPostalCode(?string $postalCode): self
     {
         $this->postalCode = $postalCode;
         return $this;
     }
 
-    /**
-     * @param string $countryCode
-     * @return Address
-     */
-    public function setCountryCode($countryCode)
+    public function setCountryCode(?string $countryCode): self
     {
         $this->countryCode = $countryCode;
         return $this;
     }
 
-    /**
-     * @param string $addressResidentialIndicator
-     * @return Address
-     */
-    public function setAddressResidentialIndicator($addressResidentialIndicator)
+    public function setAddressResidentialIndicator(ResidentialIndicator $addressResidentialIndicator): self
     {
         $this->addressResidentialIndicator = $addressResidentialIndicator;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCompanyName()
+    public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddressLine1()
+    public function getAddressLine1(): ?string
     {
         return $this->addressLine1;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getAddressLine2()
+    public function getAddressLine2(): ?string
     {
         return $this->addressLine2;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getAddressLine3()
+    public function getAddressLine3(): ?string
     {
         return $this->addressLine3;
     }
 
-    /**
-     * @return string
-     */
-    public function getCityLocality()
+    public function getCityLocality(): ?string
     {
         return $this->cityLocality;
     }
 
-    /**
-     * @return string
-     */
-    public function getStateProvince()
+    public function getStateProvince(): ?string
     {
         return $this->stateProvince;
     }
 
-    /**
-     * @return string
-     */
-    public function getPostalCode()
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCountryCode()
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddressResidentialIndicator()
+    public function getAddressResidentialIndicator(): ResidentialIndicator
     {
         return $this->addressResidentialIndicator;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'name'           => $this->getName(),
@@ -286,7 +177,8 @@ class Address
             'city_locality'  => $this->getCityLocality(),
             'state_province' => $this->getStateProvince(),
             'postal_code'    => $this->getPostalCode(),
-            'country_code'   => $this->getCountryCode()
+            'country_code'   => $this->getCountryCode(),
+            'address_residential_indicator' => $this->getAddressResidentialIndicator()->value
         ];
     }
 }

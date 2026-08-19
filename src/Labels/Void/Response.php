@@ -1,35 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * ShipEngine API Wrapper
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is found in the root folder of
+ * this source code package.
+ *
+ * @author    John Hall
+ */
+
 namespace jsamhall\ShipEngine\Labels\Void;
 
 class Response
 {
-    private $approved;
+    private bool $approved;
 
-    private $message;
+    private string $message;
 
     public function __construct(array $voidResponse)
     {
-        $approved = $voidResponse['approved'] ?? false;
-        $message = $voidResponse['message'] ?? 'No message found in Void Response';
-
-        $this->approved = $approved;
-        $this->message = $message;
+        $this->approved = (bool) ($voidResponse['approved'] ?? false);
+        $this->message = (string) ($voidResponse['message'] ?? 'No message found in Void Response');
     }
 
-    /**
-     * @return bool
-     */
     public function isApproved(): bool
     {
-        return (bool)$this->approved;
+        return $this->approved;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
-        return (string)$this->message;
+        return $this->message;
     }
 }

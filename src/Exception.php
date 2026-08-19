@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -19,26 +22,18 @@ namespace jsamhall\ShipEngine;
 class Exception extends \Exception
 {
     /**
-     * The response from the ShipEngine API contained one or more errors
-     *
-     * @param array $errorResponse
-     * @throws Exception\ApiErrorResponse
-     * @return Exception\ApiErrorResponse
+     * The response from the ShipEngine API contained one or more errors.
      */
-    public static function apiErrorResponse(array $errorResponse)
+    public static function apiErrorResponse(array $errorResponse): Exception\ApiErrorResponse
     {
-        throw new Exception\ApiErrorResponse($errorResponse);
+        return new Exception\ApiErrorResponse($errorResponse);
     }
-    
+
     /**
-     * A request to the ShipEngine API failed
-     *
-     * @param string $message
-     * @throws Exception\ApiRequestFailed
-     * @return Exception\ApiRequestFailed
+     * A request to the ShipEngine API failed.
      */
-    public static function apiRequestFailed($message = "No response was received.")
+    public static function apiRequestFailed(string $message = "No response was received."): Exception\ApiRequestFailed
     {
-        throw new Exception\ApiRequestFailed($message);
+        return new Exception\ApiRequestFailed($message);
     }
 }

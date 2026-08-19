@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,34 +14,32 @@
 
 namespace jsamhall\ShipEngine\Carriers\FedEx;
 
-use jsamhall\ShipEngine;
+use jsamhall\ShipEngine\Carriers\AdvancedOption as AdvancedOptionInterface;
+use jsamhall\ShipEngine\Carriers\AdvancedOptionCode;
+use jsamhall\ShipEngine\Carriers\CustomAdvancedOption;
 
 /**
- * Class AdvancedOption
- *
- * Named constructors for all "advanced options" offered by FedEx
- *
- * @package jsamhall\ShipEngine\Carriers\FedEx
+ * Named constructors for the "advanced options" offered by FedEx.
  */
-class AdvancedOption extends ShipEngine\Carriers\AdvancedOption
+final class AdvancedOption
 {
-    public static function containsAlcohol()
+    public static function containsAlcohol(): AdvancedOptionInterface
     {
-        return new static('contains_alcohol', true);
+        return new CustomAdvancedOption(AdvancedOptionCode::ContainsAlcohol->value, true);
     }
 
-    public static function deliveredDutyPaid()
+    public static function deliveredDutyPaid(): AdvancedOptionInterface
     {
-        return new static('delivered_duty_paid', true);
+        return new CustomAdvancedOption(AdvancedOptionCode::DeliveredDutyPaid->value, true);
     }
 
-    public static function nonMachinable()
+    public static function nonMachinable(): AdvancedOptionInterface
     {
-        return new static('non_machinable', true);
+        return new CustomAdvancedOption(AdvancedOptionCode::NonMachinable->value, true);
     }
 
-    public static function saturdayDelivery()
+    public static function saturdayDelivery(): AdvancedOptionInterface
     {
-        return new static('saturday_delivery', true);
+        return new CustomAdvancedOption(AdvancedOptionCode::SaturdayDelivery->value, true);
     }
 }

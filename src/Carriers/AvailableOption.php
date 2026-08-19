@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -22,65 +25,48 @@ class AvailableOption
 {
     /**
      * The name of the Option
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The default value provided for this Option when not specified for a Shipment
-     *
-     * @var string
      */
-    protected $defaultValue;
+    protected mixed $defaultValue;
 
     /**
      * A description of this Option
-     *
-     * @var string
      */
-    protected $description;
+    protected string $description;
 
     /**
-     * Option constructor.
-     *
      * @param array $optionData Carrier Option Data as provided by the ShipEngine API
      */
     public function __construct(array $optionData)
     {
-        list($this->name, $this->defaultValue, $this->description) = array_values($optionData);
+        $this->name = $optionData['name'] ?? '';
+        $this->defaultValue = $optionData['default_value'] ?? null;
+        $this->description = $optionData['description'] ?? '';
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * Alias for getName
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function isDefaultValue()
+    public function isDefaultValue(): mixed
     {
         return $this->defaultValue;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -20,24 +23,10 @@ use jsamhall\ShipEngine\Rating\Rate;
  */
 class ShipEngine
 {
-    /**
-     * Request Factory
-     *
-     * @var Api\RequestFactory
-     */
-    protected $requestFactory;
+    protected Api\RequestFactory $requestFactory;
 
-    /**
-     * @var Address\Factory
-     */
-    protected $addressFactory;
+    protected Address\Factory $addressFactory;
 
-    /**
-     * ShipEngine constructor.
-     *
-     * @param string $apiKey
-     * @param Address\FormatterInterface $addressFormatter
-     */
     public function __construct(string $apiKey, Address\FormatterInterface $addressFormatter)
     {
         $this->requestFactory = new Api\RequestFactory($apiKey);
@@ -48,9 +37,8 @@ class ShipEngine
      * Format an address using the Factory's Formatter
      *
      * @param mixed $address Domain address as expected by the Address\Formatter implementation
-     * @return Address\Address
      */
-    public function formatAddress($address)
+    public function formatAddress($address): Address\Address
     {
         return $this->addressFactory->factory($address);
     }
@@ -64,7 +52,7 @@ class ShipEngine
      *
      * @return AddressVerification\VerificationResult[] Array of Verification Results for every address requested
      */
-    public function validateAddresses(array $addresses)
+    public function validateAddresses(array $addresses): array
     {
         $addressData = array_map(function ($address) {
             return $address instanceof Address\Address
@@ -86,7 +74,7 @@ class ShipEngine
      *
      * @return Carriers\Carrier[]
      */
-    public function listCarriers()
+    public function listCarriers(): array
     {
         $response = $this->requestFactory->listCarriers()->send();
 
@@ -97,11 +85,8 @@ class ShipEngine
 
     /**
      * Get a single Carrier
-     *
-     * @param string $carrierId
-     * @return Carriers\Carrier
      */
-    public function getCarrier(string $carrierId)
+    public function getCarrier(string $carrierId): Carriers\Carrier
     {
         $response = $this->requestFactory->getCarrier($carrierId)->send();
 
@@ -111,10 +96,9 @@ class ShipEngine
     /**
      * List all Services offered by a Carrier
      *
-     * @param string $carrierId
      * @return Carriers\Service[]
      */
-    public function listCarrierServices(string $carrierId)
+    public function listCarrierServices(string $carrierId): array
     {
         $response = $this->requestFactory->listCarrierServices($carrierId)->send();
 
@@ -126,10 +110,9 @@ class ShipEngine
     /**
      * List all Package Types offered by a Carrier
      *
-     * @param string $carrierId
      * @return Carriers\PackageType[]
      */
-    public function listCarrierPackageTypes(string $carrierId)
+    public function listCarrierPackageTypes(string $carrierId): array
     {
         $response = $this->requestFactory->listCarrierPackageTypes($carrierId)->send();
 
@@ -141,10 +124,9 @@ class ShipEngine
     /**
      * Get all Options offered by a Carrier
      *
-     * @param string $carrierId
      * @return Carriers\AvailableOption[]
      */
-    public function getCarrierOptions(string $carrierId)
+    public function getCarrierOptions(string $carrierId): array
     {
         $response = $this->requestFactory->getCarrierOptions($carrierId)->send();
 
@@ -155,12 +137,8 @@ class ShipEngine
 
     /**
      * Get all Rates for the given Shipment and RateOptions
-     *
-     * @param Rating\Shipment $shipment
-     * @param Rating\Options $rateOptions
-     * @return Api\Response|Rating\RateResponse
      */
-    public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions)
+    public function getRates(Rating\Shipment $shipment, Rating\Options $rateOptions): Rating\RateResponse
     {
         $response = $this->requestFactory->getShipmentRates($shipment, $rateOptions)->send();
 
@@ -169,10 +147,6 @@ class ShipEngine
 
     /**
      * Create a Shipping Label
-     *
-     * @param Labels\Shipment $shipment
-     * @param bool $testMode
-     * @return Labels\Response
      */
     public function createLabel(Labels\Shipment $shipment, bool $testMode): Labels\Response
     {
@@ -184,10 +158,7 @@ class ShipEngine
     /**
      * Create a Shipping Label with a Custom Image
      *
-     * @param Labels\Shipment $shipment
      * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
-     * @param bool $testMode
-     * @return Labels\Response
      */
     public function createLabelWithCustomImage(
         Labels\Shipment $shipment,
@@ -209,9 +180,7 @@ class ShipEngine
     /**
      * Create a Shipping Label from a previous Rate including a Custom Image
      *
-     * @param Rating\Rate $rate
      * @param string $labelImageId The Label image ID retrieved from the ShipEngine back-office
-     * @return Labels\Response
      */
     public function createLabelFromRateWithCustomImage(Rate $rate, string $labelImageId): Labels\Response
     {
@@ -219,9 +188,8 @@ class ShipEngine
 
         return new Labels\Response($response->getData());
     }
+
     /**
-     * @param string $labelId
-     * @return Labels\Void\Response
      * @throws Exception\ApiErrorResponse
      * @throws Exception\ApiRequestFailed
      */
@@ -238,12 +206,10 @@ class ShipEngine
      * @link https://www.shipengine.com/docs/tracking/
      *
      * @param string|Carriers\CarrierCode $carrierCode    e.g. "usps", "fedex", "ups"
-     * @param string $trackingNumber
-     * @return Tracking\TrackingInformation
      * @throws Exception\ApiErrorResponse  if the carrier is not connected or the request is rejected
      * @throws Exception\ApiRequestFailed  on transport failure
      */
-    public function trackPackage($carrierCode, string $trackingNumber): Tracking\TrackingInformation
+    public function trackPackage(string|Carriers\CarrierCode $carrierCode, string $trackingNumber): Tracking\TrackingInformation
     {
         $carrierCode = (string) $carrierCode;
 
@@ -261,11 +227,10 @@ class ShipEngine
      *
      * @param string|Carriers\CarrierCode $carrierCode The LTL carrier code (e.g. "FXFE")
      * @param string $proNumber The shipment's PRO number (essentially a tracking number)
-     * @return Tracking\Ltl\TrackingInformation
      * @throws Exception\ApiErrorResponse  if the carrier is not connected or the request is rejected
      * @throws Exception\ApiRequestFailed  on transport failure
      */
-    public function trackLtlShipment($carrierCode, string $proNumber): Tracking\Ltl\TrackingInformation
+    public function trackLtlShipment(string|Carriers\CarrierCode $carrierCode, string $proNumber): Tracking\Ltl\TrackingInformation
     {
         $carrierCode = (string) $carrierCode;
 

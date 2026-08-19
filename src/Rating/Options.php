@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -20,16 +23,20 @@ class Options
      *
      * @var string[]
      */
-    protected $carriers = [];
-
-    protected $services = [];
-
-    protected $packageTypes = [];
+    protected array $carriers = [];
 
     /**
-     * Options constructor.
-     *
-     * @param mixed $carrierIds A carrierId or array of CarrierIds
+     * @var string[]
+     */
+    protected array $services = [];
+
+    /**
+     * @var string[]
+     */
+    protected array $packageTypes = [];
+
+    /**
+     * @param array $carrierIds A carrierId or array of CarrierIds
      * @param string[] $serviceCodes Service codes for which to retrieve rates
      * @param string[] $packageTypes Package Type Codes for which to retrieve rates
      */
@@ -37,8 +44,7 @@ class Options
         array $carrierIds = [],
         array $serviceCodes = [],
         array $packageTypes = []
-    )
-    {
+    ) {
         array_map([$this, 'addCarrierId'], $carrierIds);
         array_map([$this, 'addServiceCode'], $serviceCodes);
         array_map([$this, 'addPackageType'], $packageTypes);
@@ -46,13 +52,10 @@ class Options
 
     /**
      * Add a Carrier ID to retrieve Rates for
-     *
-     * @param string|ShipEngine\Carriers\CarrierId $carrierId
-     * @return void
      */
-    public function addCarrierId($carrierId)
+    public function addCarrierId(ShipEngine\Carriers\CarrierId|string $carrierId): void
     {
-        $id = is_a($carrierId, ShipEngine\Carriers\CarrierId::class) ? $carrierId->__toString() : $carrierId;
+        $id = $carrierId instanceof ShipEngine\Carriers\CarrierId ? $carrierId->__toString() : $carrierId;
 
         if (in_array($id, $this->carriers)) {
             return;
@@ -61,7 +64,7 @@ class Options
         $this->carriers[] = $id;
     }
 
-    public function addServiceCode(string $serviceCode)
+    public function addServiceCode(string $serviceCode): void
     {
         if (in_array($serviceCode, $this->services)) {
             return;
@@ -70,7 +73,7 @@ class Options
         $this->services[] = $serviceCode;
     }
 
-    public function addPackageType(string $packageType)
+    public function addPackageType(string $packageType): void
     {
         if (in_array($packageType, $this->packageTypes)) {
             return;
@@ -79,10 +82,7 @@ class Options
         $this->packageTypes[] = $packageType;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return array_filter([
             'carrier_ids'   => array_values($this->carriers),

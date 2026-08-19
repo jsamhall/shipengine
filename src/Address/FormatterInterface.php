@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -20,8 +23,8 @@ interface FormatterInterface
      *
      * @link https://docs.shipengine.com/docs/address-validation#section-v1addressesvalidate
      *
-     * @param mixed $address A framework address 
+     * @param mixed $address A framework address
      * @return array Array of Address Data as required for ShipEngine API
      */
-    public function format($address);
+    public function format($address): array;
 }

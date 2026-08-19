@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -13,7 +16,6 @@ namespace jsamhall\ShipEngine\Shipment;
 
 use jsamhall\ShipEngine;
 use jsamhall\ShipEngine\Carriers\DeliveryConfirmation;
-use jsamhall\ShipEngine\Exception;
 use jsamhall\ShipEngine\Labels\InsuranceProvider;
 
 abstract class AbstractShipment
@@ -21,60 +23,24 @@ abstract class AbstractShipment
     private const FEDEX_DIRECT_SIGNATURE_INSURANCE_THRESHOLD = 500;
 
     /**
-     * The destination address of the Shipment
-     *
-     * @var ShipEngine\Address\Address
-     */
-    protected $shipTo;
-
-    /**
-     * The origin address of the Shipment
-     *
-     * @var ShipEngine\Address\Address
-     */
-    protected $shipFrom;
-
-    /**
      * One or more packages to be quoted
      *
      * @var Package[]
      */
-    protected $packages = [];
+    protected array $packages = [];
 
     /**
      * @var ShipEngine\Carriers\AdvancedOption[]
      */
-    protected $advancedOptions = [];
+    protected array $advancedOptions = [];
 
-    /**
-     * @var InsuranceProvider|null
-     */
-    protected ?InsuranceProvider $insuranceProvider = null;
-
-    /**
-     * @var DeliveryConfirmation|null
-     */
-    protected ?DeliveryConfirmation $deliveryConfirmation = null;
-
-    /**
-     * AbstractShipment constructor.
-     *
-     * @param ShipEngine\Address\Address $shipTo
-     * @param ShipEngine\Address\Address $shipFrom
-     * @param Package[] $packages
-     */
     public function __construct(
-        ShipEngine\Address\Address $shipTo,
-        ShipEngine\Address\Address $shipFrom,
+        protected ShipEngine\Address\Address $shipTo,
+        protected ShipEngine\Address\Address $shipFrom,
         array $packages = [],
-        ?InsuranceProvider $insuranceProvider = null,
-        ?DeliveryConfirmation $deliveryConfirmation = null
+        protected ?InsuranceProvider $insuranceProvider = null,
+        protected ?DeliveryConfirmation $deliveryConfirmation = null
     ) {
-        $this->shipTo = $shipTo;
-        $this->shipFrom = $shipFrom;
-        $this->insuranceProvider = $insuranceProvider;
-        $this->deliveryConfirmation = $deliveryConfirmation;
-
         foreach ($packages as $package) {
             $this->addPackage($package);
         }
@@ -84,27 +50,20 @@ abstract class AbstractShipment
      * Add an Advanced Option to the Shipment
      *
      * @link https://docs.shipengine.com/docs/specify-advanced-options
-     *
-     * @param ShipEngine\Carriers\AdvancedOption $advancedOption
-     * @return static $this
      */
-    public function addAdvancedOption(ShipEngine\Carriers\AdvancedOption $advancedOption)
+    public function addAdvancedOption(ShipEngine\Carriers\AdvancedOption $advancedOption): static
     {
         $this->advancedOptions[] = $advancedOption;
 
         return $this;
     }
 
-    public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider)
+    public function specifyInsuranceProvider(InsuranceProvider $insuranceProvider): void
     {
         $this->insuranceProvider = $insuranceProvider;
     }
 
-    /**
-     * @param Package $package
-     * @return static $this
-     */
-    public function addPackage(Package $package)
+    public function addPackage(Package $package): static
     {
         $this->packages[] = $package;
 
@@ -114,12 +73,12 @@ abstract class AbstractShipment
     /**
      * @return Package[]
      */
-    public function getPackages()
+    public function getPackages(): array
     {
         return $this->packages;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $advancedOptions = [];
         foreach ($this->advancedOptions as $advancedOption) {
@@ -130,24 +89,23 @@ abstract class AbstractShipment
         $payload = [
             'ship_to'            => $this->shipTo->toArray(),
             'ship_from'          => $this->shipFrom->toArray(),
-            'insurance_provider' => $this->insuranceProvider ? $this->insuranceProvider->__toString() : 'none',
+            'insurance_provider' => ($this->insuranceProvider ?? InsuranceProvider::None)->value,
             'total_weight'       => [
                 'value' => $totalWeight->getValue(),
-                'unit'  => $totalWeight->getUnit()
+                'unit'  => $totalWeight->getUnit()->value
             ],
             'advanced_options'   => count($advancedOptions) ? $advancedOptions : null,
-            'packages'           => array_map(function ($package) {
-                /** @var ShipEngine\Shipment\Package $package */
+            'packages'           => array_map(function (Package $package) {
                 $weight = $package->getWeight();
                 $dimensions = $package->getDimensions();
 
                 $data = [
                     'weight'     => [
                         'value' => $weight->getValue(),
-                        'unit'  => $weight->getUnit()
+                        'unit'  => $weight->getUnit()->value
                     ],
                     'dimensions' => [
-                        'unit'   => $dimensions->getUnit(),
+                        'unit'   => $dimensions->getUnit()->value,
                         'length' => $dimensions->getLength(),
                         'width'  => $dimensions->getWidth(),
                         'height' => $dimensions->getHeight()
@@ -169,8 +127,8 @@ abstract class AbstractShipment
             }, $this->packages)
         ];
 
-        if (!is_null($this->deliveryConfirmation)) {
-            $payload['confirmation'] = $this->deliveryConfirmation->__toString();
+        if (! is_null($this->deliveryConfirmation)) {
+            $payload['confirmation'] = $this->deliveryConfirmation->value;
         }
 
         return $payload;
@@ -190,7 +148,7 @@ abstract class AbstractShipment
     {
         $grossValue = 0;
         foreach ($this->packages as $package) {
-            if (!$package->hasInsuredValue()) {
+            if (! $package->hasInsuredValue()) {
                 continue;
             }
 
@@ -202,7 +160,7 @@ abstract class AbstractShipment
 
     public function hasDeliveryConfirmation(): bool
     {
-        return !is_null($this->deliveryConfirmation);
+        return ! is_null($this->deliveryConfirmation);
     }
 
     /**
@@ -210,11 +168,8 @@ abstract class AbstractShipment
      * If Delivery Confirmation was previously set, it is overwritten by the provided value
      *
      * @link https://docs.shipengine.com/docs/request-delivery-confirmation
-     *
-     * @param DeliveryConfirmation $deliveryConfirmation
-     * @return static $this
      */
-    public function setDeliveryConfirmation(?DeliveryConfirmation $deliveryConfirmation = null)
+    public function setDeliveryConfirmation(?DeliveryConfirmation $deliveryConfirmation = null): static
     {
         $this->deliveryConfirmation = $deliveryConfirmation;
 

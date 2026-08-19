@@ -3,6 +3,10 @@ A PHP wrapper for the accessing and interacting with the ShipEngine v1 API.
 
 **Not actively maintained though functional for my own needs. Use at your own discretion**
 
+## Requirements
+Requires **PHP 8.1+**. Version 2.0 is a breaking release that adopts enums and strict typing —
+see `CHANGELOG.md` for the full migration notes.
+
 ## How to use
 ```php
 $addressFormatter = new Acme\AddressFormatter; // implements Address\FormatterInterface
@@ -18,6 +22,7 @@ Minimal example to implement the [Quick Start](https://docs.shipengine.com/docs/
 use jsamhall\ShipEngine\Address\ArrayFormatter;
 use jsamhall\ShipEngine\ShipEngine;
 use jsamhall\ShipEngine\Address\Address;
+use jsamhall\ShipEngine\Address\ResidentialIndicator;
 use jsamhall\ShipEngine\Shipment\Package;
 use jsamhall\ShipEngine\Labels\Shipment;
 use jsamhall\ShipEngine\Carriers\USPS\ServiceCode;
@@ -31,7 +36,8 @@ $to->setCityLocality('Burbank');
 $to->setStateProvince('CA');
 $to->setPostalCode('91521');
 $to->setCountryCode('US');
-$to->setAddressResidentialIndicator('No');
+// Addresses default to residential; declare a commercial address explicitly:
+$to->setAddressResidentialIndicator(ResidentialIndicator::No);
 
 $from = new Address;
 $from->setName('Mickey and Minnie Mouse');
@@ -42,13 +48,13 @@ $from->setCityLocality('Burbank');
 $from->setStateProvince('CA');
 $from->setPostalCode('91521');
 $from->setCountryCode('US');
-$from->setAddressResidentialIndicator('No');
+$from->setAddressResidentialIndicator(ResidentialIndicator::No);
 
 $weight = new Package\Weight(1.0);
 $dimensions = new Package\Dimensions(10.0, 15.0, 8.0);
 $package = new Package($weight, $dimensions);
 
-$shipment = new Shipment(ServiceCode::priorityMail(), $to, $from, [$package]);
+$shipment = new Shipment(ServiceCode::PriorityMail, $to, $from, [$package]);
 
 $addressFormatter = new ArrayFormatter();
 $shipEngine = new ShipEngine('your_shipengine_api_key', $addressFormatter);
@@ -87,7 +93,8 @@ $shipEngine = new ShipEngine('your_shipengine_api_key', new ArrayFormatter());
 
 $tracking = $shipEngine->trackPackage('usps', '9405511899223197428490');
 
-$tracking->getStatusCode();          // e.g. "DE"  (see Tracking\StatusCode constants)
+$tracking->getStatusCode();          // e.g. "DE"  (raw ShipEngine code)
+$tracking->getStatus();              // ?Tracking\StatusCode enum, e.g. StatusCode::Delivered
 $tracking->getStatusDescription();   // e.g. "Delivered"
 $tracking->isDelivered();            // bool
 $tracking->getActualDeliveryDate();  // ?\DateTime
@@ -104,6 +111,36 @@ foreach ($tracking->getEvents() as $event) {
 The first argument accepts either a carrier code string (`"usps"`, `"fedex"`, `"ups"`) or a
 `Carriers\CarrierCode` value object. If the carrier is not connected to your account the call
 throws `Exception\ApiErrorResponse`.
+
+## LTL Tracking
+Track a Less Than Truckload (LTL) freight shipment by carrier code and PRO number. This uses
+ShipEngine's beta LTL tracking endpoint (`v-beta/ltl/tracking`).
+
+```php
+use jsamhall\ShipEngine\ShipEngine;
+use jsamhall\ShipEngine\Address\ArrayFormatter;
+
+$shipEngine = new ShipEngine('your_shipengine_api_key', new ArrayFormatter());
+
+$tracking = $shipEngine->trackLtlShipment('FXFE', '123456789');
+
+$tracking->getProNumber();             // "123456789"
+$tracking->isDelivered();              // bool
+$tracking->getSignatureName();         // ?string, e.g. "MARK PITTS"
+$tracking->getEstimatedDeliveryDate(); // ?\DateTime
+$tracking->getActualDeliveryDate();    // ?\DateTime
+
+foreach ($tracking->getEvents() as $event) {
+    printf("%s — %s (%s, %s)\n",
+        $event->getOccurredAt()?->format('c') ?? 'n/a',
+        $event->getStatus(),
+        $event->getCityLocality(),
+        $event->getStateProvince()
+    );
+}
+```
+
+As with parcel tracking, the first argument accepts a carrier code string or a `Carriers\CarrierCode`.
 
 ## Information
 Please visit https://www.shipengine.com/ for information regarding, and to sign up for the ShipEngine platform.

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -19,388 +22,261 @@ class Rate
 {
     /**
      * Id of this rate, used when creating a Label using this Rate
-     *
-     * @var RateId
      */
-    protected $id;
+    protected ShipEngine\Rating\RateId $id;
 
-    /**
-     * @var string
-     */
-    protected $type;
+    protected ?string $type = null;
 
     /**
      * The ShipEngine ID of the Carrier from which this rate was retrieved
-     *
-     * @var ShipEngine\Carriers\CarrierId
      */
-    protected $carrierId;
+    protected ShipEngine\Carriers\CarrierId $carrierId;
 
     /**
      * The code used to identify the Carrier when only one account exists
-     * within the ShipEngine platform. When multiple accounts exist, the
-     * internal carrier_id must be used to reference the Carrier account
-     *
-     * @var ShipEngine\Carriers\CarrierCode
+     * within the ShipEngine platform.
      */
-    protected $carrierCode;
+    protected ShipEngine\Carriers\CarrierCode $carrierCode;
 
-    /**
-     * The nickname given to the Carrier by the ShipEngine account holder
-     * e.g. My Company UPS
-     *
-     * @var string
-     */
-    protected $carrierNickname;
+    protected ?string $carrierNickname = null;
 
-    /**
-     * The carrier's "Friendly Name" as displayed in ShipEngine
-     * e.g. UPS
-     *
-     * @var string
-     */
-    protected $carrierFriendlyName;
+    protected ?string $carrierFriendlyName = null;
 
-    /**
-     * @var ShipEngine\ValueObject\Amount
-     */
-    protected $shippingAmount;
+    protected ?ShipEngine\ValueObject\Amount $shippingAmount = null;
 
-    /**
-     * @var ShipEngine\ValueObject\Amount
-     */
-    protected $insuranceAmount;
+    protected ?ShipEngine\ValueObject\Amount $insuranceAmount = null;
 
-    /**
-     * @var ShipEngine\ValueObject\Amount
-     */
-    protected $confirmationAmount;
+    protected ?ShipEngine\ValueObject\Amount $confirmationAmount = null;
 
-    /**
-     * @var ShipEngine\ValueObject\Amount
-     */
-    protected $otherAmount;
+    protected ?ShipEngine\ValueObject\Amount $otherAmount = null;
 
-    /**
-     * @var string
-     */
-    protected $zone;
+    protected ?string $zone = null;
 
-    /**
-     * @var string
-     */
-    protected $packageType;
+    protected ?string $packageType = null;
 
     /**
      * Number of days until Delivery
-     *
-     * @var int
      */
-    protected $deliveryDays;
+    protected ?int $deliveryDays = null;
 
     /**
      * Is the service guaranteed?
-     *
-     * @var bool
      */
-    protected $guaranteedService;
+    protected ?bool $guaranteedService = null;
 
-    /**
-     * @var string
-     */
-    protected $estimatedDeliveryDate;
+    protected ?string $estimatedDeliveryDate = null;
 
     /**
      * A delivery date message as provided by the Carrier
      * e.g. "Monday 7/17 by 11:00 PM"
-     *
-     * @var string
      */
-    protected $carrierDeliveryDays;
+    protected ?string $carrierDeliveryDays = null;
 
     /**
      * The pickup date for the Shipment
-     *
-     * @var \DateTime
      */
-    protected $shipDate;
+    protected ?string $shipDate = null;
 
     /**
      * Are negotiated rates applied to this Rate? (carrier specific)
-     *
-     * @var boolean
      */
-    protected $negotiatedRatesApplied;
+    protected ?bool $negotiatedRatesApplied = null;
 
     /**
      * The name of the Service as described by the Carrier
      * e.g. UPS® Ground
-     *
-     * @var string
      */
-    protected $serviceName;
+    protected ?string $serviceName = null;
 
     /**
      * The internal code used to reference this Service
      * e.g. ups_ground
-     *
-     * @var ShipEngine\Carriers\ServiceCode
      */
-    protected $serviceCode;
+    protected ShipEngine\Carriers\ServiceCode $serviceCode;
+
+    protected ?bool $trackable = null;
 
     /**
-     * @var bool
-     */
-    protected $trackable;
-
-    /**
-     * Array of Warning Messages
-     *
      * @var string[]
      */
-    protected $warningMessages = [];
+    protected array $warningMessages = [];
 
     /**
-     * Array of Error Messages
-     *
      * @var string[]
      */
-    protected $errorMessages = [];
+    protected array $errorMessages = [];
 
     public function __construct(array $rateData)
     {
         $this->id = new RateId($rateData['rate_id']);
         $this->carrierId = new ShipEngine\Carriers\CarrierId($rateData['carrier_id']);
         $this->carrierCode = new ShipEngine\Carriers\CarrierCode($rateData['carrier_code']);
-        $this->serviceCode = new ShipEngine\Carriers\ServiceCode($rateData['service_code']);
+        $this->serviceCode = new ShipEngine\Carriers\CustomServiceCode($rateData['service_code']);
 
-        $map = [
-            'rate_type'               => 'type',
-            'carrier_nickname'        => 'carrierNickname',
-            'carrier_friendly_name'   => 'carrierFriendlyName',
-            'shipping_amount'         => 'shippingAmount',
-            'insurance_amount'        => 'insuranceAmount',
-            'confirmation_amount'     => 'confirmationAmount',
-            'other_amount'            => 'otherAmount',
-            'zone'                    => 'zone',
-            'package_type'            => 'packageType',
-            'delivery_days'           => 'deliveryDays',
-            'guaranteed_service'      => 'guaranteed_service',
-            'estimated_delivery_date' => 'estimatedDeliveryDate',
-            'carrier_delivery_days'   => 'carrierDeliveryDays',
-            'ship_date'               => 'shipDate',
-            'negotiated_rate'         => 'negotiatedRatesApplied',
-            'service_type'            => 'serviceName',
-            'trackable'               => 'trackable',
-            'warning_messages'        => 'warningMessages',
-            'error_messages'          => 'errorMessages'
-        ];
+        $this->type = $rateData['rate_type'] ?? null;
+        $this->carrierNickname = $rateData['carrier_nickname'] ?? null;
+        $this->carrierFriendlyName = $rateData['carrier_friendly_name'] ?? null;
 
-        foreach ($map as $key => $property) {
-            if (!isset($rateData[$key])) {
-                continue;
-            }
+        $this->shippingAmount = $this->amountFrom($rateData, 'shipping_amount');
+        $this->insuranceAmount = $this->amountFrom($rateData, 'insurance_amount');
+        $this->confirmationAmount = $this->amountFrom($rateData, 'confirmation_amount');
+        $this->otherAmount = $this->amountFrom($rateData, 'other_amount');
 
-            $value = $rateData[$key];
-
-            if (strpos($key, '_amount')) {
-                $value = new ShipEngine\ValueObject\Amount($value['amount'], $value['currency']);
-            }
-
-            $this->$property = $value;
-        }
+        $this->zone = isset($rateData['zone']) ? (string) $rateData['zone'] : null;
+        $this->packageType = $rateData['package_type'] ?? null;
+        $this->deliveryDays = isset($rateData['delivery_days']) ? (int) $rateData['delivery_days'] : null;
+        $this->guaranteedService = isset($rateData['guaranteed_service']) ? (bool) $rateData['guaranteed_service'] : null;
+        $this->estimatedDeliveryDate = $rateData['estimated_delivery_date'] ?? null;
+        $this->carrierDeliveryDays = $rateData['carrier_delivery_days'] ?? null;
+        $this->shipDate = $rateData['ship_date'] ?? null;
+        $this->negotiatedRatesApplied = isset($rateData['negotiated_rate']) ? (bool) $rateData['negotiated_rate'] : null;
+        $this->serviceName = $rateData['service_type'] ?? null;
+        $this->trackable = isset($rateData['trackable']) ? (bool) $rateData['trackable'] : null;
+        $this->warningMessages = $rateData['warning_messages'] ?? [];
+        $this->errorMessages = $rateData['error_messages'] ?? [];
     }
 
-    /**
-     * @return RateId;
-     */
-    public function getId()
+    private function amountFrom(array $rateData, string $key): ?ShipEngine\ValueObject\Amount
+    {
+        if (! isset($rateData[$key])) {
+            return null;
+        }
+
+        return new ShipEngine\ValueObject\Amount($rateData[$key]['amount'], $rateData[$key]['currency']);
+    }
+
+    public function getId(): RateId
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return ShipEngine\Carriers\CarrierId;
-     */
-    public function getCarrierId()
+    public function getCarrierId(): ShipEngine\Carriers\CarrierId
     {
         return $this->carrierId;
     }
 
-    /**
-     * @return ShipEngine\Carriers\CarrierCode
-     */
-    public function getCarrierCode()
+    public function getCarrierCode(): ShipEngine\Carriers\CarrierCode
     {
         return $this->carrierCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCarrierNickname()
+    public function getCarrierNickname(): ?string
     {
         return $this->carrierNickname;
     }
 
-    /**
-     * @return string
-     */
-    public function getCarrierFriendlyName()
+    public function getCarrierFriendlyName(): ?string
     {
         return $this->carrierFriendlyName;
     }
 
-    public function getGrossAmount()
+    public function getGrossAmount(): float
     {
-        return $this->getShippingAmount()->getAmount()
-            + $this->getInsuranceAmount()->getAmount()
-            + $this->getConfirmationAmount()->getAmount()
-            + $this->getOtherAmount()->getAmount();
+        return ($this->shippingAmount?->getAmount() ?? 0.0)
+            + ($this->insuranceAmount?->getAmount() ?? 0.0)
+            + ($this->confirmationAmount?->getAmount() ?? 0.0)
+            + ($this->otherAmount?->getAmount() ?? 0.0);
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getShippingAmount()
+    public function getShippingAmount(): ?ShipEngine\ValueObject\Amount
     {
         return $this->shippingAmount;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getInsuranceAmount()
+    public function getInsuranceAmount(): ?ShipEngine\ValueObject\Amount
     {
         return $this->insuranceAmount;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getConfirmationAmount()
+    public function getConfirmationAmount(): ?ShipEngine\ValueObject\Amount
     {
         return $this->confirmationAmount;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Amount
-     */
-    public function getOtherAmount()
+    public function getOtherAmount(): ?ShipEngine\ValueObject\Amount
     {
         return $this->otherAmount;
     }
 
-    /**
-     * @return string
-     */
-    public function getZone()
+    public function getZone(): ?string
     {
         return $this->zone;
     }
 
-    /**
-     * @return string
-     */
-    public function getPackageType()
+    public function getPackageType(): ?string
     {
         return $this->packageType;
     }
 
-    /**
-     * @return int
-     */
-    public function getDeliveryDays()
+    public function getDeliveryDays(): ?int
     {
         return $this->deliveryDays;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isGuaranteedService()
+    public function isGuaranteedService(): ?bool
     {
         return $this->guaranteedService;
     }
 
     /**
-     * @param bool $asDateTime
-     * @return DateTime|string
-     * @throws Exception If returning a datetime object and date string is malformed
+     * @throws Exception If returning a datetime object and the date string is malformed
      */
-    public function getEstimatedDeliveryDate(bool $asDateTime = false)
+    public function getEstimatedDeliveryDate(bool $asDateTime = false): \DateTime|string|null
     {
+        if ($this->estimatedDeliveryDate === null) {
+            return null;
+        }
+
         return $asDateTime ? new DateTime($this->estimatedDeliveryDate) : $this->estimatedDeliveryDate;
     }
 
-    /**
-     * @return string
-     */
-    public function getCarrierDeliveryDays()
+    public function getCarrierDeliveryDays(): ?string
     {
         return $this->carrierDeliveryDays;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getShipDate()
+    public function getShipDate(): ?string
     {
         return $this->shipDate;
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasNegotiatedRatesApplied()
+    public function hasNegotiatedRatesApplied(): ?bool
     {
         return $this->negotiatedRatesApplied;
     }
 
-    /**
-     * @return string
-     */
-    public function getServiceName()
+    public function getServiceName(): ?string
     {
         return $this->serviceName;
     }
 
-    /**
-     * @return ShipEngine\Carriers\ServiceCode
-     */
-    public function getServiceCode()
+    public function getServiceCode(): ShipEngine\Carriers\ServiceCode
     {
         return $this->serviceCode;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isTrackable()
+    public function isTrackable(): ?bool
     {
         return $this->trackable;
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
-    public function getWarningMessages()
+    public function getWarningMessages(): array
     {
         return $this->warningMessages;
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
-    public function getErrorMessages()
+    public function getErrorMessages(): array
     {
         return $this->errorMessages;
     }

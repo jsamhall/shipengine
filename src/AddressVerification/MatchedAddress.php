@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -12,6 +15,7 @@
 namespace jsamhall\ShipEngine\AddressVerification;
 
 use jsamhall\ShipEngine\Address\Address as Address;
+use jsamhall\ShipEngine\Address\ResidentialIndicator;
 
 class MatchedAddress extends Address
 {
@@ -22,18 +26,18 @@ class MatchedAddress extends Address
      */
     public function __construct(array $matchedAddress)
     {
-        list(
-            $this->name,
-            $this->phone,
-            $this->companyName,
-            $this->addressLine1,
-            $this->addressLine2,
-            $this->addressLine3,
-            $this->cityLocality,
-            $this->stateProvince,
-            $this->postalCode,
-            $this->countryCode,
-            $this->addressResidentialIndicator
-            ) = array_values($matchedAddress);
+        $this->name = $matchedAddress['name'] ?? '';
+        $this->phone = $matchedAddress['phone'] ?? null;
+        $this->companyName = $matchedAddress['company_name'] ?? null;
+        $this->addressLine1 = $matchedAddress['address_line1'] ?? '';
+        $this->addressLine2 = $matchedAddress['address_line2'] ?? null;
+        $this->addressLine3 = $matchedAddress['address_line3'] ?? null;
+        $this->cityLocality = $matchedAddress['city_locality'] ?? '';
+        $this->stateProvince = $matchedAddress['state_province'] ?? '';
+        $this->postalCode = $matchedAddress['postal_code'] ?? '';
+        $this->countryCode = $matchedAddress['country_code'] ?? '';
+        $this->addressResidentialIndicator = ResidentialIndicator::tryFrom(
+            (string) ($matchedAddress['address_residential_indicator'] ?? '')
+        ) ?? ResidentialIndicator::Unknown;
     }
 }

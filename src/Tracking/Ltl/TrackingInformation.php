@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -25,54 +28,30 @@ use jsamhall\ShipEngine;
 class TrackingInformation extends ShipEngine\Api\Response
 {
     /**
-     * The shipment's PRO number (essentially a tracking number)
-     *
-     * @var string
+     * The shipment's PRO number (essentially a tracking number).
      */
-    protected $proNumber;
+    protected string $proNumber;
+
+    protected ?string $shipFromPostalCode;
+
+    protected ?string $shipToPostalCode;
+
+    protected ?\DateTime $pickupDate;
+
+    protected ?\DateTime $estimatedDeliveryDate;
+
+    protected ?\DateTime $actualDeliveryDate;
 
     /**
-     * @var string|null
+     * The name of the person who signed for delivery, if available.
      */
-    protected $shipFromPostalCode;
-
-    /**
-     * @var string|null
-     */
-    protected $shipToPostalCode;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $pickupDate;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $estimatedDeliveryDate;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $actualDeliveryDate;
-
-    /**
-     * The name of the person who signed for delivery, if available
-     *
-     * @var string|null
-     */
-    protected $signatureName;
+    protected ?string $signatureName;
 
     /**
      * @var Event[]
      */
-    protected $events;
+    protected array $events;
 
-    /**
-     * TrackingInformation constructor.
-     *
-     * @param array $data
-     */
     public function __construct(array $data)
     {
         parent::__construct($data);
@@ -98,12 +77,8 @@ class TrackingInformation extends ShipEngine\Api\Response
     /**
      * Combine the API's separate date ("YYYY-MM-DD") and optional time ("HH:MM:SS") fields, either
      * of which may be an empty string, into a single DateTime.
-     *
-     * @param string|null $date
-     * @param string|null $time
-     * @return \DateTime|null
      */
-    private function toDateTime($date, $time = null)
+    private function toDateTime(?string $date, ?string $time = null): ?\DateTime
     {
         $date = trim((string) $date);
         if ($date === '') {
@@ -116,58 +91,37 @@ class TrackingInformation extends ShipEngine\Api\Response
         return new \DateTime($value);
     }
 
-    /**
-     * @return string
-     */
-    public function getProNumber()
+    public function getProNumber(): string
     {
         return $this->proNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getShipFromPostalCode()
+    public function getShipFromPostalCode(): ?string
     {
         return $this->shipFromPostalCode;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getShipToPostalCode()
+    public function getShipToPostalCode(): ?string
     {
         return $this->shipToPostalCode;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getPickupDate()
+    public function getPickupDate(): ?\DateTime
     {
         return $this->pickupDate;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getEstimatedDeliveryDate()
+    public function getEstimatedDeliveryDate(): ?\DateTime
     {
         return $this->estimatedDeliveryDate;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getActualDeliveryDate()
+    public function getActualDeliveryDate(): ?\DateTime
     {
         return $this->actualDeliveryDate;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSignatureName()
+    public function getSignatureName(): ?string
     {
         return $this->signatureName;
     }
@@ -175,15 +129,12 @@ class TrackingInformation extends ShipEngine\Api\Response
     /**
      * @return Event[]
      */
-    public function getEvents()
+    public function getEvents(): array
     {
         return $this->events;
     }
 
-    /**
-     * @return Event|null
-     */
-    public function getLatestEvent()
+    public function getLatestEvent(): ?Event
     {
         if (empty($this->events)) {
             return null;
@@ -195,12 +146,10 @@ class TrackingInformation extends ShipEngine\Api\Response
     /**
      * Whether the shipment has been delivered, determined from the actual delivery date or a
      * "delivered" tracking event.
-     *
-     * @return bool
      */
-    public function isDelivered()
+    public function isDelivered(): bool
     {
-        if (!is_null($this->actualDeliveryDate)) {
+        if ($this->actualDeliveryDate !== null) {
             return true;
         }
 

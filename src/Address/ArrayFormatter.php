@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,11 +14,10 @@
 
 namespace jsamhall\ShipEngine\Address;
 
-
 class ArrayFormatter implements FormatterInterface
 {
     /** @inheritdoc */
-    public function format($address)
+    public function format($address): array
     {
         return [
             'name'           => $address['name'] ?? '',
@@ -27,7 +29,8 @@ class ArrayFormatter implements FormatterInterface
             'city_locality'  => $address['city_locality'] ?? '',
             'state_province' => $address['state_province'] ?? '',
             'postal_code'    => $address['postal_code'] ?? '',
-            'country_code'   => $address['country_code'] ?? ''
+            'country_code'   => $address['country_code'] ?? '',
+            'address_residential_indicator' => $address['address_residential_indicator'] ?? null
         ];
     }
 }

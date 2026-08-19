@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,32 +14,23 @@
 
 namespace jsamhall\ShipEngine\Carriers;
 
-use jsamhall\ShipEngine;
-
-class ServiceCode
+/**
+ * A carrier service code.
+ *
+ * Implemented both by the carrier-specific backed enums (a known, closed set of service codes, e.g.
+ * {@see FedEx\ServiceCode}) and by {@see CustomServiceCode}, which wraps an arbitrary service code
+ * string returned by the ShipEngine API.
+ */
+interface ServiceCode
 {
     /**
-     * @var string
+     * The service code as sent to / received from the ShipEngine API (e.g. "ups_ground").
      */
-    protected $code;
+    public function code(): string;
 
     /**
-     * ServiceCode constructor.
-     *
-     * @param string $code
+     * Whether this service code refers to the same carrier service as another, regardless of whether
+     * either side is an enum case or a {@see CustomServiceCode}.
      */
-    public function __construct(string $code)
-    {
-        $this->code = $code;
-    }
-
-    public function __toString()
-    {
-        return $this->code;
-    }
-
-    public function equals(ServiceCode $serviceCode)
-    {
-        return $serviceCode->__toString() === $this->__toString();
-    }
+    public function equals(ServiceCode $other): bool;
 }

@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace jsamhall\ShipEngine\Shipment\Package;
 
 class InsuredValue
 {
-    protected string $currency = 'usd';
-
-    protected float $amount;
-
-    public function __construct(float $amount, string $currency = 'usd')
-    {
-        $this->amount = $amount;
-        $this->currency = $currency;
+    public function __construct(
+        private readonly float $amount,
+        private readonly string $currency = 'usd'
+    ) {
     }
 
     public function toArray(): array

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -14,33 +17,33 @@ use jsamhall\ShipEngine;
 
 class Shipment extends ShipEngine\Shipment\AbstractShipment
 {
-    const ADDRESS_NO_VALIDATION = 'no_validation';
-    const ADDRESS_VALIDATE_ONLY = 'validate_only';
-    const ADDRESS_VALIDATE_AND_CLEAN = 'validate_and_clean';
+    protected AddressValidation $validateAddress = AddressValidation::NoValidation;
 
-    protected $validateAddress = self::ADDRESS_NO_VALIDATION;
-
-    public function disableAddressValidation()
+    public function disableAddressValidation(): static
     {
-        $this->validateAddress = self::ADDRESS_NO_VALIDATION;
+        $this->validateAddress = AddressValidation::NoValidation;
 
         return $this;
     }
 
-    public function enableAddressValidation()
+    public function enableAddressValidation(): static
     {
-        $this->validateAddress = self::ADDRESS_VALIDATE_ONLY;
+        $this->validateAddress = AddressValidation::ValidateOnly;
+
+        return $this;
     }
 
-    public function enableAddressValidationWithCleaning()
+    public function enableAddressValidationWithCleaning(): static
     {
-        $this->validateAddress = self::ADDRESS_VALIDATE_AND_CLEAN;
+        $this->validateAddress = AddressValidation::ValidateAndClean;
+
+        return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'validate_address' => $this->validateAddress,
+            'validate_address' => $this->validateAddress->value,
         ]);
     }
 }

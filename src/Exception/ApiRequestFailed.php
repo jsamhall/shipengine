@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -10,7 +13,6 @@
  */
 
 namespace jsamhall\ShipEngine\Exception;
-
 
 use jsamhall\ShipEngine\Exception;
 

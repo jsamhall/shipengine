@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -22,81 +25,37 @@ use jsamhall\ShipEngine;
  */
 class TrackingInformation extends ShipEngine\Api\Response
 {
-    /**
-     * @var string
-     */
-    protected $trackingNumber;
+    protected string $trackingNumber;
 
-    /**
-     * @var string|null
-     */
-    protected $trackingUrl;
+    protected ?string $trackingUrl;
 
-    /**
-     * @var string
-     */
-    protected $statusCode;
+    protected string $statusCode;
 
-    /**
-     * @var string|null
-     */
-    protected $statusDescription;
+    protected ?string $statusDescription;
 
-    /**
-     * @var ShipEngine\Carriers\CarrierCode
-     */
-    protected $carrierCode;
+    protected ShipEngine\Carriers\CarrierCode $carrierCode;
 
-    /**
-     * @var ShipEngine\Carriers\CarrierId|null
-     */
-    protected $carrierId;
+    protected ?ShipEngine\Carriers\CarrierId $carrierId;
 
-    /**
-     * @var string|null
-     */
-    protected $carrierStatusCode;
+    protected ?string $carrierStatusCode;
 
-    /**
-     * @var string|null
-     */
-    protected $carrierStatusDescription;
+    protected ?string $carrierStatusDescription;
 
-    /**
-     * @var string|null
-     */
-    protected $carrierDetailCode;
+    protected ?string $carrierDetailCode;
 
-    /**
-     * @var string|null
-     */
-    protected $exceptionDescription;
+    protected ?string $exceptionDescription;
 
-    /**
-     * @var \DateTime|null
-     */
-    protected $shipDate;
+    protected ?\DateTime $shipDate;
 
-    /**
-     * @var \DateTime|null
-     */
-    protected $estimatedDeliveryDate;
+    protected ?\DateTime $estimatedDeliveryDate;
 
-    /**
-     * @var \DateTime|null
-     */
-    protected $actualDeliveryDate;
+    protected ?\DateTime $actualDeliveryDate;
 
     /**
      * @var Event[]
      */
-    protected $events;
+    protected array $events;
 
-    /**
-     * TrackingInformation constructor.
-     *
-     * @param array $data
-     */
     public function __construct(array $data)
     {
         parent::__construct($data);
@@ -123,9 +82,6 @@ class TrackingInformation extends ShipEngine\Api\Response
 
     /**
      * Convert a date string into a DateTime instance
-     *
-     * @param string|null $value
-     * @return \DateTime|null
      */
     private function toDateTime(?string $value): ?\DateTime
     {
@@ -137,23 +93,7 @@ class TrackingInformation extends ShipEngine\Api\Response
     }
 
     /**
-     * @return string
-     */
-    public function getTrackingNumber(): string
-    {
-        return $this->trackingNumber;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTrackingUrl(): ?string
-    {
-        return $this->trackingUrl;
-    }
-
-    /**
-     * @return string
+     * The raw ShipEngine status code (e.g. "DE").
      */
     public function getStatusCode(): string
     {
@@ -161,80 +101,69 @@ class TrackingInformation extends ShipEngine\Api\Response
     }
 
     /**
-     * @return string|null
+     * The status as a {@see StatusCode} enum, or null if ShipEngine returned a code this library
+     * does not yet recognize.
      */
+    public function getStatus(): ?StatusCode
+    {
+        return StatusCode::tryFrom($this->statusCode);
+    }
+
+    public function getTrackingNumber(): string
+    {
+        return $this->trackingNumber;
+    }
+
+    public function getTrackingUrl(): ?string
+    {
+        return $this->trackingUrl;
+    }
+
     public function getStatusDescription(): ?string
     {
         return $this->statusDescription;
     }
 
-    /**
-     * @return ShipEngine\Carriers\CarrierCode
-     */
-    public function getCarrierCode()
+    public function getCarrierCode(): ShipEngine\Carriers\CarrierCode
     {
         return $this->carrierCode;
     }
 
-    /**
-     * @return ShipEngine\Carriers\CarrierId|null
-     */
-    public function getCarrierId()
+    public function getCarrierId(): ?ShipEngine\Carriers\CarrierId
     {
         return $this->carrierId;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCarrierStatusCode(): ?string
     {
         return $this->carrierStatusCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCarrierStatusDescription(): ?string
     {
         return $this->carrierStatusDescription;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCarrierDetailCode(): ?string
     {
         return $this->carrierDetailCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getExceptionDescription(): ?string
     {
         return $this->exceptionDescription;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getShipDate(): ?\DateTime
     {
         return $this->shipDate;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getEstimatedDeliveryDate(): ?\DateTime
     {
         return $this->estimatedDeliveryDate;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getActualDeliveryDate(): ?\DateTime
     {
         return $this->actualDeliveryDate;
@@ -248,34 +177,22 @@ class TrackingInformation extends ShipEngine\Api\Response
         return $this->events;
     }
 
-    /**
-     * @return bool
-     */
     public function isDelivered(): bool
     {
-        return $this->statusCode === StatusCode::DELIVERED;
+        return $this->statusCode === StatusCode::Delivered->value;
     }
 
-    /**
-     * @return bool
-     */
     public function hasException(): bool
     {
-        return $this->statusCode === StatusCode::EXCEPTION;
+        return $this->statusCode === StatusCode::Exception->value;
     }
 
-    /**
-     * @return bool
-     */
     public function isInTransit(): bool
     {
-        return $this->statusCode === StatusCode::IN_TRANSIT;
+        return $this->statusCode === StatusCode::InTransit->value;
     }
 
-    /**
-     * @return Event|null
-     */
-    public function getLatestEvent()
+    public function getLatestEvent(): ?Event
     {
         if (empty($this->events)) {
             return null;

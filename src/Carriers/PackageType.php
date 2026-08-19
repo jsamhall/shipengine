@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -9,8 +12,6 @@
  * @author    John Hall
  */
 namespace jsamhall\ShipEngine\Carriers;
-
-use jsamhall\ShipEngine;
 
 /**
  * Class PackageType
@@ -24,81 +25,52 @@ class PackageType
      * Used only with Custom Package Types
      *
      * @link https://docs.shipengine.com/docs/custom-packages
-     *
-     * @var PackageId
      */
-    protected $packageId;
+    protected PackageId $packageId;
 
     /**
      * The code used to identify this Package Type with the Carrier
      * This is used for all shipments, labels and rates
-     *
-     * @var PackageCode
      */
-    protected $packageCode;
+    protected PackageCode $packageCode;
 
     /**
      * The Name of the Package Type
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * A Description of the Package Type
-     *
-     * @var string
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * PackageType constructor.
-     *
      * @param array $packageData Package Data provided by the ShipEngine Carrier API Response
      */
     public function __construct(array $packageData)
     {
-        list(
-            $this->packageId,
-            $this->packageCode,
-            $this->name,
-            $this->description
-            ) = [
-            new PackageId($packageData['package_id']),
-            new PackageCode($packageData['package_code']),
-            $packageData['name'],
-            $packageData['description']
-        ];
+        $this->packageId = new PackageId($packageData['package_id']);
+        $this->packageCode = new PackageCode($packageData['package_code']);
+        $this->name = $packageData['name'];
+        $this->description = $packageData['description'] ?? null;
     }
 
-    /**
-     * @return PackageId
-     */
-    public function getPackageId()
+    public function getPackageId(): PackageId
     {
         return $this->packageId;
     }
 
-    /**
-     * @return PackageCode
-     */
-    public function getPackageCode()
+    public function getPackageCode(): PackageCode
     {
         return $this->packageCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -20,85 +23,34 @@ namespace jsamhall\ShipEngine\Tracking;
  */
 class Event
 {
-    /**
-     * The date/time at which this event occurred
-     *
-     * @var \DateTime|null
-     */
-    protected $occurredAt;
+    protected ?\DateTime $occurredAt;
 
-    /**
-     * The date/time at which this event occurred according to the Carrier
-     *
-     * @var \DateTime|null
-     */
-    protected $carrierOccurredAt;
+    protected ?\DateTime $carrierOccurredAt;
 
-    /**
-     * @var string|null
-     */
-    protected $description;
+    protected ?string $description;
 
-    /**
-     * @var string|null
-     */
-    protected $cityLocality;
+    protected ?string $cityLocality;
 
-    /**
-     * @var string|null
-     */
-    protected $stateProvince;
+    protected ?string $stateProvince;
 
-    /**
-     * @var string|null
-     */
-    protected $postalCode;
+    protected ?string $postalCode;
 
-    /**
-     * @var string|null
-     */
-    protected $countryCode;
+    protected ?string $countryCode;
 
-    /**
-     * @var string|null
-     */
-    protected $companyName;
+    protected ?string $companyName;
 
-    /**
-     * @var string|null
-     */
-    protected $signer;
+    protected ?string $signer;
 
-    /**
-     * @var string|null
-     */
-    protected $eventCode;
+    protected ?string $eventCode;
 
-    /**
-     * @var string|null
-     */
-    protected $carrierStatusCode;
+    protected ?string $carrierStatusCode;
 
-    /**
-     * @var string|null
-     */
-    protected $carrierStatusDescription;
+    protected ?string $carrierStatusDescription;
 
-    /**
-     * @var float|null
-     */
-    protected $latitude;
+    protected ?float $latitude;
 
-    /**
-     * @var float|null
-     */
-    protected $longitude;
+    protected ?float $longitude;
 
-    /**
-     * Event constructor.
-     *
-     * @param array $event
-     */
     public function __construct(array $event)
     {
         $this->occurredAt = $this->toDateTime($event['occurred_at'] ?? null);
@@ -119,9 +71,6 @@ class Event
 
     /**
      * Convert a date string into a DateTime instance
-     *
-     * @param string|null $value
-     * @return \DateTime|null
      */
     private function toDateTime(?string $value): ?\DateTime
     {
@@ -132,113 +81,71 @@ class Event
         return new \DateTime($value);
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getOccurredAt(): ?\DateTime
     {
         return $this->occurredAt;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getCarrierOccurredAt(): ?\DateTime
     {
         return $this->carrierOccurredAt;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCityLocality(): ?string
     {
         return $this->cityLocality;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStateProvince(): ?string
     {
         return $this->stateProvince;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSigner(): ?string
     {
         return $this->signer;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEventCode(): ?string
     {
         return $this->eventCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCarrierStatusCode(): ?string
     {
         return $this->carrierStatusCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCarrierStatusDescription(): ?string
     {
         return $this->carrierStatusDescription;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLatitude(): ?float
     {
         return $this->latitude;
     }
 
-    /**
-     * @return float|null
-     */
     public function getLongitude(): ?float
     {
         return $this->longitude;

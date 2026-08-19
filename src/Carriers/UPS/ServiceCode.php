@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -11,105 +14,34 @@
 
 namespace jsamhall\ShipEngine\Carriers\UPS;
 
-use jsamhall\ShipEngine\Carriers;
+use jsamhall\ShipEngine\Carriers\ServiceCode as ServiceCodeInterface;
+use jsamhall\ShipEngine\Carriers\ServiceCodeComparison;
 
 /**
- * Class ServiceCode
- *
- * Named constructors for UPS service codes in ShipEngine
- *
- * @package jsamhall\ShipEngine\Carriers\UPS
+ * UPS service codes in ShipEngine.
  */
-class ServiceCode extends Carriers\ServiceCode
+enum ServiceCode: string implements ServiceCodeInterface
 {
-    private static $GROUND = 'ups_ground';
-    private static $GROUND_INTERNATIONAL = 'ups_ground_international';
-    private static $STANDARD_INTERNATIONAL = 'ups_standard_international';
-    private static $WORLDWIDE_EXPRESS = 'ups_worldwide_express';
-    private static $WORLDWIDE_EXPRESS_PLUS = 'ups_worldwide_express_plus';
-    private static $WORLDWIDE_EXPEDITED = 'ups_worldwide_expedited';
-    private static $WORLDWIDE_SAVER = 'ups_worldwide_saver';
-    private static $NEXT_DAY_AIR = 'ups_next_day_air';
-    private static $NEXT_DAY_AIR_EARLY_AM = 'ups_next_day_air_early_am';
-    private static $NEXT_DAY_AIR_SAVER = 'ups_next_day_air_saver';
-    private static $NEXT_DAY_AIR_INTERNATIONAL = 'ups_next_day_air_international';
-    private static $SECOND_DAY_AIR = 'ups_2nd_day_air';
-    private static $SECOND_DAY_AIR_AM = 'ups_2nd_day_air_am';
-    private static $SECOND_DAY_AIR_INTERNATIONAL = 'ups_2nd_day_air_international';
-    private static $THREE_DAY_SELECT = 'ups_3_day_select';
+    use ServiceCodeComparison;
 
-    public static function ground()
-    {
-        return new static(self::$GROUND);
-    }
+    case Ground = 'ups_ground';
+    case GroundInternational = 'ups_ground_international';
+    case StandardInternational = 'ups_standard_international';
+    case WorldwideExpress = 'ups_worldwide_express';
+    case WorldwideExpressPlus = 'ups_worldwide_express_plus';
+    case WorldwideExpedited = 'ups_worldwide_expedited';
+    case WorldwideSaver = 'ups_worldwide_saver';
+    case NextDayAir = 'ups_next_day_air';
+    case NextDayAirEarlyAm = 'ups_next_day_air_early_am';
+    case NextDayAirSaver = 'ups_next_day_air_saver';
+    case NextDayAirInternational = 'ups_next_day_air_international';
+    case SecondDayAir = 'ups_2nd_day_air';
+    case SecondDayAirAm = 'ups_2nd_day_air_am';
+    case SecondDayAirInternational = 'ups_2nd_day_air_international';
+    case ThreeDaySelect = 'ups_3_day_select';
 
-    public static function groundInternational()
+    public function code(): string
     {
-        return new static(self::$GROUND_INTERNATIONAL);
-    }
-
-    public static function standardInternational()
-    {
-        return new static(self::$STANDARD_INTERNATIONAL);
-    }
-
-    public static function worldwideExpress()
-    {
-        return new static(self::$WORLDWIDE_EXPRESS);
-    }
-
-    public static function worldwideExpressPlus()
-    {
-        return new static(self::$WORLDWIDE_EXPRESS_PLUS);
-    }
-
-    public static function worldwideExpedited()
-    {
-        return new static(self::$WORLDWIDE_EXPEDITED);
-    }
-
-    public static function worldwideSaver()
-    {
-        return new static(self::$WORLDWIDE_SAVER);
-    }
-
-    public static function nextDayAir()
-    {
-        return new static(self::$NEXT_DAY_AIR);
-    }
-
-    public static function nextDayAirEarlyAm()
-    {
-        return new static(self::$NEXT_DAY_AIR_EARLY_AM);
-    }
-
-    public static function nextDayAirSaver()
-    {
-        return new static(self::$NEXT_DAY_AIR_SAVER);
-    }
-
-    public static function nextDayAirInternational()
-    {
-        return new static(self::$NEXT_DAY_AIR_INTERNATIONAL);
-    }
-
-    public static function secondDayAir()
-    {
-        return new static(self::$SECOND_DAY_AIR);
-    }
-
-    public static function secondDayAirAm()
-    {
-        return new static(self::$SECOND_DAY_AIR_AM);
-    }
-
-    public static function secondDayAirInternational()
-    {
-        return new static(self::$SECOND_DAY_AIR_INTERNATIONAL);
-    }
-
-    public static function threeDaySelect()
-    {
-        return new static(self::$THREE_DAY_SELECT);
+        return $this->value;
     }
 }

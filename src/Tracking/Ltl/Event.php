@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -22,42 +25,25 @@ namespace jsamhall\ShipEngine\Tracking\Ltl;
  */
 class Event
 {
-    const STATUS_DELIVERED = 'delivered';
+    public const STATUS_DELIVERED = 'delivered';
 
     /**
-     * The raw event status as reported by ShipEngine (e.g. "delivered")
-     *
-     * @var string
+     * The raw event status as reported by ShipEngine (e.g. "delivered"). ShipEngine does not
+     * publish a closed set of LTL statuses, so this is left as a string.
      */
-    protected $status;
+    protected string $status;
+
+    protected ?\DateTime $occurredAt;
+
+    protected ?string $cityLocality;
+
+    protected ?string $stateProvince;
 
     /**
-     * @var \DateTime|null
+     * A free-text description supplied by the carrier for this event.
      */
-    protected $occurredAt;
+    protected ?string $carrierDescription;
 
-    /**
-     * @var string|null
-     */
-    protected $cityLocality;
-
-    /**
-     * @var string|null
-     */
-    protected $stateProvince;
-
-    /**
-     * A free-text description supplied by the carrier for this event
-     *
-     * @var string|null
-     */
-    protected $carrierDescription;
-
-    /**
-     * Event constructor.
-     *
-     * @param array $event
-     */
     public function __construct(array $event)
     {
         $this->status = $event['status'] ?? '';
@@ -70,12 +56,8 @@ class Event
     /**
      * Combine the API's separate date ("YYYY-MM-DD") and time ("HH:MM:SS") fields, either of which
      * may be an empty string, into a single DateTime.
-     *
-     * @param string|null $date
-     * @param string|null $time
-     * @return \DateTime|null
      */
-    private function toDateTime($date, $time)
+    private function toDateTime(?string $date, ?string $time): ?\DateTime
     {
         $date = trim((string) $date);
         if ($date === '') {
@@ -88,50 +70,32 @@ class Event
         return new \DateTime($value);
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDelivered()
+    public function isDelivered(): bool
     {
         return strtolower($this->status) === self::STATUS_DELIVERED;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getOccurredAt()
+    public function getOccurredAt(): ?\DateTime
     {
         return $this->occurredAt;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCityLocality()
+    public function getCityLocality(): ?string
     {
         return $this->cityLocality;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getStateProvince()
+    public function getStateProvince(): ?string
     {
         return $this->stateProvince;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCarrierDescription()
+    public function getCarrierDescription(): ?string
     {
         return $this->carrierDescription;
     }

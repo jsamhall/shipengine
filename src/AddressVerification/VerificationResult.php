@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -11,23 +14,18 @@
 namespace jsamhall\ShipEngine\AddressVerification;
 
 /**
- * Class Response
+ * Class VerificationResult
  *
  * @package ShipEngine\AddressVerification
  */
 class VerificationResult
 {
-    const STATUS_VERIFIED = 'verified';
-    const STATUS_UNVERIFIED = 'unverified';
-    const STATUS_ERROR = 'error';
-    const STATUS_WARNING = 'warning';
-
     /**
      * The verification status
      *
-     * @var string
+     * @var VerificationStatus
      */
-    private $status;
+    private VerificationStatus $status;
 
     /**
      * @var AddressMessage[]
@@ -42,11 +40,11 @@ class VerificationResult
     /**
      * AddressVerificationResponse constructor.
      *
-     * @param $verifyAddressResponse array The response from the /addresses/validate request
+     * @param array $verifyAddressResponse The response from the /addresses/validate request
      */
     public function __construct(array $verifyAddressResponse)
     {
-        $this->status = $verifyAddressResponse['status'];
+        $this->status = VerificationStatus::from($verifyAddressResponse['status']);
         $this->setMessages($verifyAddressResponse['messages']);
 
         if (is_array($verifyAddressResponse['matched_address'])) {
@@ -55,13 +53,19 @@ class VerificationResult
     }
 
     /**
-     * Was the address successfully verified?
-     *
-     * @return bool
+     * The verification status as an enum.
      */
-    public function addressIsVerified()
+    public function getStatus(): VerificationStatus
     {
-        return $this->status == self::STATUS_VERIFIED;
+        return $this->status;
+    }
+
+    /**
+     * Was the address successfully verified?
+     */
+    public function addressIsVerified(): bool
+    {
+        return $this->status === VerificationStatus::Verified;
     }
 
     /**
@@ -76,19 +80,10 @@ class VerificationResult
 
     /**
      * Returns a message describing the Verification Status of the address
-     *
-     * @return mixed
      */
-    public function getVerificationStatusMessage()
+    public function getVerificationStatusMessage(): string
     {
-        $statusMessages = [
-            self::STATUS_VERIFIED   => 'Address was successfully verified.',
-            self::STATUS_UNVERIFIED => 'Address validation was not validated against the database because pre-validation failed.',
-            self::STATUS_WARNING    => 'The address was validated, but the address should be double checked.',
-            self::STATUS_ERROR      => 'The address could not be validated with any degree of certainty against the database.'
-        ];
-
-        return $statusMessages[$this->status];
+        return $this->status->message();
     }
 
     /**
@@ -106,7 +101,7 @@ class VerificationResult
      */
     public function hasMessages()
     {
-        return count($this->messages);
+        return count($this->messages) > 0;
     }
 
     private function setMessages(array $messages)

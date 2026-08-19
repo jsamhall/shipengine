@@ -1,38 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * ShipEngine API Wrapper
+ *
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is found in the root folder of
+ * this source code package.
+ *
+ * @author    John Hall
+ */
+
 namespace jsamhall\ShipEngine\Labels;
 
-class InsuranceProvider
+/**
+ * Insurance providers supported by ShipEngine.
+ */
+enum InsuranceProvider: string
 {
-    private string $code;
-
-    protected function __construct(string $code)
-    {
-        $this->code = $code;
-    }
-
-    public static function none()
-    {
-        return new self('none');
-    }
-
-    public static function shipsurance()
-    {
-        return new self('shipsurance');
-    }
-
-    public static function carrier()
-    {
-        return new self('carrier');
-    }
-
-    public static function thirdParty()
-    {
-        return new self('third_party');
-    }
-
-    public function __toString()
-    {
-        return $this->code;
-    }
+    case None = 'none';
+    case Shipsurance = 'shipsurance';
+    case Carrier = 'carrier';
+    case ThirdParty = 'third_party';
 }

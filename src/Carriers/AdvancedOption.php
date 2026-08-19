@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -12,49 +15,16 @@
 namespace jsamhall\ShipEngine\Carriers;
 
 /**
- * Class AdvancedOption
+ * An advanced option for a Shipment.
  *
- * AdvancedOption for a Shipment
- *
- * @package jsamhall\ShipEngine\Carriers
+ * Unlike {@see ServiceCode}, an advanced option is a (code, value) pair where the value may be
+ * supplied at runtime (e.g. a bill-to account number), so it is not modeled as an enum. See
+ * {@see AdvancedOptionCode} for the known option codes and {@see CustomAdvancedOption} for the
+ * default implementation.
  */
-class AdvancedOption
+interface AdvancedOption
 {
-    /**
-     * @var string
-     */
-    protected $code;
+    public function getCode(): string;
 
-    /**
-     * @var mixed
-     */
-    protected $value;
-
-    /**
-     * AdvancedOption constructor.
-     *
-     * @param string $code
-     * @param mixed  $value
-     */
-    public function __construct($code, $value)
-    {
-        $this->code = $code;
-        $this->value = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
+    public function getValue(): mixed;
 }

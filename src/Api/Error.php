@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -13,49 +16,35 @@ namespace jsamhall\ShipEngine\Api;
 
 /**
  * Class Error
- * 
+ *
  * Wrapper for an error returned by the ShipEngine API
  *
  * @package ShipEngine\Api
  */
 class Error
 {
-    /**
-     * @var string
-     */
-    protected $errorCode;
+    protected string $errorCode;
 
-    /**
-     * @var string
-     */
-    protected $errorMessage;
+    protected string $errorMessage;
 
     public function __construct(array $error)
     {
-        $this->errorCode = $error['error_code'];
-        $this->errorMessage = $error['message'];
+        $this->errorCode = $error['error_code'] ?? '';
+        $this->errorMessage = $error['message'] ?? '';
     }
 
-    /**
-     * @return mixed
-     */
-    public function getErrorCode()
+    public function getErrorCode(): string
     {
         return $this->errorCode;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        /** @var string $message */
-        $message = sprintf("[Error Code: %s] %s", $this->errorCode ?: "N/A", $this->errorMessage);
-        return $message;
+        return sprintf("[Error Code: %s] %s", $this->errorCode ?: "N/A", $this->errorMessage);
     }
 }

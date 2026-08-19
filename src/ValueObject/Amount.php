@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -9,48 +11,25 @@
  *
  * @author    John Hall
  */
+
 namespace jsamhall\ShipEngine\ValueObject;
 
 class Amount
 {
     const CURRENCY_USD = "usd";
 
-    /**
-     * A three letter ISO currency code
-     *
-     * @var string
-     */
-    protected $currency;
-
-    /**
-     * @var float
-     */
-    protected $amount;
-
-    /**
-     * Amount constructor.
-     *
-     * @param float  $amount
-     * @param string $currency
-     */
-    public function __construct(float $amount, $currency = self::CURRENCY_USD)
-    {
-        $this->amount = $amount;
-        $this->currency = $currency;
+    public function __construct(
+        private readonly float $amount,
+        private readonly string $currency = self::CURRENCY_USD
+    ) {
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @return float
-     */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }

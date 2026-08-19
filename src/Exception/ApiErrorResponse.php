@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -13,24 +16,19 @@ namespace jsamhall\ShipEngine\Exception;
 use jsamhall\ShipEngine\Api\Error;
 use jsamhall\ShipEngine\Exception;
 
-class ApiErrorResponse
-    extends Exception
+class ApiErrorResponse extends Exception
 {
     /**
      * The internal id of the Request
-     *
-     * @var string
      */
-    protected $requestId;
+    protected string $requestId;
 
     /**
      * @var Error[]
      */
-    protected $errors = [];
+    protected array $errors = [];
 
     /**
-     * ShipEngineApiException constructor.
-     *
      * @param array $errorResponse The ShipEngine API error response
      */
     public function __construct(array $errorResponse)
@@ -38,24 +36,22 @@ class ApiErrorResponse
         $this->requestId = $errorResponse['request_id'];
         $this->setErrors($errorResponse['errors']);
 
-
-        $message = sprintf("ShipEngine Request ID %s response contained %d error(s).", $this->requestId, count($this->errors));
-        return parent::__construct($message);
+        $message = sprintf(
+            "ShipEngine Request ID %s response contained %d error(s).",
+            $this->requestId,
+            count($this->errors)
+        );
+        parent::__construct($message);
     }
 
-    private function setErrors(array $errors)
+    private function setErrors(array $errors): void
     {
         foreach ($errors as $error) {
             $this->errors[] = new Error($error);
         }
-
-        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestId()
+    public function getRequestId(): string
     {
         return $this->requestId;
     }
@@ -63,7 +59,7 @@ class ApiErrorResponse
     /**
      * @return Error[]
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }

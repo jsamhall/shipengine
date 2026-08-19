@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * PHP Implementation for ShipEngine API
  *
@@ -19,75 +22,51 @@ class Service
 {
     /**
      * The code used to identify this Service when requesting Rates or creating Labels
-     *
-     * @var ServiceCode
      */
-    protected $code;
+    protected ServiceCode $code;
 
     /**
      * The name of this Service
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Indicates if this service can be used for Domestic shipments
-     *
-     * @var bool
      */
-    protected $domestic;
+    protected bool $domestic;
 
     /**
      * Indicates if this Service can be used for International shipments
-     *
-     * @var bool
      */
-    protected $international;
+    protected bool $international;
 
     /**
-     * Service constructor.
-     *
      * @param array $serviceData Service Data provided by ShipEngine Carrier API Response
      */
     public function __construct(array $serviceData)
     {
-        list($this->code, $this->name, $this->domestic, $this->international) = [
-            new ServiceCode($serviceData['service_code']),
-            $serviceData['name'],
-            boolval($serviceData['domestic']),
-            boolval($serviceData['international'])
-        ];
+        $this->code = new CustomServiceCode($serviceData['service_code']);
+        $this->name = $serviceData['name'];
+        $this->domestic = boolval($serviceData['domestic']);
+        $this->international = boolval($serviceData['international']);
     }
 
-    /**
-     * @return ServiceCode
-     */
-    public function getCode()
+    public function getCode(): ServiceCode
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDomestic()
+    public function isDomestic(): bool
     {
         return $this->domestic;
     }
 
-    /**
-     * @return bool
-     */
-    public function isInternational()
+    public function isInternational(): bool
     {
         return $this->international;
     }

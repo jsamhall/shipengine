@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ShipEngine API Wrapper
  *
@@ -18,28 +21,21 @@ class RateResponse
     /**
      * @var Rate[]
      */
-    protected $rates = [];
+    protected array $rates = [];
 
     /**
      * @var array
      */
-    protected $invalidRates = [];
+    protected array $invalidRates = [];
 
     /**
-     * @var string[]
+     * @var RatingError[]
      */
-    protected $errors = [];
+    protected array $errors = [];
 
-    /**
-     * @var ShipEngine\ValueObject\Id
-     */
-    protected $requestId;
+    protected ShipEngine\ValueObject\Id $requestId;
 
-    /**
-     * @var ShipEngine\ValueObject\Id
-     */
-    protected $shipmentId;
-
+    protected ShipEngine\Shipment\ShipmentId $shipmentId;
 
     public function __construct(array $rateResponse)
     {
@@ -52,7 +48,7 @@ class RateResponse
 
         $this->invalidRates = $rateResponse['invalid_rates'] ?? [];
 
-        foreach($rateResponse['errors'] ?? [] as $errorDetails){
+        foreach ($rateResponse['errors'] ?? [] as $errorDetails) {
             $this->errors[] = RatingError::fromRateResponseError($errorDetails);
         }
     }
@@ -60,21 +56,18 @@ class RateResponse
     /**
      * @return Rate[]
      */
-    public function getRates()
+    public function getRates(): array
     {
         return $this->rates;
     }
 
     /**
      * Get the Rate for the given Service Code
-     *
-     * @param string|ShipEngine\Carriers\ServiceCode $serviceCode
-     * @return bool|Rate
      */
-    public function getRateByServiceCode($serviceCode)
+    public function getRateByServiceCode(ShipEngine\Carriers\ServiceCode|string $serviceCode): Rate|false
     {
         if (! $serviceCode instanceof ShipEngine\Carriers\ServiceCode) {
-            $serviceCode = new ShipEngine\Carriers\ServiceCode($serviceCode);
+            $serviceCode = new ShipEngine\Carriers\CustomServiceCode($serviceCode);
         }
 
         foreach ($this->rates as $rate) {
@@ -86,11 +79,7 @@ class RateResponse
         return false;
     }
 
-    /**
-     * @param string|ShipEngine\ValueObject\Id $rateId
-     * @return bool|Rate
-     */
-    public function getRateById($rateId)
+    public function getRateById(ShipEngine\ValueObject\Id|string $rateId): Rate|false
     {
         if (! $rateId instanceof ShipEngine\ValueObject\Id) {
             $rateId = new ShipEngine\ValueObject\Id($rateId);
@@ -108,10 +97,9 @@ class RateResponse
     /**
      * Returns an array of all Rates for the given CarrierId
      *
-     * @param string|ShipEngine\ValueObject\Id $carrierId
      * @return Rate[]
      */
-    public function getRatesByCarrierId($carrierId)
+    public function getRatesByCarrierId(ShipEngine\ValueObject\Id|string $carrierId): array
     {
         if (! $carrierId instanceof ShipEngine\ValueObject\Id) {
             $carrierId = new ShipEngine\ValueObject\Id($carrierId);
@@ -126,10 +114,9 @@ class RateResponse
     /**
      * Returns an array of all Rates for the given CarrierCode
      *
-     * @param string|ShipEngine\Carriers\CarrierCode $carrierCode
      * @return Rate[]
      */
-    public function getRatesByCarrierCode($carrierCode)
+    public function getRatesByCarrierCode(ShipEngine\Carriers\CarrierCode|string $carrierCode): array
     {
         if (! $carrierCode instanceof ShipEngine\Carriers\CarrierCode) {
             $carrierCode = new ShipEngine\Carriers\CarrierCode($carrierCode);
@@ -140,11 +127,8 @@ class RateResponse
             return $rate->getCarrierCode()->equals($carrierCode);
         });
     }
-    
-    /**
-     * @return array
-     */
-    public function getInvalidRates()
+
+    public function getInvalidRates(): array
     {
         return $this->invalidRates;
     }
@@ -152,23 +136,17 @@ class RateResponse
     /**
      * @return RatingError[]
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Id
-     */
-    public function getRequestId()
+    public function getRequestId(): ShipEngine\ValueObject\Id
     {
         return $this->requestId;
     }
 
-    /**
-     * @return ShipEngine\ValueObject\Id
-     */
-    public function getShipmentId()
+    public function getShipmentId(): ShipEngine\Shipment\ShipmentId
     {
         return $this->shipmentId;
     }
